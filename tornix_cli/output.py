@@ -4,6 +4,7 @@ import json
 import sys
 from typing import Any
 
+import click
 from rich.console import Console
 from rich.table import Table
 
@@ -11,6 +12,27 @@ from .errors import TornixError
 
 _console = Console()
 _err_console = Console(stderr=True)
+
+
+def _set_json(ctx, param, value):
+    """Eager option callback: flip the shared ctx.obj into JSON mode."""
+    if value and isinstance(ctx.obj, dict):
+        ctx.obj["json"] = True
+    return value
+
+
+def add_json_option(group: "click.Group") -> None:
+    """Recursively give every subcommand a uniform eager `--json` flag so it works
+    both before (`tornix --json projects list`) and after (`tornix projects list --json`)
+    the subcommand. expose_value=False keeps it out of command signatures."""
+    for cmd in group.commands.values():
+        has_json = any(isinstance(p, click.Option) and "--json" in p.opts for p in cmd.params)
+        if not has_json:
+            cmd.params.append(click.Option(["--json"], is_flag=True, expose_value=False,
+                                           callback=_set_json,
+                                           help="Machine-readable JSON output."))
+        if isinstance(cmd, click.Group):
+            add_json_option(cmd)
 
 
 def emit(data: Any, *, json_mode: bool = False, jsonl: bool = False,
