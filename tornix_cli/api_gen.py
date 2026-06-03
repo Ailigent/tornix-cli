@@ -18,10 +18,21 @@ def _slug(s: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
 
-def _op_command_name(op: dict) -> str:
-    """Derive a short verb from method + whether the path ends in a param."""
+def _op_command_name(op: dict, tag: str) -> str:
+    """Name a command from its path action segment, falling back to a REST verb.
+
+    `/ai-agents/{id}/run` → "run", `/ai-agents/seed-defaults` → "seed-defaults",
+    `/projects` GET → "list", POST → "create", `/projects/{id}` GET → "get".
+    """
     method, path = op["_method"], op["_path"]
-    last_is_param = path.rstrip("/").endswith("}")
+    segs = path.replace("/api/v1/", "").strip("/").split("/")
+    last = segs[-1] if segs else ""
+    last_is_param = last.startswith("{")
+    if not last_is_param:
+        slugged = _slug(last)
+        # A trailing literal that isn't just the resource/collection name is an action.
+        if slugged and slugged != _slug(tag):
+            return slugged
     if method == "get":
         return _VERB["get_one"] if last_is_param else _VERB["get_many"]
     if method == "post":
@@ -29,6 +40,21 @@ def _op_command_name(op: dict) -> str:
     if method in ("patch", "put", "delete"):
         return _VERB[method]
     return _slug(op["operationId"])
+
+
+def _qualified_name(op: dict, tag: str) -> str | None:
+    """A path-derived name for disambiguating same-verb collisions within a tag,
+    e.g. `/projects/{id}/cost/evm/trend` (tag cost) → "evm-trend"."""
+    segs = [s for s in op["_path"].replace("/api/v1/", "").strip("/").split("/")
+            if not s.startswith("{")]
+    segs = [s for s in segs if _slug(s) != _slug(tag)]
+    if not segs:
+        return None
+    name = _slug("-".join(segs[-2:]))
+    # For write methods on a collection, suffix the verb to separate from a GET.
+    if op["_method"] in ("post", "patch", "put", "delete"):
+        name = f"{name}-{_VERB.get(op['_method'], op['_method'])}" if name else None
+    return name or None
 
 
 def _path_params(op: dict) -> list[dict]:
@@ -48,8 +74,8 @@ def _click_type(schema: dict):
     return _TYPE.get((schema or {}).get("type", "string"), str)
 
 
-def _build_command(op: dict) -> click.Command:
-    name = _op_command_name(op)
+def _build_command(op: dict, tag: str) -> click.Command:
+    name = _op_command_name(op, tag)
     params: list[click.Parameter] = []
     for p in _path_params(op):
         params.append(click.Argument([p["name"]], required=True,
@@ -114,10 +140,14 @@ def build_api_group(spec: dict) -> click.Group:
         for op in by_tag[tag]:
             if is_excluded_path(op["_path"]):
                 continue
-            cmd = _build_command(op)
+            cmd = _build_command(op, tag)
+            if cmd.name in used:              # collision → try a path-qualified name
+                alt = _qualified_name(op, tag)
+                if alt:
+                    cmd.name = alt
             base = cmd.name
             n = 2
-            while cmd.name in used:           # disambiguate duplicate verbs
+            while cmd.name in used:           # last resort: numeric suffix
                 cmd.name = f"{base}-{n}"
                 n += 1
             used.add(cmd.name)

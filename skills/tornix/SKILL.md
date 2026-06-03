@@ -1,0 +1,860 @@
+---
+name: tornix
+description: Drive the Tornix PMO platform (app.tornix.ai) from the CLI — projects, tasks, procurement, approvals, risks, cost, meetings, AI, and deep-research. Every command supports --json.
+---
+
+# Tornix CLI Skill
+
+`tornix` is an agent-native CLI for the Tornix PMO backend. **Always pass `--json`**
+for machine-readable output (it works before or after any subcommand). Authenticate once
+with `tornix auth login --api-key tk_…` (or set `TORNIX_API_KEY`). Scope a request to an
+org with `--org <id>` or `TORNIX_ORG`.
+
+Discover the full surface programmatically: `tornix catalog --json`.
+
+## Conventions
+- Output: add `--json` to any command. Errors go to stderr as `{"error": {...}}` with
+  non-zero exit codes (3=auth, 4=not-found, 5=validation, 6=rate-limit/credits).
+- Full backbone: `tornix api <tag> <operation> [--opts] --json` covers every backend operation.
+- Escape hatches: `tornix data select <table> --eq col=val --json`, `tornix rpc <fn> --arg k=v --json`.
+- Deep research: `tornix deep-research "<question>" --source pmo|web|both --project <id> --json`.
+  Default returns a structured cited corpus for you to synthesize; add `--synthesize`
+  to have Tornix AI write the report.
+
+## Commands
+- `tornix api ai-agents cancel --json` — Cancel a running agent execution
+- `tornix api ai-agents create --json` — Create AI agent
+- `tornix api ai-agents delete --json` — Delete AI agent
+- `tornix api ai-agents get --json` — Get AI agent by ID
+- `tornix api ai-agents list --json` — List AI agents
+- `tornix api ai-agents recent-chats --json` — Find recent chat IDs from the shared Telegram bot (used by the create-agent UI to auto-fill the telegram_chat_id field)
+- `tornix api ai-agents replace --json` — Update AI agent
+- `tornix api ai-agents run --json` — Manually trigger agent execution
+- `tornix api ai-agents runs --json` — Get agent run history
+- `tornix api ai-agents seed-defaults --json` — Seed default AI agents for the organization
+- `tornix api ai-agents start --json` — Start a one-click Telegram linking flow: generates a unique token and returns the t.me deep link. Frontend opens the link and polls /telegram/link/status until the user presses Start in Telegram.
+- `tornix api ai-agents status --json` — Poll endpoint for the one-click Telegram linking flow. Returns { linked, chat_id?, chat_title? } when the user has pressed Start in Telegram, or { linked: false, expired? } while waiting.
+- `tornix api ai-agents stream --json` — Trigger agent and stream live events back as SSE
+- `tornix api ai-chat autocomplete-suggestions --json` — AiChatController_getAutocompleteSuggestions
+- `tornix api ai-chat delete --json` — AiChatController_deleteRoom
+- `tornix api ai-chat ensure --json` — AiChatController_ensureRoom
+- `tornix api ai-chat messages --json` — AiChatController_getMessages
+- `tornix api ai-chat rooms --json` — AiChatController_getRooms
+- `tornix api ai-chat rooms-create --json` — AiChatController_createRoom
+- `tornix api ai-chat rooms-messages-create --json` — AiChatController_sendMessage
+- `tornix api ai-chat upsert --json` — AiChatController_upsertMessage
+- `tornix api ai-proxy ai-reports-create --json` — AiProxyController_proxyReportsRoot_post
+- `tornix api ai-proxy ai-reports-delete --json` — AiProxyController_proxyReportsRoot_delete
+- `tornix api ai-proxy ai-reports-replace --json` — AiProxyController_proxyReportsRoot_put
+- `tornix api ai-proxy ai-reports-update --json` — AiProxyController_proxyReportsRoot_patch
+- `tornix api ai-proxy budget --json` — AiProxyController_proxyBudget_get
+- `tornix api ai-proxy budget-create --json` — AiProxyController_proxyBudget_post
+- `tornix api ai-proxy budget-delete --json` — AiProxyController_proxyBudget_delete
+- `tornix api ai-proxy budget-replace --json` — AiProxyController_proxyBudget_put
+- `tornix api ai-proxy budget-update --json` — AiProxyController_proxyBudget_patch
+- `tornix api ai-proxy classifier --json` — AiProxyController_proxyClassifier_get
+- `tornix api ai-proxy classifier-create --json` — AiProxyController_proxyClassifier_post
+- `tornix api ai-proxy classifier-delete --json` — AiProxyController_proxyClassifier_delete
+- `tornix api ai-proxy classifier-replace --json` — AiProxyController_proxyClassifier_put
+- `tornix api ai-proxy classifier-update --json` — AiProxyController_proxyClassifier_patch
+- `tornix api ai-proxy contracts --json` — AiProxyController_proxyContracts_get
+- `tornix api ai-proxy contracts-create --json` — AiProxyController_proxyContracts_post
+- `tornix api ai-proxy contracts-delete --json` — AiProxyController_proxyContracts_delete
+- `tornix api ai-proxy contracts-replace --json` — AiProxyController_proxyContracts_put
+- `tornix api ai-proxy contracts-update --json` — AiProxyController_proxyContracts_patch
+- `tornix api ai-proxy create --json` — AiProxyController_proxyChat_post
+- `tornix api ai-proxy delete --json` — AiProxyController_proxyChat_delete
+- `tornix api ai-proxy dependency --json` — AiProxyController_proxyDependency_get
+- `tornix api ai-proxy dependency-create --json` — AiProxyController_proxyDependency_post
+- `tornix api ai-proxy dependency-delete --json` — AiProxyController_proxyDependency_delete
+- `tornix api ai-proxy dependency-replace --json` — AiProxyController_proxyDependency_put
+- `tornix api ai-proxy dependency-update --json` — AiProxyController_proxyDependency_patch
+- `tornix api ai-proxy document-edit --json` — AI document editing (ported from document-ai-edit edge fn)
+- `tornix api ai-proxy email-ai --json` — AiProxyController_proxyEmail_get
+- `tornix api ai-proxy email-ai-create --json` — AiProxyController_proxyEmail_post
+- `tornix api ai-proxy email-ai-delete --json` — AiProxyController_proxyEmail_delete
+- `tornix api ai-proxy email-ai-replace --json` — AiProxyController_proxyEmail_put
+- `tornix api ai-proxy email-ai-update --json` — AiProxyController_proxyEmail_patch
+- `tornix api ai-proxy evaluate-rules --json` — Evaluate business rules (ported from evaluate-rules edge fn)
+- `tornix api ai-proxy generate-chat --json` — Generate AI chat response (ported from generate-ai-chat edge fn)
+- `tornix api ai-proxy generate-json --json` — Generate AI JSON response (ported from generate-ai-json edge fn)
+- `tornix api ai-proxy generate-stream --json` — Stream Gemini text generation as SSE chunks
+- `tornix api ai-proxy list --json` — AiProxyController_proxyChat_get
+- `tornix api ai-proxy meeting --json` — AiProxyController_proxyMeeting_get
+- `tornix api ai-proxy meeting-create --json` — AiProxyController_proxyMeeting_post
+- `tornix api ai-proxy meeting-delete --json` — AiProxyController_proxyMeeting_delete
+- `tornix api ai-proxy meeting-replace --json` — AiProxyController_proxyMeeting_put
+- `tornix api ai-proxy meeting-update --json` — AiProxyController_proxyMeeting_patch
+- `tornix api ai-proxy monte-carlo --json` — AiProxyController_proxyMonteCarlo_get
+- `tornix api ai-proxy monte-carlo-create --json` — AiProxyController_proxyMonteCarlo_post
+- `tornix api ai-proxy monte-carlo-delete --json` — AiProxyController_proxyMonteCarlo_delete
+- `tornix api ai-proxy monte-carlo-replace --json` — AiProxyController_proxyMonteCarlo_put
+- `tornix api ai-proxy monte-carlo-update --json` — AiProxyController_proxyMonteCarlo_patch
+- `tornix api ai-proxy planning --json` — AiProxyController_proxyPlanning_get
+- `tornix api ai-proxy planning-create --json` — AiProxyController_proxyPlanning_post
+- `tornix api ai-proxy planning-delete --json` — AiProxyController_proxyPlanning_delete
+- `tornix api ai-proxy planning-replace --json` — AiProxyController_proxyPlanning_put
+- `tornix api ai-proxy planning-update --json` — AiProxyController_proxyPlanning_patch
+- `tornix api ai-proxy replace --json` — AiProxyController_proxyChat_put
+- `tornix api ai-proxy reports --json` — AiProxyController_proxyReportsRoot_get
+- `tornix api ai-proxy reports-2 --json` — AiProxyController_proxyReports_get
+- `tornix api ai-proxy reports-create --json` — AiProxyController_proxyReports_post
+- `tornix api ai-proxy reports-delete --json` — AiProxyController_proxyReports_delete
+- `tornix api ai-proxy reports-replace --json` — AiProxyController_proxyReports_put
+- `tornix api ai-proxy reports-update --json` — AiProxyController_proxyReports_patch
+- `tornix api ai-proxy strategy --json` — AiProxyController_proxyStrategy_get
+- `tornix api ai-proxy strategy-create --json` — AiProxyController_proxyStrategy_post
+- `tornix api ai-proxy strategy-delete --json` — AiProxyController_proxyStrategy_delete
+- `tornix api ai-proxy strategy-replace --json` — AiProxyController_proxyStrategy_put
+- `tornix api ai-proxy strategy-update --json` — AiProxyController_proxyStrategy_patch
+- `tornix api ai-proxy super-agent --json` — AiProxyController_proxySuperAgent_get
+- `tornix api ai-proxy super-agent-create --json` — AiProxyController_proxySuperAgent_post
+- `tornix api ai-proxy super-agent-delete --json` — AiProxyController_proxySuperAgent_delete
+- `tornix api ai-proxy super-agent-replace --json` — AiProxyController_proxySuperAgent_put
+- `tornix api ai-proxy super-agent-update --json` — AiProxyController_proxySuperAgent_patch
+- `tornix api ai-proxy update --json` — AiProxyController_proxyChat_patch
+- `tornix api ai-proxy vendor --json` — AiProxyController_proxyVendor_get
+- `tornix api ai-proxy vendor-create --json` — AiProxyController_proxyVendor_post
+- `tornix api ai-proxy vendor-delete --json` — AiProxyController_proxyVendor_delete
+- `tornix api ai-proxy vendor-replace --json` — AiProxyController_proxyVendor_put
+- `tornix api ai-proxy vendor-update --json` — AiProxyController_proxyVendor_patch
+- `tornix api ai-widgets create --json` — Save a generated widget config to the library
+- `tornix api ai-widgets delete --json` — Delete an AI widget from the library (cascades to dashboards)
+- `tornix api ai-widgets generate --json` — Generate a widget config from a natural-language prompt
+- `tornix api ai-widgets get --json` — Get a single AI widget config
+- `tornix api ai-widgets list --json` — List the user AI widget library
+- `tornix api ai-widgets update --json` — Update an AI widget (replaces config_json)
+- `tornix api api-keys create --json` — Create a new API key. The raw key is returned only once.
+- `tornix api api-keys delete --json` — Permanently delete an API key
+- `tornix api api-keys get --json` — Get API key details (without the raw key)
+- `tornix api api-keys list --json` — List all API keys for the current user
+- `tornix api api-keys revoke --json` — Revoke an API key (soft disable)
+- `tornix api api-keys scopes --json` — List all available permission scopes
+- `tornix api api-keys update --json` — Update API key settings
+- `tornix api api-keys usage --json` — Get usage logs for an API key
+- `tornix api approvals ai-review --json` — Run AI compliance review on an approval request
+- `tornix api approvals ai-settings --json` — Get org Approval AI settings (defaults if unset)
+- `tornix api approvals ai-settings-replace --json` — Update org Approval AI settings
+- `tornix api approvals approve --json` — Approve an approval step
+- `tornix api approvals comments --json` — Get comments on an approval request
+- `tornix api approvals compliance-policies-create --json` — Create compliance policy
+- `tornix api approvals compliance-policies-delete --json` — Delete compliance policy
+- `tornix api approvals compliance-policies-replace --json` — Update compliance policy
+- `tornix api approvals delete --json` — Delete approval workflow
+- `tornix api approvals get --json` — Get workflow by ID
+- `tornix api approvals policies --json` — List compliance policies for org
+- `tornix api approvals reject --json` — Reject an approval step
+- `tornix api approvals replace --json` — Update approval workflow
+- `tornix api approvals requests --json` — List approval requests
+- `tornix api approvals requests-2 --json` — Get approval request by ID
+- `tornix api approvals requests-ai-review --json` — Get cached AI review result for a request
+- `tornix api approvals requests-comments-create --json` — Add comment to approval request
+- `tornix api approvals requests-create --json` — Create approval request
+- `tornix api approvals trigger-ai-analysis --json` — Enqueue background AI analysis for a request that was created via the generic data-proxy (which bypasses createRequest).
+- `tornix api approvals types --json` — List custom approval types for current org
+- `tornix api approvals types-create --json` — Create custom approval type
+- `tornix api approvals types-delete --json` — Delete custom approval type
+- `tornix api approvals types-replace --json` — Update custom approval type
+- `tornix api approvals workflows --json` — List approval workflows
+- `tornix api approvals workflows-create --json` — Create approval workflow
+- `tornix api auth apple-callback-create --json` — Exchange Apple identity token for session
+- `tornix api auth callback --json` — Google OAuth callback — redirected here by Caddy catch-all, unused by API
+- `tornix api auth callback-create --json` — Exchange OAuth authorization code for tokens
+- `tornix api auth check-email --json` — Check if an email address is already registered
+- `tornix api auth check-email-confirmed --json` — Check if an email address has been confirmed
+- `tornix api auth confirm-email --json` — Confirm email address via token link
+- `tornix api auth create-user-with-password --json` — Create a new user with email/password (admin invitation)
+- `tornix api auth google --json` — Initiate Google OAuth login — redirects to Google
+- `tornix api auth login --json` — Login with email and password
+- `tornix api auth logout --json` — Log out and invalidate refresh token
+- `tornix api auth me --json` — Update current user (password, email, metadata)
+- `tornix api auth me-2 --json` — Get current user info
+- `tornix api auth refresh --json` — Refresh JWT token using refresh_token
+- `tornix api auth register --json` — Register a new user with email and password
+- `tornix api auth reset-password --json` — Send password reset email via Brevo
+- `tornix api auth send --json` — Send OTP to email or phone
+- `tornix api auth send-confirmation --json` — Send email confirmation link via Brevo
+- `tornix api auth send-sms --json` — Send OTP via SMS (Brevo)
+- `tornix api auth setup --json` — Set up TOTP (Google Authenticator) - generates secret and QR URI
+- `tornix api auth totp-verify-create --json` — Verify TOTP code from authenticator app
+- `tornix api auth update-password --json` — Set a new password using a reset token
+- `tornix api auth verify --json` — Verify OTP code
+- `tornix api auth verify-password --json` — Verify user password without creating a session
+- `tornix api benefits create --json` — Create a benefit
+- `tornix api benefits delete --json` — Delete a benefit
+- `tornix api benefits get --json` — Get a single benefit
+- `tornix api benefits health --json` — Health check for benefits module
+- `tornix api benefits list --json` — List benefits for a project
+- `tornix api benefits organization --json` — List all benefits for the user's organization
+- `tornix api benefits replace --json` — Update a benefit
+- `tornix api calls accept --json` — Recipient accepts the call
+- `tornix api calls cancel --json` — Caller withdraws before anyone answers
+- `tornix api calls invite --json` — Ring one or more recipients for an existing video room
+- `tornix api calls reject --json` — Recipient rejects (or is busy)
+- `tornix api chat delete --json` — CommunicationController_removeParticipant
+- `tornix api chat linked-tasks --json` — CommunicationController_getLinkedTasks
+- `tornix api chat messages --json` — CommunicationController_getMessages
+- `tornix api chat mute --json` — CommunicationController_toggleMute
+- `tornix api chat participants --json` — CommunicationController_getParticipants
+- `tornix api chat preferences --json` — CommunicationController_getPreferences
+- `tornix api chat preferences-update --json` — CommunicationController_updatePreferences
+- `tornix api chat role --json` — CommunicationController_updateParticipantRole
+- `tornix api chat rooms --json` — CommunicationController_getRooms
+- `tornix api chat rooms-create --json` — CommunicationController_createRoom
+- `tornix api chat rooms-delete --json` — CommunicationController_deleteRoom
+- `tornix api chat rooms-messages-create --json` — CommunicationController_sendMessage
+- `tornix api chat rooms-participants-create --json` — CommunicationController_addParticipant
+- `tornix api chat summarize --json` — CommunicationController_summarizeAttachment
+- `tornix api chat update --json` — CommunicationController_updateRoom
+- `tornix api cost accounts --json` — CostController_getCostAccounts
+- `tornix api cost baseline-pv-curve-delete --json` — CostController_clearPvCurve
+- `tornix api cost baseline-pv-curve-replace --json` — CostController_setPvCurve
+- `tornix api cost bulk-actuals --json` — CostController_bulkUpdateActuals
+- `tornix api cost cashflow --json` — CostController_getCashFlow
+- `tornix api cost cashflow-aggregate --json` — CostController_getAggregateCashFlow
+- `tornix api cost estimates --json` — CostController_getEstimates
+- `tornix api cost evm --json` — CostController_getEvm
+- `tornix api cost forecast-formula --json` — CostController_getForecastFormula
+- `tornix api cost generate-tasks-from-budget --json` — CostController_generateTasksFromBudgetItems
+- `tornix api cost missing-actuals --json` — CostController_getMissingActuals
+- `tornix api cost periods --json` — CostController_getFinancialPeriods
+- `tornix api cost portfolio-evm --json` — CostController_getPortfolioEvm
+- `tornix api cost projects-estimates-create --json` — CostController_createEstimate
+- `tornix api cost projects-forecast-formula-replace --json` — CostController_setForecastFormula
+- `tornix api cost pv-curve --json` — CostController_getPvCurve
+- `tornix api cost recalculate --json` — CostController_recalculate
+- `tornix api cost reconciliation --json` — CostController_getReconciliation
+- `tornix api cost refresh --json` — CostController_refreshCashFlow
+- `tornix api cost simulations --json` — CostController_getSimulations
+- `tornix api cost trend --json` — CostController_getEvmTrend
+- `tornix api cost-categories create --json` — Create a cost category
+- `tornix api cost-categories delete --json` — Soft-delete a cost category (sets is_active=false; never hard-deletes — Odoo depends on slug stability)
+- `tornix api cost-categories list --json` — List cost categories (defaults to active)
+- `tornix api cost-categories update --json` — Update a cost category (slug is read-only)
+- `tornix api cost-control approve --json` — CostControlController_approveInvoice
+- `tornix api cost-control attachments --json` — CostControlController_getInvoiceAttachments
+- `tornix api cost-control change-order-attachments-delete --json` — CostControlController_deleteChangeOrderAttachment
+- `tornix api cost-control change-order-attachments-download --json` — CostControlController_downloadChangeOrderAttachment
+- `tornix api cost-control change-orders --json` — CostControlController_getChangeOrders
+- `tornix api cost-control change-orders-2 --json` — CostControlController_getChangeOrderById
+- `tornix api cost-control change-orders-approve-create --json` — CostControlController_approveChangeOrder
+- `tornix api cost-control change-orders-attachments --json` — CostControlController_getChangeOrderAttachments
+- `tornix api cost-control change-orders-attachments-create --json` — CostControlController_uploadChangeOrderAttachment
+- `tornix api cost-control change-orders-reject-create --json` — CostControlController_rejectChangeOrder
+- `tornix api cost-control change-orders-replace --json` — CostControlController_updateChangeOrder
+- `tornix api cost-control change-orders-submit-create --json` — CostControlController_submitChangeOrder
+- `tornix api cost-control complete --json` — CostControlController_completePaymentScheduleItem
+- `tornix api cost-control confirm --json` — CostControlController_confirmPayment
+- `tornix api cost-control contracts --json` — CostControlController_getProjectContracts
+- `tornix api cost-control contracts-payment-schedule-create --json` — CostControlController_createPaymentSchedule
+- `tornix api cost-control contracts-payments-create --json` — CostControlController_recordPayment
+- `tornix api cost-control contracts-retention-create --json` — CostControlController_createRetentionConfig
+- `tornix api cost-control delete --json` — CostControlController_deletePaymentSchedule
+- `tornix api cost-control download --json` — CostControlController_downloadInvoiceAttachment
+- `tornix api cost-control get --json` — CostControlController_getPaymentScheduleById
+- `tornix api cost-control invoice-attachments-delete --json` — CostControlController_deleteInvoiceAttachment
+- `tornix api cost-control invoices --json` — CostControlController_getInvoices
+- `tornix api cost-control invoices-2 --json` — CostControlController_getInvoiceById
+- `tornix api cost-control invoices-attachments-create --json` — CostControlController_uploadInvoiceAttachment
+- `tornix api cost-control invoices-replace --json` — CostControlController_updateInvoice
+- `tornix api cost-control organizations-change-orders --json` — CostControlController_getOrgChangeOrders
+- `tornix api cost-control organizations-invoices --json` — CostControlController_getOrgInvoices
+- `tornix api cost-control payment-schedule --json` — CostControlController_getPaymentSchedules
+- `tornix api cost-control payments --json` — CostControlController_getPayments
+- `tornix api cost-control projects-change-orders-create --json` — CostControlController_createChangeOrder
+- `tornix api cost-control projects-invoices-create --json` — CostControlController_createInvoice
+- `tornix api cost-control reject --json` — CostControlController_rejectInvoice
+- `tornix api cost-control replace --json` — CostControlController_updatePaymentScheduleItem
+- `tornix api cost-control retention --json` — CostControlController_getRetentionConfig
+- `tornix api cost-control submit --json` — CostControlController_submitInvoice
+- `tornix api cost-control submit-to-odoo --json` — CostControlController_submitInvoiceToOdoo
+- `tornix api cost-control void --json` — CostControlController_voidInvoice
+- `tornix api credits adjust --json` — CreditsController_adminAdjust
+- `tornix api credits admin-plans --json` — CreditsController_adminGetPlans
+- `tornix api credits admin-plans-create --json` — CreditsController_adminCreatePlan
+- `tornix api credits admin-plans-delete --json` — CreditsController_adminDeletePlan
+- `tornix api credits admin-plans-replace --json` — CreditsController_adminUpdatePlan
+- `tornix api credits admin-token-config-replace --json` — CreditsController_adminUpdateTokenConfig
+- `tornix api credits alerts --json` — CreditsController_getAlerts
+- `tornix api credits balance --json` — CreditsController_getBalance
+- `tornix api credits change-plan --json` — CreditsController_adminChangePlan
+- `tornix api credits consume --json` — CreditsController_consume
+- `tornix api credits packages --json` — CreditsController_getPackages
+- `tornix api credits plans --json` — CreditsController_getPlans
+- `tornix api credits refund --json` — CreditsController_refund
+- `tornix api credits reserve --json` — CreditsController_reserve
+- `tornix api credits token-config --json` — CreditsController_adminGetTokenConfig
+- `tornix api credits transactions --json` — CreditsController_getTransactions
+- `tornix api credits upgrade-plan --json` — CreditsController_upgradePlan
+- `tornix api credits user-credits --json` — CreditsController_adminGetUserCredits
+- `tornix api credits user-transactions --json` — CreditsController_adminGetUserTransactions
+- `tornix api dashboard-widgets dashboards-widgets-create --json` — Add a widget to a dashboard
+- `tornix api dashboard-widgets delete --json` — Remove widget from a dashboard
+- `tornix api dashboard-widgets reorder --json` — Bulk reorder widgets on a dashboard
+- `tornix api dashboard-widgets update --json` — Update widget (position or is_collapsed)
+- `tornix api dashboard-widgets widgets --json` — List widgets for a dashboard
+- `tornix api dashboards create --json` — Create a dashboard
+- `tornix api dashboards delete --json` — Delete a dashboard
+- `tornix api dashboards get --json` — Get a single dashboard
+- `tornix api dashboards list --json` — List the current user dashboards
+- `tornix api dashboards migrate-legacy --json` — One-time seed from legacy localStorage
+- `tornix api dashboards office-performance --json` — Office Performance: governance cadence (90d), compliance watchlist, services delivered (30d)
+- `tornix api dashboards overview --json` — Aggregated PMO command-center KPIs (11 cards) for a portfolio or the entire org
+- `tornix api dashboards portfolios --json` — Portfolios dashboard: KPI strip, alignment-vs-value bubbles, investment donut, rebalancing recs
+- `tornix api dashboards programs --json` — Programs dashboard: 4 top-strip stats and per-program rows (health/SPI/CPI/benefits/dependencies)
+- `tornix api dashboards update --json` — Update a dashboard
+- `tornix api documents ai-edit --json` — AI-powered document editing
+- `tornix api documents breadcrumbs --json` — Get folder breadcrumb path
+- `tornix api documents delete --json` — Delete folder
+- `tornix api documents find-or-create --json` — Find or create a project folder in a section
+- `tornix api documents folders --json` — Create folder
+- `tornix api documents folders-list --json` — List folders by project
+- `tornix api documents get --json` — Get document by ID
+- `tornix api documents list --json` — List documents by project
+- `tornix api documents move --json` — Move folder to another parent
+- `tornix api documents move-to-folder --json` — Move documents to a folder
+- `tornix api documents sync --json` — Sync a file to the File Center (find-or-create folders + document)
+- `tornix api documents update --json` — Rename folder
+- `tornix api email accounts --json` — EmailController_getAccounts
+- `tornix api email accounts-create --json` — EmailController_addAccount
+- `tornix api email actions --json` — Perform IMAP flag/move actions (star, read, delete, archive)
+- `tornix api email agent-actions-create --json` — Perform email actions: delete, star, markRead (used by AI agent)
+- `tornix api email agent-fetch-create --json` — Fetch emails via IMAP (used by AI agent)
+- `tornix api email agent-send-create --json` — Send email via SMTP (used by AI agent)
+- `tornix api email attachment --json` — Fetch a single IMAP attachment by UID and index
+- `tornix api email classify-batch --json` — Enqueue background AI classification for a batch of emails. Returns immediately; classification + project suggestions are persisted asynchronously.
+- `tornix api email connect --json` — Exchange Google OAuth code for tokens and create/update email account
+- `tornix api email delete --json` — EmailController_removeAccount
+- `tornix api email digest-fetch-create --json` — Fetch emails for AI digest (used by Super Agent)
+- `tornix api email fetch --json` — Fetch emails via IMAP
+- `tornix api email imap-connect-create --json` — Test IMAP+SMTP connection and save credentials
+- `tornix api email labels --json` — EmailController_getLabels
+- `tornix api email messages --json` — EmailController_getMessages
+- `tornix api email refresh-token --json` — Refresh Gmail access token using stored refresh token
+- `tornix api email send --json` — Send email via SMTP using stored account credentials
+- `tornix api email send-create --json` — Send a transactional email via Brevo SMTP API
+- `tornix api email sync --json` — EmailController_syncAccount
+- `tornix api email sync-now --json` — Pull new Gmail messages for the current user since last_sync_at and enqueue classification. Awaits the Gmail fetch + enqueue (typically <5s) but the LLM work itself runs async in BullMQ.
+- `tornix api gantt activate --json` — Activate an approved baseline (snapshot + lock)
+- `tornix api gantt baselines --json` — Create a baseline (project_id in body)
+- `tornix api gantt baselines-create --json` — Create a baseline
+- `tornix api gantt calendars --json` — Get project calendars
+- `tornix api gantt create --json` — Run CPM scheduling (forward/backward pass)
+- `tornix api gantt delete --json` — Delete a baseline
+- `tornix api gantt export-xer-create --json` — Export to P6 XER format (project_id in body)
+- `tornix api gantt export-xer-create-2 --json` — Export to P6 XER format (base64 JSON)
+- `tornix api gantt get --json` — List project baselines
+- `tornix api gantt import-xer-create --json` — Import P6 XER file
+- `tornix api gantt reject --json` — Reject a baseline request
+- `tornix api gantt request --json` — Create a DRAFT baseline request (approval flow)
+- `tornix api gantt resource-leveling-create --json` — Run resource leveling to resolve over-allocation
+- `tornix api gantt resources --json` — Get project resources
+- `tornix api gantt restore-baseline --json` — Restore schedule from baseline (project_id in body)
+- `tornix api gantt restore-baseline-create --json` — Restore schedule from a baseline (dates_only or full mode)
+- `tornix api gantt schedule --json` — Run CPM scheduling (project_id in body)
+- `tornix api gantt set-primary --json` — Set a baseline as primary (atomic)
+- `tornix api gantt update-status --json` — Update baseline status
+- `tornix api gantt variance --json` — Calculate baseline variance (project_id in body)
+- `tornix api gantt variance-create --json` — Calculate baseline variance (schedule & cost)
+- `tornix api gantt wbs --json` — Get WBS structure
+- `tornix api gantt xer --json` — Import P6 XER file (project_id in body)
+- `tornix api gis bulk --json` — Create multiple zones at once
+- `tornix api gis delete --json` — Delete a zone
+- `tornix api gis geo-ai-images --json` — Save a generated GEO AI image
+- `tornix api gis geo-ai-images-delete --json` — Delete a saved GEO AI image
+- `tornix api gis get --json` — Get zone with linked tasks
+- `tornix api gis import-gdb --json` — Import an ESRI File Geodatabase (.gdb) as zones
+- `tornix api gis projects-geo-ai-images --json` — List saved GEO AI images for a project
+- `tornix api gis projects-zones-create --json` — Create a zone
+- `tornix api gis tasks --json` — Link tasks to a zone
+- `tornix api gis update --json` — Update a zone
+- `tornix api gis zones --json` — List zones for a project
+- `tornix api gis zones-tasks-delete --json` — Unlink a task from a zone
+- `tornix api hr-approval-settings approval-settings --json` — HrApprovalSettingsController_get
+- `tornix api hr-approval-settings hr-approval-settings-replace --json` — HrApprovalSettingsController_upsert
+- `tornix api hr-requests access --json` — HrRequestsController_myAccess
+- `tornix api hr-requests cancel --json` — HrRequestsController_cancel
+- `tornix api hr-requests create --json` — HrRequestsController_create
+- `tornix api hr-requests delete --json` — HrRequestsController_detachFile
+- `tornix api hr-requests files --json` — HrRequestsController_listFiles
+- `tornix api hr-requests files-create --json` — HrRequestsController_attachFile
+- `tornix api hr-requests get --json` — HrRequestsController_findOne
+- `tornix api hr-requests list --json` — HrRequestsController_list
+- `tornix api invitations invite-to-org --json` — Add an existing user to an organization and notify them
+- `tornix api invitations notify-existing --json` — Notify an existing user that they were added to an organization
+- `tornix api invitations send --json` — Invite a new user by email (creates account + sends invitation)
+- `tornix api material-consumptions available --json` — MaterialConsumptionController_available
+- `tornix api material-consumptions create --json` — MaterialConsumptionController_create
+- `tornix api material-consumptions list --json` — MaterialConsumptionController_list
+- `tornix api material-consumptions warehouse --json` — MaterialConsumptionController_warehouse
+- `tornix api meetings action-items --json` — MeetingsController_getActionItems
+- `tornix api meetings approve --json` — Approve a pending guest join request (host only)
+- `tornix api meetings batch --json` — Batch save transcript segments for a meeting session
+- `tornix api meetings create --json` — MeetingsController_create
+- `tornix api meetings deny --json` — Deny a pending guest join request (host only)
+- `tornix api meetings end --json` — Mark a meeting session as ended and enqueue async AI summary generation. Idempotent unless force=true.
+- `tornix api meetings get --json` — MeetingsController_findById
+- `tornix api meetings invite --json` — Fetch invite metadata (no auth required)
+- `tornix api meetings invite-link --json` — Create or fetch a shareable invite link for a video room (host only). Idempotent by default — returns the existing token if one is still valid. Pass `force: true` to rotate (invalidates previously shared links). Pass `ttl_days: null` or `0` for a permanent link.
+- `tornix api meetings invite-status --json` — Poll the status of a guest join request
+- `tornix api meetings list --json` — MeetingsController_findAll
+- `tornix api meetings livekit-token --json` — Generate a LiveKit room token for WebRTC meetings
+- `tornix api meetings minutes --json` — MeetingsController_getMinutes
+- `tornix api meetings pending-guests --json` — List guest join requests still waiting for approval on this room. Used to rehydrate the People panel when users join after a guest has already knocked.
+- `tornix api meetings playback-url --json` — Get a short-lived presigned URL to play back a finished recording
+- `tornix api meetings recording-start-create --json` — Start a server-side recording for a meeting session (host only)
+- `tornix api meetings recordings-share-link-delete --json` — Revoke a recording share link
+- `tornix api meetings request-join --json` — Guest requests to join a meeting via invite link
+- `tornix api meetings rooms-invite-link-delete --json` — Revoke an existing invite link
+- `tornix api meetings share-link --json` — Create or fetch a shareable public link for a recording
+- `tornix api meetings shared-recording --json` — Fetch shared recording metadata + playback URL (no auth required)
+- `tornix api meetings start --json` — Create a new meeting session (fallback for when AI service is unavailable)
+- `tornix api meetings stop --json` — Stop a live recording (host only)
+- `tornix api meetings transcript --json` — MeetingsController_getTranscript
+- `tornix api meetings webhook --json` — LiveKit room webhook (signed by the server-secret)
+- `tornix api misc apply --json` — GanttAiController_apply
+- `tornix api misc apply-direct --json` — GanttAiController_applyDirect
+- `tornix api misc apply-extraction --json` — ApplyExtractionController_apply
+- `tornix api misc confirm --json` — OdooCostController_confirm
+- `tornix api misc consumption-cost --json` — OdooConsumptionCallbackController_handle
+- `tornix api misc cost-actual --json` — OdooProcurementCallbackController_ingestCostActual
+- `tornix api misc costs --json` — OdooCostController_create
+- `tornix api misc create --json` — StorageCompatController_createSignedUploadUrl
+- `tornix api misc delete --json` — StorageCompatController_deleteFiles
+- `tornix api misc get --json` — SystemSettingsController_read
+- `tornix api misc hr-requests-status-create --json` — OdooHrCallbackController_updateStatus
+- `tornix api misc list --json` — StorageCompatController_downloadFile
+- `tornix api misc llm-config --json` — LlmConfigController_read
+- `tornix api misc object-create --json` — StorageCompatController_uploadFile
+- `tornix api misc object-list-create --json` — StorageCompatController_listFiles
+- `tornix api misc preview --json` — GanttAiController_preview
+- `tornix api misc procurements --json` — OdooProcurementController_create
+- `tornix api misc query --json` — PrismaQueryController_query
+- `tornix api misc reject --json` — OdooCostController_reject
+- `tornix api misc replace --json` — SystemSettingsController_write
+- `tornix api misc schedule-preview --json` — SchedulePreviewController_preview
+- `tornix api misc sender-pm-approval --json` — OdooSenderPmCallbackController_create
+- `tornix api misc sign-create --json` — StorageCompatController_createSignedDownloadUrl
+- `tornix api misc snapshot --json` — OdooWarehouseController_ingestSnapshot
+- `tornix api misc stage-approved --json` — OdooProcurementCallbackController_recordStageApproval
+- `tornix api misc status --json` — OdooProcurementCallbackController_updateStatus
+- `tornix api misc sync --json` — OdooWarehouseController_syncWarehouse
+- `tornix api misc system-settings-llm-config-replace --json` — LlmConfigController_write
+- `tornix api misc undo --json` — GanttAiController_undo
+- `tornix api notifications credit-alert --json` — Internal: fan-out low-credit alert to Telegram + Email
+- `tornix api notifications delete --json` — NotificationsController_delete
+- `tornix api notifications expo-push-token --json` — Register Expo push token
+- `tornix api notifications expo-push-token-delete --json` — Unregister Expo push token
+- `tornix api notifications get --json` — List Expo push tokens for a user
+- `tornix api notifications link --json` — Start Telegram linking flow
+- `tornix api notifications list --json` — NotificationsController_findAll
+- `tornix api notifications push-subscribe --json` — Register push subscription
+- `tornix api notifications push-subscribe-delete --json` — Unregister push subscription
+- `tornix api notifications read --json` — NotificationsController_markRead
+- `tornix api notifications read-all --json` — NotificationsController_markAllRead
+- `tornix api notifications send-push --json` — Trigger Expo push + Socket.io for a DB notification
+- `tornix api notifications settings --json` — Get Telegram notification settings for the current user
+- `tornix api notifications status --json` — Poll Telegram linking status
+- `tornix api notifications telegram-link-delete --json` — Unlink Telegram (clear chat_id)
+- `tornix api notifications telegram-settings-replace --json` — Update Telegram notification settings
+- `tornix api notifications test --json` — Send a test message to verify Telegram connection
+- `tornix api notifications test-expo-push --json` — Test Expo push notification to a user
+- `tornix api notifications voip-push-token --json` — Register VoIP push token (iOS PushKit)
+- `tornix api notifications voip-push-token-delete --json` — Unregister VoIP push token
+- `tornix api notifications web-push --json` — Send web push notification to user
+- `tornix api odoo-sync list --json` — Get Odoo sync status for a project
+- `tornix api odoo-sync retry --json` — Retry Odoo sync for this project
+- `tornix api odoo-sync-admin events --json` — List Odoo outbox events (org-scoped, super admin sees all)
+- `tornix api odoo-sync-admin get --json` — Get a single outbox event (org-scoped)
+- `tornix api odoo-sync-admin inbound-logs --json` — List inbound REST calls received from Odoo (org-scoped)
+- `tornix api odoo-sync-admin odoo-sync-inbound-logs --json` — Get a single inbound log (org-scoped)
+- `tornix api odoo-sync-admin retry --json` — Manually retry a failed outbox event (org-scoped)
+- `tornix api odoo-sync-admin stats --json` — Outbox + inbound counts and latency (org-scoped)
+- `tornix api odoo-sync-admin sync-sections --json` — Backfill: enqueue section.create for every unsynced section of a project
+- `tornix api organizations create --json` — Create organization
+- `tornix api organizations delete --json` — Delete organization (only the creator can delete)
+- `tornix api organizations get --json` — Get organization by ID
+- `tornix api organizations list --json` — List user organizations
+- `tornix api organizations members --json` — List organization members
+- `tornix api organizations members-create --json` — Add member to organization
+- `tornix api organizations roles --json` — List organization roles
+- `tornix api payments create --json` — Manually fulfill a pending credit purchase (super-admin only). Use when Paymob webhook failed but payment succeeded.
+- `tornix api payments initiate --json` — Initiate a Paymob payment for a credit package
+- `tornix api payments paymob --json` — Handle Paymob payment webhook callback (no auth required)
+- `tornix api pdf render --json` — PdfController_render
+- `tornix api plan-generation active --json` — PlanGenerationController_getActive
+- `tornix api plan-generation cancel --json` — PlanGenerationController_cancel
+- `tornix api plan-generation create --json` — PlanGenerationController_updateSection
+- `tornix api plan-generation delete --json` — PlanGenerationController_remove
+- `tornix api plan-generation get --json` — PlanGenerationController_getById
+- `tornix api plan-generation history --json` — PlanGenerationController_getHistory
+- `tornix api plan-generation mark-saved --json` — PlanGenerationController_markSaved
+- `tornix api plan-generation pause --json` — PlanGenerationController_pause
+- `tornix api plan-generation regenerate --json` — PlanGenerationController_regenerateSection
+- `tornix api plan-generation resume --json` — PlanGenerationController_resume
+- `tornix api plan-generation sections --json` — PlanGenerationController_getSection
+- `tornix api plan-generation start --json` — PlanGenerationController_start
+- `tornix api portfolio create --json` — Create portfolio
+- `tornix api portfolio delete --json` — Delete portfolio
+- `tornix api portfolio get --json` — Get portfolio by ID
+- `tornix api portfolio list --json` — List portfolios for organization
+- `tornix api portfolio replace --json` — Update portfolio
+- `tornix api procurement ai-suggest --json` — ProcurementController_aiSuggest
+- `tornix api procurement batch --json` — ProcurementController_createMultiVendorDocuments
+- `tornix api procurement bulk --json` — ProcurementController_createPartnersBulk
+- `tornix api procurement comments --json` — ProcurementController_getRequestComments
+- `tornix api procurement comparison --json` — ProcurementController_saveComparison
+- `tornix api procurement compliance-policies --json` — ProcurementController_getPolicy
+- `tornix api procurement compliance-policies-create --json` — ProcurementController_createPolicy
+- `tornix api procurement compliance-policies-delete --json` — ProcurementController_deletePolicy
+- `tornix api procurement compliance-policies-replace --json` — ProcurementController_updatePolicy
+- `tornix api procurement compliance-report --json` — ProcurementController_getComplianceReport
+- `tornix api procurement contracts --json` — ProcurementController_getContracts
+- `tornix api procurement contracts-create --json` — ProcurementController_createContract
+- `tornix api procurement delete --json` — ProcurementController_deleteRequest
+- `tornix api procurement documents --json` — ProcurementController_getDocuments
+- `tornix api procurement documents-2 --json` — ProcurementController_getDocumentById
+- `tornix api procurement documents-comments --json` — ProcurementController_getDocumentComments
+- `tornix api procurement documents-comments-create --json` — ProcurementController_addDocumentComment
+- `tornix api procurement documents-create --json` — ProcurementController_createDocument
+- `tornix api procurement documents-replace --json` — ProcurementController_updateDocument
+- `tornix api procurement documents-status-update --json` — ProcurementController_updateDocumentStatus
+- `tornix api procurement docx --json` — ProcurementController_getContractDocx
+- `tornix api procurement evaluate --json` — ProcurementController_evaluateRequest
+- `tornix api procurement get --json` — ProcurementController_getRequestById
+- `tornix api procurement partners --json` — ProcurementController_getPartners
+- `tornix api procurement partners-create --json` — ProcurementController_createPartner
+- `tornix api procurement policies --json` — ProcurementController_getPolicies
+- `tornix api procurement poll-vendor-responses --json` — ProcurementController_triggerPollVendorResponses
+- `tornix api procurement replace --json` — ProcurementController_updateRequest
+- `tornix api procurement requests --json` — ProcurementController_getRequests
+- `tornix api procurement requests-comments-create --json` — ProcurementController_addRequestComment
+- `tornix api procurement requests-create --json` — ProcurementController_createRequest
+- `tornix api procurement select --json` — ProcurementController_selectVendor
+- `tornix api procurement send-emails --json` — ProcurementController_sendVendorEmails
+- `tornix api procurement status --json` — ProcurementController_updateRequestStatus
+- `tornix api procurement vendor-offers --json` — ProcurementController_getVendorOffers
+- `tornix api procurement vendors --json` — ProcurementController_getVendorResponses
+- `tornix api procurement wizard --json` — ProcurementController_createWizardRequest
+- `tornix api procurement-approval-settings approval-settings --json` — ProcurementApprovalSettingsController_get
+- `tornix api procurement-approval-settings procurement-approval-settings-delete --json` — ProcurementApprovalSettingsController_deleteOverride
+- `tornix api procurement-approval-settings procurement-approval-settings-replace --json` — ProcurementApprovalSettingsController_upsert
+- `tornix api procurement-plan delete --json` — ProcurementPlanController_delete
+- `tornix api procurement-plan get --json` — ProcurementPlanController_get
+- `tornix api procurement-plan plan-items --json` — ProcurementPlanController_list
+- `tornix api procurement-plan procurement-plan-items-create --json` — ProcurementPlanController_create
+- `tornix api procurement-plan update --json` — ProcurementPlanController_update
+- `tornix api procurement-pmo consolidated-demand --json` — ProcurementPmoController_consolidatedDemand
+- `tornix api procurement-pmo cross-project-requests --json` — ProcurementPmoController_crossProjectRequests
+- `tornix api procurement-pmo dashboard --json` — ProcurementPmoController_dashboard
+- `tornix api procurement-pmo risk-heatmap --json` — ProcurementPmoController_riskHeatmap
+- `tornix api procurement-pmo supplier-matrix --json` — ProcurementPmoController_supplierMatrix
+- `tornix api procurement-pmo sync-monitor --json` — ProcurementPmoController_syncMonitor
+- `tornix api procurement-requests cancel --json` — ProcurementRequestsController_cancel
+- `tornix api procurement-requests create --json` — ProcurementRequestsController_create
+- `tornix api procurement-requests delete --json` — ProcurementRequestsController_detachFile
+- `tornix api procurement-requests files --json` — ProcurementRequestsController_listFiles
+- `tornix api procurement-requests files-create --json` — ProcurementRequestsController_attachFile
+- `tornix api procurement-requests get --json` — ProcurementRequestsController_findOne
+- `tornix api procurement-requests list --json` — ProcurementRequestsController_list
+- `tornix api procurement-requests resend-to-odoo --json` — ProcurementRequestsController_resendToOdoo
+- `tornix api program benefit-chart --json` — Get benefit realization chart data (time-series)
+- `tornix api program benefit-snapshot --json` — Snapshot current benefit values for the current period
+- `tornix api program count --json` — Count programs for a portfolio
+- `tornix api program create --json` — Create program
+- `tornix api program delete --json` — Delete program
+- `tornix api program get --json` — Get program by ID
+- `tornix api program list --json` — List programs for a portfolio
+- `tornix api program portfolio-stats --json` — Get aggregated portfolio stats with enriched program data
+- `tornix api program replace --json` — Update program
+- `tornix api project-links create --json` — Create project-to-project dependency
+- `tornix api project-links delete --json` — Delete a project-to-project dependency
+- `tornix api project-links get --json` — List project + milestone links touching a project (global only)
+- `tornix api project-links milestone --json` — Create cross-project milestone-to-milestone dependency
+- `tornix api project-links milestone-delete --json` — Delete a milestone-to-milestone dependency
+- `tornix api project-links program --json` — List project + milestone links scoped to a program
+- `tornix api project-sentiment sentiment-analysis --json` — Aggregated AI sentiment analysis for all members of a project (team mood overview)
+- `tornix api projects create --json` — Create a project
+- `tornix api projects delete --json` — Delete project
+- `tornix api projects get --json` — Get project by ID
+- `tornix api projects health --json` — Get project health snapshot
+- `tornix api projects list --json` — List projects in organization
+- `tornix api projects members --json` — List project members
+- `tornix api projects replace --json` — Update project
+- `tornix api projects sections --json` — List project sections
+- `tornix api risks create --json` — Create a risk
+- `tornix api risks delete --json` — RisksController_delete
+- `tornix api risks get --json` — RisksController_findById
+- `tornix api risks list --json` — List risks for a project
+- `tornix api risks mitigations --json` — RisksController_getMitigations
+- `tornix api risks mitigations-create --json` — RisksController_addMitigation
+- `tornix api risks replace --json` — RisksController_update
+- `tornix api sender-pm-approvals approve --json` — SenderPmApprovalsController_approve
+- `tornix api sender-pm-approvals list --json` — SenderPmApprovalsController_list
+- `tornix api sender-pm-approvals reject --json` — SenderPmApprovalsController_reject
+- `tornix api storage copy --json` — Copy a file within a bucket
+- `tornix api storage delete --json` — Delete a single file
+- `tornix api storage download --json` — Download a file as a blob
+- `tornix api storage files --json` — Bulk delete files
+- `tornix api storage list --json` — List files in a bucket/folder
+- `tornix api storage public --json` — Serve a public file by streaming from S3
+- `tornix api storage signed-url --json` — Get signed download URL
+- `tornix api storage upload --json` — Get presigned upload URL
+- `tornix api storage upload-direct --json` — Upload file directly through backend (avoids S3 CORS)
+- `tornix api strategic achievement --json` — Compute KPI achievement percentage
+- `tornix api strategic alignment --json` — Compute alignment score for objective
+- `tornix api strategic batch-calculate --json` — Batch calculate for all objectives in strategy
+- `tornix api strategic calculate --json` — Calculate & store confidence snapshot
+- `tornix api strategic confidence --json` — Get confidence history for entity
+- `tornix api strategic confidence-bsc --json` — BSC (Balanced Scorecard) summary
+- `tornix api strategic confidence-trends --json` — Confidence trend with delta
+- `tornix api strategic delete --json` — Delete strategy
+- `tornix api strategic details --json` — Theme with objectives and KPIs
+- `tornix api strategic gaps --json` — StrategicController_getGaps
+- `tornix api strategic get --json` — StrategicController_getConfidenceSnapshots
+- `tornix api strategic history --json` — Get risk history (audit trail)
+- `tornix api strategic initiatives --json` — List initiatives
+- `tornix api strategic initiatives-2 --json` — Get initiative with objective links
+- `tornix api strategic initiatives-create --json` — Create initiative with objective links
+- `tornix api strategic initiatives-delete --json` — Delete initiative
+- `tornix api strategic initiatives-objective-links-delete --json` — Unlink objective from initiative
+- `tornix api strategic initiatives-replace --json` — Update initiative
+- `tornix api strategic kpis --json` — List strategic KPIs
+- `tornix api strategic kpis-2 --json` — Get strategic KPI with values
+- `tornix api strategic kpis-create --json` — Create strategic KPI
+- `tornix api strategic kpis-delete --json` — Delete strategic KPI
+- `tornix api strategic kpis-replace --json` — Update strategic KPI
+- `tornix api strategic launch --json` — Atomic launch: create strategy + themes + objectives + KPIs + initiatives
+- `tornix api strategic legacy-kpis --json` — List legacy KPIs
+- `tornix api strategic legacy-kpis-2 --json` — Get legacy KPI with objective links
+- `tornix api strategic legacy-kpis-create --json` — Create legacy KPI
+- `tornix api strategic links --json` — List risk links
+- `tornix api strategic mitigations --json` — List mitigation actions
+- `tornix api strategic objective-links --json` — Link objective to initiative
+- `tornix api strategic objectives --json` — List objectives (org-scoped, optional strategy_id/theme_id filter)
+- `tornix api strategic objectives-2 --json` — Get objective with KPIs, projects, gaps
+- `tornix api strategic objectives-create --json` — Create objective
+- `tornix api strategic objectives-delete --json` — Delete objective
+- `tornix api strategic objectives-projects-create --json` — Link project to objective
+- `tornix api strategic objectives-projects-delete --json` — Unlink project from objective
+- `tornix api strategic objectives-replace --json` — Update objective
+- `tornix api strategic overview --json` — Enriched strategy overview with stats
+- `tornix api strategic project-objective-links --json` — Create AI project-objective link
+- `tornix api strategic project-objective-links-delete --json` — Delete project-objective link
+- `tornix api strategic project-objective-links-replace --json` — Update project-objective link
+- `tornix api strategic projects --json` — List linked projects
+- `tornix api strategic replace --json` — Update strategy
+- `tornix api strategic risks --json` — List strategic risks
+- `tornix api strategic risks-2 --json` — Get risk with mitigations, links, history
+- `tornix api strategic risks-create --json` — Create strategic risk
+- `tornix api strategic risks-delete --json` — Delete risk
+- `tornix api strategic risks-links-create --json` — Add risk link
+- `tornix api strategic risks-mitigations-create --json` — Add mitigation action
+- `tornix api strategic risks-replace --json` — Update risk (re-computes score)
+- `tornix api strategic risks-risk-mitigations-delete --json` — Delete mitigation action
+- `tornix api strategic risks-risk-mitigations-replace --json` — Update mitigation action
+- `tornix api strategic strategies --json` — List strategies for organization
+- `tornix api strategic strategies-2 --json` — Get strategy with themes, objectives
+- `tornix api strategic strategies-create --json` — Create strategy
+- `tornix api strategic strategies-themes-create --json` — Create theme under strategy
+- `tornix api strategic strategies-themes-delete --json` — Delete theme
+- `tornix api strategic strategies-themes-replace --json` — Update theme
+- `tornix api strategic summary --json` — Strategy-level confidence summary
+- `tornix api strategic themes --json` — List themes for strategy
+- `tornix api strategic timeseries --json` — Get KPI timeseries (date range filter)
+- `tornix api strategic values --json` — Record KPI value (upsert by date)
+- `tornix api strategy accept --json` — Accept a strategic recommendation
+- `tornix api strategy actual --json` — Update the actual value of a project-objective KPI
+- `tornix api strategy ai-refresh --json` — Refresh AI insights for a strategic risk
+- `tornix api strategy ai-usage --json` — Admin: list AI Anthropic calls (paginated). Used by the AI Usage admin page.
+- `tornix api strategy alignment --json` — Update the alignment score between a project and an objective
+- `tornix api strategy all --json` — Delete all strategic risks for a strategy (used before Re-analyze)
+- `tornix api strategy analyze --json` — Analyze strategic risks (SSE endpoint - not yet implemented)
+- `tornix api strategy batch --json` — Batch calculate confidence for multiple entities
+- `tornix api strategy benefit --json` — Update the expected benefit for a project-objective link
+- `tornix api strategy bsc --json` — Get Balanced Scorecard (BSC) summary for a strategy
+- `tornix api strategy calculate --json` — Calculate alignment score for an objective-project pair
+- `tornix api strategy candidate-projects --json` — Candidate projects for a risk (derived from linked objectives)
+- `tornix api strategy confidence-calculate-create --json` — Calculate strategy-level confidence score
+- `tornix api strategy confidence-calculate-create-2 --json` — Calculate confidence score for an entity
+- `tornix api strategy confidence-history --json` — Get confidence history by query params
+- `tornix api strategy confidence-history-2 --json` — Get strategy confidence history
+- `tornix api strategy confidence-history-3 --json` — Get confidence history snapshots for an entity
+- `tornix api strategy create --json` — Recalculate alignment for all projects linked to an objective
+- `tornix api strategy create-manual --json` — Manually create a strategic risk
+- `tornix api strategy delete --json` — Delete strategy by ID
+- `tornix api strategy delete-2 --json` — Delete a strategy by ID
+- `tornix api strategy details --json` — Get theme details including objectives and KPIs
+- `tornix api strategy detect --json` — Detect and persist strategic gaps for the current organization
+- `tornix api strategy dismiss --json` — Dismiss a strategic recommendation
+- `tornix api strategy escalate --json` — Escalate project risk to strategic level
+- `tornix api strategy existing --json` — Get the latest existing strategy for an organization
+- `tornix api strategy explain --json` — Get confidence explanation
+- `tornix api strategy gaps --json` — Get gaps by query params
+- `tornix api strategy gaps-2 --json` — List all strategic gaps for an organization
+- `tornix api strategy gaps-summary --json` — Get strategic gaps summary (counts by type and severity) for an organization
+- `tornix api strategy generate --json` — Generate strategy with AI (SSE stream) — proxied to strategic-navigator:8013
+- `tornix api strategy generate-sync --json` — Generate strategy synchronously — proxied to strategic-navigator:8013
+- `tornix api strategy get --json` — Get single strategy by ID
+- `tornix api strategy health --json` — Health check
+- `tornix api strategy health-objective --json` — Calculate health score for a strategic objective
+- `tornix api strategy history --json` — Get KPI value history
+- `tornix api strategy ingest --json` — Ingest a single AI usage row from a Python service. Auth via apikey header (SERVICE_API_KEY).
+- `tornix api strategy initiatives --json` — Get initiatives by strategy ID or org ID
+- `tornix api strategy initiatives-delete --json` — Delete a strategic initiative
+- `tornix api strategy initiatives-replace --json` — Update a strategic initiative
+- `tornix api strategy insights --json` — Get AI insights for a strategy
+- `tornix api strategy insights-generate-create --json` — Generate AI-driven strategic insights for a strategy or organization
+- `tornix api strategy insights-replace --json` — Update an insight (e.g. mark as dismissed or acted upon)
+- `tornix api strategy kpis --json` — Create a strategic KPI
+- `tornix api strategy kpis-2 --json` — Get KPIs for an objective (Python service compat)
+- `tornix api strategy kpis-delete --json` — Delete a strategic KPI
+- `tornix api strategy kpis-objectives --json` — Get KPIs belonging to one or more objectives (query param: objectiveIds[])
+- `tornix api strategy kpis-replace --json` — Update a strategic KPI
+- `tornix api strategy launch --json` — Atomically launch a strategy with themes, objectives, KPIs, initiatives, and project links
+- `tornix api strategy link --json` — Link KPIs to a project-objective relationship
+- `tornix api strategy match-projects --json` — Match projects to objectives — proxied to strategic-navigator:8013
+- `tornix api strategy match-projects-wizard --json` — Match projects during wizard — proxied to strategic-navigator:8013
+- `tornix api strategy materialize-mitigations --json` — Backfill project_tasks for any mitigations on this risk that lack one (e.g. AI-created)
+- `tornix api strategy mitigation-actions --json` — Create a mitigation action for a strategic risk
+- `tornix api strategy objectives --json` — Get objectives belonging to a theme
+- `tornix api strategy objectives-2 --json` — Get objectives by strategy ID, or single objective by ID
+- `tornix api strategy objectives-create --json` — Create a strategic objective
+- `tornix api strategy objectives-delete --json` — Delete a strategic objective
+- `tornix api strategy objectives-organization --json` — Get all objectives for an organization
+- `tornix api strategy objectives-perspective --json` — Get objectives filtered by BSC perspective for an organization
+- `tornix api strategy objectives-project --json` — Get all objectives linked to a project
+- `tornix api strategy objectives-projects-delete --json` — Remove a single project link from an objective
+- `tornix api strategy objectives-replace --json` — Update a strategic objective
+- `tornix api strategy organization-delete --json` — Delete all strategies for an organization
+- `tornix api strategy overview --json` — Get strategy overview stats for an organization
+- `tornix api strategy project-kpis --json` — Get KPIs linked to a specific project-objective pair
+- `tornix api strategy project-kpis-delete --json` — Unlink a KPI from a project-objective relationship
+- `tornix api strategy project-kpis-link --json` — Get the project-objective link record
+- `tornix api strategy project-links --json` — Get project-objective links for strategy
+- `tornix api strategy project-links-create --json` — Create project-objective link
+- `tornix api strategy project-links-delete --json` — Delete project-objective link
+- `tornix api strategy project-links-replace --json` — Update project-objective link
+- `tornix api strategy projects --json` — Sync (replace) the full set of projects linked to an objective
+- `tornix api strategy recalculate-aggregation --json` — Recalculate risk aggregation — stub
+- `tornix api strategy recommendations --json` — Get recommendations by query params
+- `tornix api strategy recommendations-2 --json` — List all strategic recommendations for an organization
+- `tornix api strategy recommendations-generate-create --json` — Generate AI-driven strategic recommendations for the current organization
+- `tornix api strategy recommendations-summary --json` — Get recommendations summary by query params
+- `tornix api strategy recommendations-summary-2 --json` — Get strategic recommendations summary (counts by type, priority, status) for an organization
+- `tornix api strategy record-value --json` — Record an actual value for a KPI (upserts by date)
+- `tornix api strategy replace --json` — Update strategy
+- `tornix api strategy resolve --json` — Resolve a strategic gap
+- `tornix api strategy risks --json` — List all strategic risks for a strategy with summary
+- `tornix api strategy risks-2 --json` — Get detailed information for a specific strategic risk
+- `tornix api strategy risks-mitigation-actions-replace --json` — Update a mitigation action for a strategic risk
+- `tornix api strategy save --json` — Save complete strategy (delegates to launch)
+- `tornix api strategy strategies --json` — List strategies for organization (query param)
+- `tornix api strategy strategies-create --json` — Create a new strategy
+- `tornix api strategy summary --json` — Get gaps summary by query params
+- `tornix api strategy sync-project-change --json` — Sync project risk change — stub
+- `tornix api strategy themes --json` — Get themes by strategy ID or org ID
+- `tornix api strategy themes-delete --json` — Delete a theme
+- `tornix api strategy themes-replace --json` — Update a theme
+- `tornix api strategy timeseries --json` — Get KPI value timeseries with optional date range filter
+- `tornix api strategy whatif --json` — Get all what-if scenarios for an organization
+- `tornix api strategy whatif-create --json` — Create a new what-if scenario
+- `tornix api strategy whatif-delete --json` — Delete a what-if scenario
+- `tornix api strategy whatif-replace --json` — Update a what-if scenario
+- `tornix api supplier-evaluations aggregated --json` — Aggregated rating for a partner across all rated projects
+- `tornix api supplier-evaluations create --json` — Create a supplier evaluation for the current user
+- `tornix api supplier-evaluations delete --json` — Delete an evaluation (rater only)
+- `tornix api supplier-evaluations list --json` — List supplier evaluations (filter by partner/project/rater)
+- `tornix api supplier-evaluations update --json` — Update an evaluation (rater only)
+- `tornix api tasks comments --json` — Get task comments
+- `tornix api tasks comments-create --json` — Add comment to task
+- `tornix api tasks create --json` — Create a task
+- `tornix api tasks delete --json` — Delete task
+- `tornix api tasks dependencies --json` — Get task dependencies
+- `tornix api tasks dependencies-create --json` — Add task dependency
+- `tornix api tasks extract --json` — Extract task drafts from a chat message or long text via AI
+- `tornix api tasks extract-voice --json` — Extract task drafts from a voice recording (audio passed as base64) via Gemini multimodal
+- `tornix api tasks from-drafts --json` — Bulk create tasks from AI-generated drafts (chat message or voice extraction)
+- `tornix api tasks get --json` — Get task by ID
+- `tornix api tasks list --json` — List tasks for a project
+- `tornix api tasks replace --json` — Update task
+- `tornix api tasks tag-suggestions --json` — List distinct task tags in the current organization
+- `tornix api time-tracking current --json` — TimerController_current
+- `tornix api time-tracking delete --json` — TimeEntriesController_remove
+- `tornix api time-tracking effective --json` — BillableRatesController_effective
+- `tornix api time-tracking get --json` — TimeEntriesController_findOne
+- `tornix api time-tracking pause --json` — TimerController_pause
+- `tornix api time-tracking rates --json` — BillableRatesController_list
+- `tornix api time-tracking rates-create --json` — BillableRatesController_create
+- `tornix api time-tracking rates-delete --json` — BillableRatesController_remove
+- `tornix api time-tracking rates-update --json` — BillableRatesController_update
+- `tornix api time-tracking resume --json` — TimerController_resume
+- `tornix api time-tracking start --json` — TimerController_start
+- `tornix api time-tracking stop --json` — TimerController_stop
+- `tornix api time-tracking summary --json` — TimeEntriesController_summary
+- `tornix api time-tracking switch --json` — TimerController_switch
+- `tornix api time-tracking time-entries --json` — TimeEntriesController_list
+- `tornix api time-tracking time-entries-create --json` — TimeEntriesController_create
+- `tornix api time-tracking timer-current-update --json` — TimerController_updateRunning
+- `tornix api time-tracking update --json` — TimeEntriesController_update
+- `tornix api translate section-name --json` — Translate a section name between EN/AR
+- `tornix api translate text-pair --json` — Translate a longer text between EN/AR (no length cap)
+- `tornix api user-sentiment sentiment-analysis --json` — Aggregated AI sentiment analysis for a user across meetings, chat messages, and task comments
+- `tornix api users ai-suggestions --json` — Get user AI chat quick action suggestions
+- `tornix api users ai-suggestions-replace --json` — Update user AI chat quick action suggestions
+- `tornix api users analyze-skills --json` — AI-analyze user skills from tasks and comments
+- `tornix api users change-password --json` — [Super admin] Change any user password
+- `tornix api users create --json` — Create or upsert security settings
+- `tornix api users create-demo-file --json` — Create a demo file record
+- `tornix api users delete --json` — Delete email user (requires password verification)
+- `tornix api users delete-apple --json` — Delete Apple user (no password required)
+- `tornix api users delete-google --json` — Delete Google user (no password required)
+- `tornix api users get --json` — Get user by ID
+- `tornix api users list --json` — [Super admin] List all users with search/pagination
+- `tornix api users me --json` — Get current user profile
+- `tornix api users me-replace --json` — Update current user profile
+- `tornix api users privacy-settings --json` — Get user privacy settings (creates defaults if missing)
+- `tornix api users privacy-settings-replace --json` — Update privacy settings
+- `tornix api users security-settings --json` — Get user security settings (creates defaults if missing)
+- `tornix api users security-settings-replace --json` — Update security settings
+- `tornix api widget-data get --json` — Execute a data source and return its rows
+- `tornix api widget-data widget-data-sample --json` — Fetch up to N sample rows for a data source. Service-key auth only — used by super-agent to give the AI ground-truth shape before Phase B.
+- `tornix api widget-data widget-schema --json` — Enumerate data sources + their schemas. Public: no per-user data — catalog metadata only; consumed by super-agent at boot.
+- `tornix approvals approve --json` — 
+- `tornix approvals get --json` — 
+- `tornix approvals list --json` — 
+- `tornix approvals reject --json` — 
+- `tornix auth keys create --json` — 
+- `tornix auth keys list --json` — 
+- `tornix auth keys revoke --json` — 
+- `tornix auth keys scopes --json` — 
+- `tornix auth login --json` — 
+- `tornix auth logout --json` — 
+- `tornix auth whoami --json` — 
+- `tornix catalog --json` — Print the full command tree (use --json for agents).
+- `tornix config org --json` — 
+- `tornix config show --json` — 
+- `tornix data delete --json` — 
+- `tornix data insert --json` — 
+- `tornix data select --json` — 
+- `tornix data update --json` — 
+- `tornix deep-research --json` — Multi-source research over PMO data and/or the web.
+- `tornix gen --json` — Refresh the pinned OpenAPI snapshot from a backend.
+- `tornix meetings action-items --json` — 
+- `tornix meetings get --json` — 
+- `tornix meetings list --json` — 
+- `tornix meetings minutes --json` — 
+- `tornix meetings transcript --json` — 
+- `tornix projects create --json` — 
+- `tornix projects get --json` — 
+- `tornix projects health --json` — 
+- `tornix projects list --json` — 
+- `tornix projects members --json` — 
+- `tornix projects update --json` — 
+- `tornix rpc --json` — Call a backend RPC function.
+- `tornix skill --json` — Generate the agent SKILL.md from the live command catalog.
+- `tornix tasks comment --json` — 
+- `tornix tasks create --json` — 
+- `tornix tasks get --json` — 
+- `tornix tasks list --json` — 
+- `tornix tasks update --json` — 

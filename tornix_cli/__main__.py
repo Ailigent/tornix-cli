@@ -76,20 +76,27 @@ def gen(obj, src):
     emit({"refreshed": True, "paths": len(spec.get("paths", {}))}, json_mode=obj.get("json"))
 
 
-@cli.command("skill")
+@cli.command("skill", help="Generate the agent SKILL.md from the live command catalog.")
 @click.argument("action", type=click.Choice(["generate"]))
+@click.option("--out", default=None, help="Output path (default: <repo>/skills/tornix/SKILL.md).")
+@click.option("--stdout", "to_stdout", is_flag=True, help="Print the SKILL.md to stdout.")
 @click.pass_context
-def skill(ctx, action):
+def skill(ctx, action, out, to_stdout):
     from pathlib import Path
 
     from .catalog import _describe
     from .skillgen import render_skill
 
     catalog = _describe(ctx.find_root().command, "tornix")
-    out = Path(__file__).resolve().parent.parent / "skills" / "tornix" / "SKILL.md"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(render_skill(catalog))
-    emit({"written": str(out)}, json_mode=(ctx.obj or {}).get("json", True))
+    content = render_skill(catalog)
+    if to_stdout:
+        click.echo(content)
+        return
+    out_path = Path(out) if out else (Path(__file__).resolve().parent.parent
+                                      / "skills" / "tornix" / "SKILL.md")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(content)
+    emit({"written": str(out_path)}, json_mode=(ctx.obj or {}).get("json", True))
 
 
 # Assemble layers
