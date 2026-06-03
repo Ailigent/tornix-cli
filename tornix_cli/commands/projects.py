@@ -12,7 +12,7 @@ def projects_group() -> None:
     pass
 
 
-@projects_group.command("list")
+@projects_group.command("list", help="List projects in the active organization.")
 @click.option("--limit", type=int, default=None)
 @click.option("--status", default=None)
 @click.pass_obj
@@ -26,21 +26,21 @@ def projects_list(obj, limit, status):
          columns=["id", "name", "status", "progress"])
 
 
-@projects_group.command("get")
+@projects_group.command("get", help="Get a project by id.")
 @click.argument("project_id")
 @click.pass_obj
 def projects_get(obj, project_id):
     show(obj, client(obj).get(f"/api/v1/projects/{project_id}"))
 
 
-@projects_group.command("health")
+@projects_group.command("health", help="Get a project's health summary.")
 @click.argument("project_id")
 @click.pass_obj
 def projects_health(obj, project_id):
     show(obj, client(obj).get(f"/api/v1/projects/{project_id}/health"))
 
 
-@projects_group.command("members")
+@projects_group.command("members", help="List a project's members.")
 @click.argument("project_id")
 @click.pass_obj
 def projects_members(obj, project_id):
@@ -48,7 +48,7 @@ def projects_members(obj, project_id):
          columns=["id", "name", "role"])
 
 
-@projects_group.command("create")
+@projects_group.command("create", help="Create a project.")
 @click.option("--name", required=True)
 @click.option("--description", default=None)
 @click.pass_obj
@@ -59,9 +59,13 @@ def projects_create(obj, name, description):
     show(obj, client(obj).post("/api/v1/projects", json=body))
 
 
-@projects_group.command("update")
+@projects_group.command("update", help="Update a project (PUT) with a JSON body.")
 @click.argument("project_id")
 @click.option("--data", "raw", required=True, help="JSON body (PUT).")
 @click.pass_obj
 def projects_update(obj, project_id, raw):
-    show(obj, client(obj).put(f"/api/v1/projects/{project_id}", json=json.loads(raw)))
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError as e:
+        raise click.UsageError(f"invalid JSON for --data: {e}")
+    show(obj, client(obj).put(f"/api/v1/projects/{project_id}", json=payload))

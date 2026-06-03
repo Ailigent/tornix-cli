@@ -12,20 +12,38 @@ FOLD_TAGS = {"PostgREST Compatibility", "data-proxy", "rpc-proxy"}
 # Tags that are internal/webhook/meta/duplicate → never generate commands.
 EXCLUDE_TAGS = {
     "mcp", "api-docs", "API Documentation", "storage-compat",
-    "livekit-webhook", "odoo-sync-callback",
+    "odoo-sync", "odoo-sync-admin",
 }
-# Path-prefix exclusions for untagged/internal operations.
-EXCLUDE_PATH_PREFIXES = ("/api/v1/odoo-", "/api/v1/livekit", "/api/v1/webhooks")
+# Inbound webhooks / OAuth+integration callbacks are not first-class commands
+# (spec §3 non-goal). Matches e.g. .../livekit/webhook, .../odoo-*-callback, auth OAuth callbacks.
+EXCLUDE_PATH_SUBSTRINGS = ("webhook", "callback")
 
 
 def load_spec() -> dict:
     return json.loads(Path(PINNED_SPEC).read_text())
 
 
+def _allowed_base(base: str) -> bool:
+    """Allow https anywhere; http only for localhost/dev (SSRF guard)."""
+    if base.startswith("https://"):
+        return True
+    if base.startswith("http://"):
+        host = base[len("http://"):].split("/")[0].split(":")[0]
+        return host in ("localhost", "127.0.0.1", "0.0.0.0") or host.endswith(".local")
+    return False
+
+
 def fetch_spec(base_url: str, timeout: float = 30.0) -> dict:
-    url = base_url.rstrip("/") + "/api/v1/api-docs/openapi.json"
+    base = base_url.rstrip("/")
+    if not _allowed_base(base):
+        raise ValueError(f"refusing to fetch spec from non-https/non-local URL: {base_url}")
+    url = base + "/api/v1/api-docs/openapi.json"
     body = httpx.get(url, timeout=timeout).json()
-    return body.get("data", body) if isinstance(body, dict) else body
+    spec = body.get("data", body) if isinstance(body, dict) else body
+    if not (isinstance(spec, dict) and (spec.get("openapi") or spec.get("swagger"))
+            and spec.get("paths")):
+        raise ValueError("fetched document is not a valid OpenAPI spec (missing openapi/paths)")
+    return spec
 
 
 def operations_by_tag(spec: dict) -> dict[str, list[dict]]:
@@ -52,7 +70,7 @@ def classify_tags(spec: dict) -> dict[str, set[str]]:
 
 
 def is_excluded_path(path: str) -> bool:
-    return path.startswith(EXCLUDE_PATH_PREFIXES)
+    return any(sub in path for sub in EXCLUDE_PATH_SUBSTRINGS)
 
 
 def _fallback_op_id(method: str, path: str) -> str:

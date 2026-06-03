@@ -1,0 +1,24 @@
+{
+  "openapi": "3.0.0",
+  "info": {"title": "Edge", "version": "1.0"},
+  "paths": {
+    "/api/v1/projects/{projectId}/items": {
+      "get": {"tags": ["projects"], "operationId": "proj_items", "summary": "List items",
+              "parameters": [{"name": "projectId", "in": "path", "required": true,
+                              "schema": {"type": "string"}}]}
+    },
+    "/api/v1/widgets": {
+      "post": {"tags": ["widgets"], "operationId": "widget_create", "summary": "Create widget",
+               "requestBody": {"content": {"application/json": {"schema": {"type": "object",
+                 "required": ["content-type"],
+                 "properties": {"content-type": {"type": "string"},
+                                "size": {"type": "integer"}}}}}}}
+    },
+    "/api/v1/meetings/livekit/webhook": {
+      "post": {"tags": ["meetings"], "operationId": "lk_webhook", "summary": "webhook"}
+    },
+    "/api/v1/meetings": {
+      "get": {"tags": ["meetings"], "operationId": "meet_list", "summary": "List meetings"}
+    }
+  }
+}

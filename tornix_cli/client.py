@@ -10,8 +10,11 @@ from .errors import TornixError
 
 class TornixClient:
     def __init__(self, config: Config, *, transport: httpx.BaseTransport | None = None,
-                 timeout: float = 30.0) -> None:
+                 timeout: float = 30.0, retries: int = 2) -> None:
         self.config = config
+        # Default transport retries transient connection failures; tests inject a mock.
+        if transport is None:
+            transport = httpx.HTTPTransport(retries=retries)
         self._http = httpx.Client(
             base_url=config.api_url or "",
             timeout=timeout,

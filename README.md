@@ -28,6 +28,9 @@ reached via the credit-metered AI proxy) are excluded.
 pip install tornix-cli          # or: pipx install tornix-cli
 ```
 
+> Not yet published to PyPI? Install from source: `git clone … && cd tornix-cli && pip install .`
+> (use `pip install --break-system-packages .` on Debian/Ubuntu system Python).
+
 ## Quickstart
 
 ```bash

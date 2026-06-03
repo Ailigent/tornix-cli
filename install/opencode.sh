@@ -1,15 +1,36 @@
 #!/usr/bin/env bash
-# Copy Tornix slash commands into an OpenCode project (run from the project root).
+# Install Tornix slash commands into an OpenCode project (run from the project root).
+# Writes real OpenCode command files (not the skill) so it works after a PyPI install.
 set -euo pipefail
-pip install --upgrade tornix-cli
+pip install --upgrade tornix-cli || python3 -m pip install --upgrade tornix-cli
 DEST=".opencode/commands"
 mkdir -p "$DEST"
-PKG_PARENT="$(python -c 'import tornix_cli, os; print(os.path.dirname(os.path.dirname(tornix_cli.__file__)))')"
-SRC="$PKG_PARENT/plugins/claude-code/commands"
-if [ -d "$SRC" ]; then
-  cp "$SRC"/*.md "$DEST/"
-else
-  # Wheel install without bundled plugins: synthesize a single command from the skill.
-  tornix skill generate --out "$DEST/tornix.md"
-fi
+
+cat > "$DEST/tornix.md" <<'EOF'
+---
+description: Run a Tornix CLI command (agent-native, --json).
+argument-hint: <tornix subcommand and args>
+---
+
+Run the Tornix CLI and return parsed results. Always pass `--json`.
+
+1. Ensure auth: if a call returns exit code 3, run `tornix auth login --api-key tk_…`
+   or set `TORNIX_API_KEY`.
+2. Run: `tornix --json $ARGUMENTS`
+3. Parse the JSON output. On non-zero exit, read `{"error":{...}}` on stderr and act on `hint`.
+4. Discover commands with `tornix catalog --json`; full backend under `tornix api <tag> <op>`.
+EOF
+
+cat > "$DEST/deep-research.md" <<'EOF'
+---
+description: Deep research over Tornix PMO data and/or the web, then synthesize a cited answer.
+argument-hint: "<question>" [--project <id>] [--source pmo|web|both]
+---
+
+1. Run: `tornix --json deep-research $ARGUMENTS` (defaults to `--source pmo`).
+2. The CLI returns `{question, sub_questions, corpus, web_brief, instructions}`.
+3. If `web_brief` is present, execute its `search_queries` with your own web tools.
+4. Synthesize a cited answer: cite PMO facts by `tornix://kind/id`, web facts by URL.
+EOF
+
 echo "Installed Tornix commands to $DEST"

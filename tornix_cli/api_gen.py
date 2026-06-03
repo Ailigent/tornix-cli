@@ -5,7 +5,7 @@ from typing import Any
 
 import click
 
-from .output import emit
+from .output import emit_result
 from .spec import classify_tags, is_excluded_path, operations_by_tag
 
 _VERB = {"get_one": "get", "get_many": "list", "post": "create",
@@ -16,6 +16,17 @@ _TYPE = {"integer": int, "number": float, "boolean": bool}
 
 def _slug(s: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
+
+
+def _arg_dest(name: str) -> str:
+    """Replicate Click's Argument destination normalization (lower + dash→underscore),
+    so we can look up the kwarg for a path param like {projectId} (→ 'projectid')."""
+    return name.lower().replace("-", "_")
+
+
+def _body_dest(fname: str) -> str:
+    """A valid Python identifier dest for a body field option, hyphen-safe."""
+    return "_body_" + re.sub(r"[^0-9a-zA-Z_]", "_", fname)
 
 
 def _op_command_name(op: dict, tag: str) -> str:
@@ -90,7 +101,7 @@ def _build_command(op: dict, tag: str) -> click.Command:
         required = set(body.get("required", []))
         for fname, fschema in (body.get("properties") or {}).items():
             body_fields.append(fname)
-            params.append(click.Option([f"--{_slug(fname)}", "_body_" + fname],
+            params.append(click.Option([f"--{_slug(fname)}", _body_dest(fname)],
                                         required=fname in required,
                                         type=_click_type(fschema),
                                         help=(fschema or {}).get("description", "")))
@@ -102,10 +113,10 @@ def _build_command(op: dict, tag: str) -> click.Command:
         ctx = click.get_current_context()
         obj = ctx.obj or {}
         client = obj["client"]
-        json_mode = obj.get("json", False)
         path = op["_path"]
         for pp in _path_params(op):
-            path = path.replace("{%s}" % pp["name"], str(kwargs.pop(pp["name"])))
+            # Click normalized the Argument dest; look it up the same way.
+            path = path.replace("{%s}" % pp["name"], str(kwargs.pop(_arg_dest(pp["name"]))))
         query = {}
         for q in _query_params(op):
             key = _slug(q["name"]).replace("-", "_")
@@ -116,12 +127,15 @@ def _build_command(op: dict, tag: str) -> click.Command:
         raw = kwargs.pop("_raw_body", None)
         if raw:
             import json as _j
-            payload = _j.loads(raw)
+            try:
+                payload = _j.loads(raw)
+            except _j.JSONDecodeError as e:
+                raise click.UsageError(f"invalid JSON for --data: {e}")
         elif body_fields:
-            payload = {f: kwargs[f"_body_{f}"] for f in body_fields
-                       if kwargs.get(f"_body_{f}") is not None}
+            payload = {f: kwargs[_body_dest(f)] for f in body_fields
+                       if kwargs.get(_body_dest(f)) is not None}
         result = client.request(op["_method"].upper(), path, params=query or None, json=payload)
-        emit(result, json_mode=json_mode)
+        emit_result(obj, result)
 
     cmd = click.Command(name=name, params=params, callback=callback,
                         help=op.get("summary") or op.get("description") or op["operationId"],
@@ -137,7 +151,8 @@ def build_api_group(spec: dict) -> click.Group:
     for tag in sorted(cls["generate"]):
         sub = click.Group(name=_slug(tag), help=f"{tag} operations.")
         used: set[str] = set()
-        for op in by_tag[tag]:
+        # Deterministic order → stable command names across spec refreshes.
+        for op in sorted(by_tag[tag], key=lambda o: (o["_path"], o["_method"])):
             if is_excluded_path(op["_path"]):
                 continue
             cmd = _build_command(op, tag)

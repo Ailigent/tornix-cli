@@ -21,16 +21,33 @@ def _set_json(ctx, param, value):
     return value
 
 
+def _set_jsonl(ctx, param, value):
+    """Eager option callback: JSON-lines mode (implies JSON)."""
+    if value and isinstance(ctx.obj, dict):
+        ctx.obj["json"] = True
+        ctx.obj["jsonl"] = True
+    return value
+
+
+def emit_result(obj: dict, data: Any, columns: list[str] | None = None) -> None:
+    """Emit honoring the shared context's json / jsonl flags."""
+    emit(data, json_mode=obj.get("json", False), jsonl=obj.get("jsonl", False), columns=columns)
+
+
 def add_json_option(group: "click.Group") -> None:
-    """Recursively give every subcommand a uniform eager `--json` flag so it works
-    both before (`tornix --json projects list`) and after (`tornix projects list --json`)
-    the subcommand. expose_value=False keeps it out of command signatures."""
+    """Recursively give every subcommand uniform eager `--json` / `--jsonl` flags so they
+    work both before (`tornix --json projects list`) and after (`tornix projects list --json`)
+    the subcommand. expose_value=False keeps them out of command signatures."""
     for cmd in group.commands.values():
-        has_json = any(isinstance(p, click.Option) and "--json" in p.opts for p in cmd.params)
-        if not has_json:
+        opts = {o for p in cmd.params if isinstance(p, click.Option) for o in p.opts}
+        if "--json" not in opts:
             cmd.params.append(click.Option(["--json"], is_flag=True, expose_value=False,
                                            callback=_set_json,
                                            help="Machine-readable JSON output."))
+        if "--jsonl" not in opts:
+            cmd.params.append(click.Option(["--jsonl"], is_flag=True, expose_value=False,
+                                           callback=_set_jsonl,
+                                           help="JSON-lines output (one row per line)."))
         if isinstance(cmd, click.Group):
             add_json_option(cmd)
 

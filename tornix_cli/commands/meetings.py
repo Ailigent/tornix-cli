@@ -10,7 +10,7 @@ def meetings_group() -> None:
     pass
 
 
-@meetings_group.command("list")
+@meetings_group.command("list", help="List meetings (optionally by project).")
 @click.option("--project", "project_id", default=None)
 @click.pass_obj
 def meetings_list(obj, project_id):
@@ -19,28 +19,28 @@ def meetings_list(obj, project_id):
          columns=["id", "title", "scheduled_at", "status"])
 
 
-@meetings_group.command("get")
+@meetings_group.command("get", help="Get a meeting by id.")
 @click.argument("meeting_id")
 @click.pass_obj
 def meetings_get(obj, meeting_id):
     show(obj, client(obj).get(f"/api/v1/meetings/{meeting_id}"))
 
 
-@meetings_group.command("transcript")
+@meetings_group.command("transcript", help="Get a meeting's transcript.")
 @click.argument("meeting_id")
 @click.pass_obj
 def meetings_transcript(obj, meeting_id):
     show(obj, client(obj).get(f"/api/v1/meetings/{meeting_id}/transcript"))
 
 
-@meetings_group.command("minutes")
+@meetings_group.command("minutes", help="Get a meeting's minutes.")
 @click.argument("meeting_id")
 @click.pass_obj
 def meetings_minutes(obj, meeting_id):
     show(obj, client(obj).get(f"/api/v1/meetings/{meeting_id}/minutes"))
 
 
-@meetings_group.command("action-items")
+@meetings_group.command("action-items", help="Get a meeting's action items.")
 @click.argument("meeting_id")
 @click.pass_obj
 def meetings_action_items(obj, meeting_id):

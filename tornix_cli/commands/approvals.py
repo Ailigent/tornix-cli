@@ -10,7 +10,7 @@ def approvals_group() -> None:
     pass
 
 
-@approvals_group.command("list")
+@approvals_group.command("list", help="List approval requests by status.")
 @click.option("--status", default="pending")
 @click.pass_obj
 def approvals_list(obj, status):
@@ -18,14 +18,14 @@ def approvals_list(obj, status):
          columns=["id", "type", "status", "requested_by"])
 
 
-@approvals_group.command("get")
+@approvals_group.command("get", help="Get an approval request by id.")
 @click.argument("request_id")
 @click.pass_obj
 def approvals_get(obj, request_id):
     show(obj, client(obj).get(f"/api/v1/approvals/requests/{request_id}"))
 
 
-@approvals_group.command("approve")
+@approvals_group.command("approve", help="Approve a workflow step.")
 @click.argument("step_id")
 @click.option("--note", default=None)
 @click.pass_obj
@@ -34,7 +34,7 @@ def approvals_approve(obj, step_id, note):
     show(obj, client(obj).post(f"/api/v1/approvals/steps/{step_id}/approve", json=body or None))
 
 
-@approvals_group.command("reject")
+@approvals_group.command("reject", help="Reject a workflow step.")
 @click.argument("step_id")
 @click.option("--note", default=None)
 @click.pass_obj

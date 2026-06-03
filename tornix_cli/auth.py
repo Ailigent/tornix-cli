@@ -11,10 +11,13 @@ def auth_group() -> None:
     pass
 
 
-@auth_group.command("login")
+@auth_group.command("login", help="Authenticate with an API key or email/password. "
+                                  "Prefer TORNIX_API_KEY env over --api-key (which is "
+                                  "visible in the process list and shell history).")
 @click.option("--api-key", "api_key", default=None, help="Scoped API key (tk_…).")
 @click.option("--email", default=None)
-@click.option("--password", default=None, hide_input=True)
+@click.option("--password", default=None,
+              help="Password (prefer interactive entry; flags leak via ps/history).")
 @click.pass_obj
 def login(obj, api_key, email, password):
     cfg: Config = obj["config"]
@@ -33,7 +36,7 @@ def login(obj, api_key, email, password):
     emit({"logged_in": True, "user": me}, json_mode=obj.get("json"))
 
 
-@auth_group.command("logout")
+@auth_group.command("logout", help="Clear the stored API key / token.")
 @click.pass_obj
 def logout(obj):
     cfg: Config = obj["config"]
@@ -43,7 +46,7 @@ def logout(obj):
     emit({"logged_out": True}, json_mode=obj.get("json"))
 
 
-@auth_group.command("whoami")
+@auth_group.command("whoami", help="Show the authenticated user.")
 @click.pass_obj
 def whoami(obj):
     emit(obj["client"].get("/api/v1/auth/me"), json_mode=obj.get("json"))
@@ -54,19 +57,19 @@ def keys():
     pass
 
 
-@keys.command("list")
+@keys.command("list", help="List your API keys.")
 @click.pass_obj
 def keys_list(obj):
     emit(obj["client"].get("/api/v1/api-keys"), json_mode=obj.get("json"))
 
 
-@keys.command("scopes")
+@keys.command("scopes", help="List available permission scopes.")
 @click.pass_obj
 def keys_scopes(obj):
     emit(obj["client"].get("/api/v1/api-keys/scopes"), json_mode=obj.get("json"))
 
 
-@keys.command("create")
+@keys.command("create", help="Create a new API key (raw key shown once).")
 @click.option("--name", required=True)
 @click.option("--scope", "scopes", multiple=True, help="Permission scope (repeatable).")
 @click.pass_obj
@@ -75,7 +78,7 @@ def keys_create(obj, name, scopes):
     emit(obj["client"].post("/api/v1/api-keys", json=body), json_mode=obj.get("json"))
 
 
-@keys.command("revoke")
+@keys.command("revoke", help="Revoke an API key by id.")
 @click.argument("key_id")
 @click.pass_obj
 def keys_revoke(obj, key_id):
