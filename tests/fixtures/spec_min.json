@@ -1,0 +1,32 @@
+{
+  "openapi": "3.0.0",
+  "info": {"title": "Tornix", "version": "1.0"},
+  "paths": {
+    "/api/v1/projects": {
+      "get": {"tags": ["projects"], "operationId": "projects_list",
+              "summary": "List projects",
+              "parameters": [{"name": "limit", "in": "query",
+                              "schema": {"type": "integer"}}]},
+      "post": {"tags": ["projects"], "operationId": "projects_create",
+               "summary": "Create project",
+               "requestBody": {"content": {"application/json":
+                 {"schema": {"type": "object",
+                   "required": ["name"],
+                   "properties": {"name": {"type": "string"},
+                                  "budget": {"type": "number"}}}}}}}
+    },
+    "/api/v1/projects/{id}": {
+      "get": {"tags": ["projects"], "operationId": "projects_get",
+              "summary": "Get project",
+              "parameters": [{"name": "id", "in": "path", "required": true,
+                              "schema": {"type": "string"}}]}
+    },
+    "/api/v1/data/{table}": {
+      "get": {"tags": ["PostgREST Compatibility"], "operationId": "pg_select",
+              "summary": "select"}
+    },
+    "/api/v1/mcp": {
+      "post": {"tags": ["mcp"], "operationId": "mcp_call", "summary": "mcp"}
+    }
+  }
+}
