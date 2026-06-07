@@ -29,21 +29,48 @@ def _kv(pairs: tuple[str, ...]) -> dict[str, str]:
 
 @data_group.command("select", help="Read rows from a table with optional filters.")
 @click.argument("table")
-@click.option("--eq", "eq", multiple=True, help="Filter col=value (repeatable).")
-@click.option("--select", "select_", default=None, help="Comma-separated columns.")
+@click.option("--eq", "eq", multiple=True, help="Equality filter col=value (repeatable).")
+@click.option("--filter", "filters", multiple=True,
+              help="Raw PostgREST filter col=op.value (repeatable), e.g. status=in.(done,closed) "
+                   "or percent_complete=gte.100. Operators: eq,neq,gt,gte,lt,lte,like,ilike,in,is,not.")
+@click.option("--select", "select_", default=None, help="Comma-separated columns (project only what you need).")
 @click.option("--order", default=None, help="col.asc / col.desc")
 @click.option("--limit", type=int, default=None)
+@click.option("--offset", type=int, default=None, help="Skip N rows (pagination).")
+@click.option("--count", is_flag=True, default=False,
+              help="Return ONLY the total row count (matching the filters), not the rows. "
+                   "Use this for 'how many' questions instead of pulling rows.")
 @click.pass_obj
-def data_select(obj, table, eq, select_, order, limit):
+def data_select(obj, table, eq, filters, select_, order, limit, offset, count):
     params = {}
     for k, v in _kv(eq).items():
         params[k] = f"eq.{v}"          # PostgREST operator form
+    for f in filters:
+        k, _, v = f.partition("=")
+        if k:
+            params[k] = v              # raw op.value passthrough (backend parses col=op.value)
     if select_:
         params["select"] = select_
     if order:
         params["order"] = order
+    if count:
+        # count-only: ask the backend for an exact count, minimise rows returned
+        params["count"] = "exact"
+        params["limit"] = 1
+        body = obj["client"].get(f"/api/v1/data/{table}", params=params, envelope=True)
+        n = None
+        if isinstance(body, dict):
+            n = body.get("count")
+            if n is None and isinstance(body.get("meta"), dict):
+                n = body["meta"].get("count")
+            if n is None and isinstance(body.get("data"), list):
+                n = len(body["data"])
+        emit_result(obj, {"count": n})
+        return
     if limit is not None:
         params["limit"] = limit
+    if offset is not None:
+        params["offset"] = offset
     emit_result(obj, obj["client"].get(f"/api/v1/data/{table}", params=params))
 
 

@@ -36,7 +36,8 @@ class TornixClient:
 
     # ── core request ──
     def request(self, method: str, path: str, *, params: dict | None = None,
-                json: Any = None, headers: dict | None = None) -> Any:
+                json: Any = None, headers: dict | None = None,
+                envelope: bool = False) -> Any:
         try:
             resp = self._http.request(method, path, params=_clean(params),
                                       json=json, headers=self._headers(headers))
@@ -47,6 +48,9 @@ class TornixClient:
         if resp.status_code == 204 or not resp.content:
             return None
         body = resp.json()
+        # When envelope=True, return the full parsed body without unwrapping.
+        if envelope:
+            return body
         # Backend wraps successful payloads in {"data": …}. Unwrap when present.
         if isinstance(body, dict) and set(body.keys()) <= {"data", "meta", "count"} and "data" in body:
             return body["data"]
