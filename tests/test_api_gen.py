@@ -134,3 +134,19 @@ def test_bodyless_action_endpoint_still_fires_without_data():
     assert r.exit_code == 0, r.output
     assert captured["path"] == "/api/v1/gantt/schedule/p1"
     assert captured["content"] in (b"", None)
+
+
+def test_collision_names_prefer_reads_over_deletes():
+    """When several methods on one path contest a bare action name, the GET/POST
+    an agent intends must win it — never the DELETE. Before this rule,
+    `api cost pv-curve` was the DELETE (wiping a client baseline) and
+    `api notifications push-subscribe` was the UNsubscribe."""
+    grp = build_api_group(load_spec())
+
+    pv = grp.commands["cost"].commands["pv-curve"]._tornix_op
+    assert pv["_method"] == "get"
+    assert grp.commands["cost"].commands["baseline-pv-curve-delete"]._tornix_op["_method"] == "delete"
+
+    sub = grp.commands["notifications"].commands["push-subscribe"]._tornix_op
+    assert sub["_method"] == "post"
+    assert "push-subscribe-delete" in grp.commands["notifications"].commands

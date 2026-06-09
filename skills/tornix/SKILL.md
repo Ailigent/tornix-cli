@@ -43,8 +43,8 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api ai-chat rooms-create --json` — AiChatController_createRoom
 - `tornix api ai-chat rooms-messages-create --json` — AiChatController_sendMessage
 - `tornix api ai-chat upsert --json` — AiChatController_upsertMessage
-- `tornix api ai-proxy ai-reports --json` — AiProxyController_proxyReportsRoot_get
 - `tornix api ai-proxy ai-reports-create --json` — AiProxyController_proxyReportsRoot_post
+- `tornix api ai-proxy ai-reports-delete --json` — AiProxyController_proxyReportsRoot_delete
 - `tornix api ai-proxy ai-reports-replace --json` — AiProxyController_proxyReportsRoot_put
 - `tornix api ai-proxy ai-reports-update --json` — AiProxyController_proxyReportsRoot_patch
 - `tornix api ai-proxy chat --json` — AiProxyController_proxyChat_get
@@ -96,7 +96,7 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api ai-proxy planning-replace --json` — AiProxyController_proxyPlanning_put
 - `tornix api ai-proxy planning-update --json` — AiProxyController_proxyPlanning_patch
 - `tornix api ai-proxy replace --json` — AiProxyController_proxyBudget_put
-- `tornix api ai-proxy reports --json` — AiProxyController_proxyReportsRoot_delete
+- `tornix api ai-proxy reports --json` — AiProxyController_proxyReportsRoot_get
 - `tornix api ai-proxy reports-2 --json` — AiProxyController_proxyReports_get
 - `tornix api ai-proxy reports-create --json` — AiProxyController_proxyReports_post
 - `tornix api ai-proxy reports-delete --json` — AiProxyController_proxyReports_delete
@@ -204,7 +204,7 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api chat summarize --json` — CommunicationController_summarizeAttachment
 - `tornix api chat update --json` — CommunicationController_updateRoom
 - `tornix api cost accounts --json` — CostController_getCostAccounts
-- `tornix api cost baseline-pv-curve --json` — CostController_getPvCurve
+- `tornix api cost baseline-pv-curve-delete --json` — CostController_clearPvCurve
 - `tornix api cost baseline-pv-curve-replace --json` — CostController_setPvCurve
 - `tornix api cost bulk-actuals --json` — CostController_bulkUpdateActuals
 - `tornix api cost cashflow --json` — CostController_getCashFlow
@@ -218,7 +218,7 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api cost portfolio-evm --json` — CostController_getPortfolioEvm
 - `tornix api cost projects-estimates-create --json` — CostController_createEstimate
 - `tornix api cost projects-forecast-formula-replace --json` — CostController_setForecastFormula
-- `tornix api cost pv-curve --json` — CostController_clearPvCurve
+- `tornix api cost pv-curve --json` — CostController_getPvCurve
 - `tornix api cost recalculate --json` — CostController_recalculate
 - `tornix api cost reconciliation --json` — CostController_getReconciliation
 - `tornix api cost refresh --json` — CostController_refreshCashFlow
@@ -267,8 +267,8 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api cost-control submit-to-odoo --json` — CostControlController_submitInvoiceToOdoo
 - `tornix api cost-control void --json` — CostControlController_voidInvoice
 - `tornix api credits adjust --json` — CreditsController_adminAdjust
-- `tornix api credits admin-plans --json` — CreditsController_adminGetPlans
 - `tornix api credits admin-plans-create --json` — CreditsController_adminCreatePlan
+- `tornix api credits admin-plans-delete --json` — CreditsController_adminDeletePlan
 - `tornix api credits admin-plans-replace --json` — CreditsController_adminUpdatePlan
 - `tornix api credits admin-token-config-replace --json` — CreditsController_adminUpdateTokenConfig
 - `tornix api credits alerts --json` — CreditsController_getAlerts
@@ -276,7 +276,7 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api credits change-plan --json` — CreditsController_adminChangePlan
 - `tornix api credits consume --json` — CreditsController_consume
 - `tornix api credits packages --json` — CreditsController_getPackages
-- `tornix api credits plans --json` — CreditsController_adminDeletePlan
+- `tornix api credits plans --json` — CreditsController_adminGetPlans
 - `tornix api credits plans-2 --json` — CreditsController_getPlans
 - `tornix api credits refund --json` — CreditsController_refund
 - `tornix api credits reserve --json` — CreditsController_reserve
@@ -392,7 +392,7 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api meetings end --json` — Mark a meeting session as ended and enqueue async AI summary generation. Idempotent unless force=true.
 - `tornix api meetings get --json` — Fetch invite metadata (no auth required)
 - `tornix api meetings get-2 --json` — MeetingsController_findById
-- `tornix api meetings invite-link --json` — Revoke an existing invite link
+- `tornix api meetings invite-link --json` — Create or fetch a shareable invite link for a video room (host only). Idempotent by default — returns the existing token if one is still valid. Pass `force: true` to rotate (invalidates previously shared links). Pass `ttl_days: null` or `0` for a permanent link.
 - `tornix api meetings invite-status --json` — Poll the status of a guest join request
 - `tornix api meetings list --json` — MeetingsController_findAll
 - `tornix api meetings livekit-token --json` — Generate a LiveKit room token for WebRTC meetings
@@ -400,10 +400,10 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api meetings pending-guests --json` — List guest join requests still waiting for approval on this room. Used to rehydrate the People panel when users join after a guest has already knocked.
 - `tornix api meetings playback-url --json` — Get a short-lived presigned URL to play back a finished recording
 - `tornix api meetings recording-start-create --json` — Start a server-side recording for a meeting session (host only)
-- `tornix api meetings recordings-share-link-create --json` — Create or fetch a shareable public link for a recording
+- `tornix api meetings recordings-share-link-delete --json` — Revoke a recording share link
 - `tornix api meetings request-join --json` — Guest requests to join a meeting via invite link
-- `tornix api meetings rooms-invite-link-create --json` — Create or fetch a shareable invite link for a video room (host only). Idempotent by default — returns the existing token if one is still valid. Pass `force: true` to rotate (invalidates previously shared links). Pass `ttl_days: null` or `0` for a permanent link.
-- `tornix api meetings share-link --json` — Revoke a recording share link
+- `tornix api meetings rooms-invite-link-delete --json` — Revoke an existing invite link
+- `tornix api meetings share-link --json` — Create or fetch a shareable public link for a recording
 - `tornix api meetings shared-recording --json` — Fetch shared recording metadata + playback URL (no auth required)
 - `tornix api meetings start --json` — Create a new meeting session (fallback for when AI service is unavailable)
 - `tornix api meetings stop --json` — Stop a live recording (host only)
@@ -439,24 +439,24 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api misc undo --json` — GanttAiController_undo
 - `tornix api notifications credit-alert --json` — Internal: fan-out low-credit alert to Telegram + Email
 - `tornix api notifications delete --json` — NotificationsController_delete
-- `tornix api notifications expo-push-token --json` — Unregister Expo push token
-- `tornix api notifications expo-push-token-create --json` — Register Expo push token
+- `tornix api notifications expo-push-token --json` — Register Expo push token
+- `tornix api notifications expo-push-token-delete --json` — Unregister Expo push token
 - `tornix api notifications get --json` — List Expo push tokens for a user
-- `tornix api notifications link --json` — Unlink Telegram (clear chat_id)
+- `tornix api notifications link --json` — Start Telegram linking flow
 - `tornix api notifications list --json` — NotificationsController_findAll
-- `tornix api notifications push-subscribe --json` — Unregister push subscription
-- `tornix api notifications push-subscribe-create --json` — Register push subscription
+- `tornix api notifications push-subscribe --json` — Register push subscription
+- `tornix api notifications push-subscribe-delete --json` — Unregister push subscription
 - `tornix api notifications read --json` — NotificationsController_markRead
 - `tornix api notifications read-all --json` — NotificationsController_markAllRead
 - `tornix api notifications send-push --json` — Trigger Expo push + Socket.io for a DB notification
 - `tornix api notifications settings --json` — Get Telegram notification settings for the current user
 - `tornix api notifications status --json` — Poll Telegram linking status
-- `tornix api notifications telegram-link-create --json` — Start Telegram linking flow
+- `tornix api notifications telegram-link-delete --json` — Unlink Telegram (clear chat_id)
 - `tornix api notifications telegram-settings-replace --json` — Update Telegram notification settings
 - `tornix api notifications test --json` — Send a test message to verify Telegram connection
 - `tornix api notifications test-expo-push --json` — Test Expo push notification to a user
-- `tornix api notifications voip-push-token --json` — Unregister VoIP push token
-- `tornix api notifications voip-push-token-create --json` — Register VoIP push token (iOS PushKit)
+- `tornix api notifications voip-push-token --json` — Register VoIP push token (iOS PushKit)
+- `tornix api notifications voip-push-token-delete --json` — Unregister VoIP push token
 - `tornix api notifications web-push --json` — Send web push notification to user
 - `tornix api organizations create --json` — Create organization
 - `tornix api organizations delete --json` — Delete organization (only the creator can delete)
@@ -522,8 +522,8 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api procurement vendor-offers --json` — ProcurementController_getVendorOffers
 - `tornix api procurement vendors --json` — ProcurementController_getVendorResponses
 - `tornix api procurement wizard --json` — ProcurementController_createWizardRequest
-- `tornix api procurement-approval-settings approval-settings --json` — ProcurementApprovalSettingsController_deleteOverride
-- `tornix api procurement-approval-settings procurement-approval-settings --json` — ProcurementApprovalSettingsController_get
+- `tornix api procurement-approval-settings approval-settings --json` — ProcurementApprovalSettingsController_get
+- `tornix api procurement-approval-settings procurement-approval-settings-delete --json` — ProcurementApprovalSettingsController_deleteOverride
 - `tornix api procurement-approval-settings procurement-approval-settings-replace --json` — ProcurementApprovalSettingsController_upsert
 - `tornix api procurement-plan delete --json` — ProcurementPlanController_delete
 - `tornix api procurement-plan get --json` — ProcurementPlanController_get

@@ -168,7 +168,12 @@ def build_api_group(spec: dict) -> click.Group:
         sub = click.Group(name=_slug(tag), help=f"{tag} operations.")
         used: set[str] = set()
         # Deterministic order → stable command names across spec refreshes.
-        for op in sorted(by_tag[tag], key=lambda o: (o["_path"], o["_method"])):
+        # Within one path, reads claim a contested bare name before writes and
+        # writes before DELETE — alphabetical order let `delete` win friendly
+        # names (`pv-curve`, `push-subscribe`), handing agents destructive
+        # commands where they meant to read/subscribe.
+        rank = {"get": 0, "post": 1, "put": 2, "patch": 3, "delete": 4}
+        for op in sorted(by_tag[tag], key=lambda o: (o["_path"], rank.get(o["_method"], 9))):
             if is_excluded_op(op):
                 continue
             cmd = _build_command(op, tag)
