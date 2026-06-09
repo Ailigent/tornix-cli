@@ -560,7 +560,6 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api project-links project --json` — List project + milestone links touching a project (global only)
 - `tornix api project-links project-delete --json` — Delete a project-to-project dependency
 - `tornix api project-sentiment sentiment-analysis --json` — Aggregated AI sentiment analysis for all members of a project (team mood overview)
-- `tornix api projects create --json` — Create a project
 - `tornix api projects delete --json` — Delete project
 - `tornix api projects get --json` — Get project by ID
 - `tornix api projects health --json` — Get project health snapshot
@@ -754,7 +753,6 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - `tornix api supplier-evaluations update --json` — Update an evaluation (rater only)
 - `tornix api tasks comments --json` — Get task comments
 - `tornix api tasks comments-create --json` — Add comment to task
-- `tornix api tasks create --json` — Create a task
 - `tornix api tasks delete --json` — Delete task
 - `tornix api tasks dependencies --json` — Get task dependencies
 - `tornix api tasks dependencies-create --json` — Add task dependency

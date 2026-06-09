@@ -6,7 +6,7 @@ from typing import Any
 import click
 
 from .output import emit_result
-from .spec import classify_tags, is_excluded_path, operations_by_tag
+from .spec import classify_tags, is_excluded_op, operations_by_tag
 
 _VERB = {"get_one": "get", "get_many": "list", "post": "create",
          "patch": "update", "put": "replace", "delete": "delete"}
@@ -105,9 +105,21 @@ def _build_command(op: dict, tag: str) -> click.Command:
                                         required=fname in required,
                                         type=_click_type(fschema),
                                         help=(fschema or {}).get("description", "")))
-    if body:
+    writes = op["_method"] in ("post", "put", "patch")
+    if body or writes:
         params.append(click.Option(["--data", "_raw_body"],
                                     help="Raw JSON body (overrides --field options)."))
+    # Bodyless bare-verb CRUD shapes must not fire with an empty body: a
+    # collection POST `create` would mint an untitled row, a resource PUT/PATCH
+    # `replace`/`update` would blank fields. Both demand --data. Action endpoints
+    # (trailing literal like /run, or trailing-param POST like gantt scheduling)
+    # are untouched — `name` here is the pre-collision _op_command_name result.
+    last_is_param = op["_path"].rstrip("/").split("/")[-1].startswith("{")
+    requires_data = writes and not body and (
+        (op["_method"] == "post" and not last_is_param and name == "create")
+        or (op["_method"] in ("put", "patch") and last_is_param
+            and name in ("replace", "update"))
+    )
 
     def callback(**kwargs):
         ctx = click.get_current_context()
@@ -134,6 +146,10 @@ def _build_command(op: dict, tag: str) -> click.Command:
         elif body_fields:
             payload = {f: kwargs[_body_dest(f)] for f in body_fields
                        if kwargs.get(_body_dest(f)) is not None}
+        if requires_data and payload is None:
+            raise click.UsageError(
+                "this command writes a JSON body the API spec does not document; "
+                "pass --data '<json>' (or use the curated equivalent command).")
         result = client.request(op["_method"].upper(), path, params=query or None, json=payload)
         emit_result(obj, result)
 
@@ -153,7 +169,7 @@ def build_api_group(spec: dict) -> click.Group:
         used: set[str] = set()
         # Deterministic order → stable command names across spec refreshes.
         for op in sorted(by_tag[tag], key=lambda o: (o["_path"], o["_method"])):
-            if is_excluded_path(op["_path"]):
+            if is_excluded_op(op):
                 continue
             cmd = _build_command(op, tag)
             if cmd.name in used:              # collision → try a path-qualified name

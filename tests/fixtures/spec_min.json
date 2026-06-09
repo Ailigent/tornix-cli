@@ -6,9 +6,11 @@
       "get": {"tags": ["projects"], "operationId": "projects_list",
               "summary": "List projects",
               "parameters": [{"name": "limit", "in": "query",
-                              "schema": {"type": "integer"}}]},
-      "post": {"tags": ["projects"], "operationId": "projects_create",
-               "summary": "Create project",
+                              "schema": {"type": "integer"}}]}
+    },
+    "/api/v1/widgets": {
+      "post": {"tags": ["widgets"], "operationId": "widgets_create",
+               "summary": "Create widget",
                "requestBody": {"content": {"application/json":
                  {"schema": {"type": "object",
                    "required": ["name"],

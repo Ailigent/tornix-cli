@@ -18,6 +18,16 @@ EXCLUDE_TAGS = {
 # (spec §3 non-goal). Matches e.g. .../livekit/webhook, .../odoo-*-callback, auth OAuth callbacks.
 EXCLUDE_PATH_SUBSTRINGS = ("webhook", "callback")
 
+# Operations a curated command already covers AND whose generated form is unsafe.
+# These ops have no requestBody in the spec, so their generated commands would
+# send an EMPTY body and mint untitled rows (the duplicate/untitled-project bug).
+# Keyed on (method, path) wire coordinates — NOT operationId — so a `tornix gen`
+# spec refresh that renames controllers cannot silently resurrect them.
+SUPERSEDED_OPS = {
+    ("post", "/api/v1/projects"),                     # → tornix projects create --name
+    ("post", "/api/v1/projects/{projectId}/tasks"),   # → tornix tasks create --title
+}
+
 
 def load_spec() -> dict:
     return json.loads(Path(PINNED_SPEC).read_text())
@@ -71,6 +81,13 @@ def classify_tags(spec: dict) -> dict[str, set[str]]:
 
 def is_excluded_path(path: str) -> bool:
     return any(sub in path for sub in EXCLUDE_PATH_SUBSTRINGS)
+
+
+def is_excluded_op(op: dict) -> bool:
+    """An operation is excluded from the generated api group when its path is a
+    webhook/callback OR it is superseded by a safer curated command."""
+    return (is_excluded_path(op.get("_path", ""))
+            or (op.get("_method"), op.get("_path")) in SUPERSEDED_OPS)
 
 
 def _fallback_op_id(method: str, path: str) -> str:

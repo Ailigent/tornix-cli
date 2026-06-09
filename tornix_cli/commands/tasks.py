@@ -40,10 +40,15 @@ def tasks_get(obj, task_id):
 
 @tasks_group.command("create", help="Create a task in a project.")
 @click.option("--project", "project_id", required=True)
-@click.option("--title", required=True)
+@click.option("--title", required=True,
+              help="Task title (leading/trailing whitespace is trimmed).")
 @click.option("--assignee", "assignee_id", default=None)
 @click.pass_obj
 def tasks_create(obj, project_id, title, assignee_id):
+    # Guard against minting an untitled task from a blank/whitespace title.
+    title = title.strip()
+    if not title:
+        raise click.UsageError("--title must not be blank.")
     body = {"title": title}
     if assignee_id:
         body["assignee_id"] = assignee_id

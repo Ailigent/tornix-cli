@@ -49,10 +49,15 @@ def projects_members(obj, project_id):
 
 
 @projects_group.command("create", help="Create a project.")
-@click.option("--name", required=True)
+@click.option("--name", required=True,
+              help="Project name (leading/trailing whitespace is trimmed).")
 @click.option("--description", default=None)
 @click.pass_obj
 def projects_create(obj, name, description):
+    # Guard against minting an untitled project from a blank/whitespace name.
+    name = name.strip()
+    if not name:
+        raise click.UsageError("--name must not be blank.")
     body = {"name": name}
     if description:
         body["description"] = description
