@@ -10,9 +10,16 @@ HEADER = """
 # Tornix CLI Skill
 
 `tornix` is an agent-native CLI for the Tornix PMO backend. **Always pass `--json`**
-for machine-readable output (it works before or after any subcommand). Authenticate once
-with `tornix auth login --api-key tk_…` (or set `TORNIX_API_KEY`). Scope a request to an
-org with `--org <id>` or `TORNIX_ORG`.
+for machine-readable output (it works before or after any subcommand). Authentication is
+AUTOMATIC: the platform injects the signed-in user's token as `TORNIX_TOKEN` in your
+environment — never run `tornix auth login`, and NEVER ask the user for an API key,
+token, password, or any other credential. If a command fails with an auth error (exit
+code 3 / `Invalid or expired token`), do NOT retry, re-authenticate, or show login
+steps: tell the user the platform session needs a refresh — refresh the page (web) or
+fully close and reopen the app (mobile), or start a new conversation. Never invoke any
+`tornix auth …` or `tornix api auth …` command (login/logout/keys): those exist for the
+platform's own flows, not for you. Scope a request to an org with `--org <id>` or
+`TORNIX_ORG`.
 
 Discover the full surface programmatically: `tornix catalog --json`.
 
