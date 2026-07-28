@@ -15,6 +15,7 @@ from .commands.projects import projects_group
 from .commands.tasks import tasks_group
 from .config import PROFILES, Config
 from .data import data_group, rpc_command
+from .doctor import doctor_command
 from .errors import EXIT, TornixError
 from .output import add_json_option, emit, emit_error
 from .repl import run_repl
@@ -149,6 +150,7 @@ cli.add_command(catalog_command)
 cli.add_command(data_group)
 cli.add_command(rpc_command)
 cli.add_command(deep_research_command)
+cli.add_command(doctor_command)
 cli.add_command(projects_group)
 cli.add_command(tasks_group)
 cli.add_command(approvals_group)
