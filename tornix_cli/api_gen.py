@@ -134,16 +134,48 @@ def _query_params(op: dict) -> list[dict]:
     return [p for p in op.get("parameters", []) if p.get("in") == "query"]
 
 
-def _body_schema(op: dict) -> dict | None:
+def _deref(schema: dict | None, spec: dict, _seen: frozenset = frozenset()) -> dict | None:
+    """Resolve a local `$ref` (and flatten `allOf`) into a concrete schema.
+
+    The backend documents most write bodies as `$ref: #/components/schemas/X`
+    rather than inline. Left unresolved, such a body is truthy but exposes no
+    properties, so the command generates no `--field` options AND slips past the
+    empty-body write guard — firing a POST with no payload. `_seen` breaks the
+    cycles that self-referential DTOs would otherwise turn into infinite
+    recursion."""
+    if not isinstance(schema, dict):
+        return schema
+    ref = schema.get("$ref")
+    if ref:
+        if not ref.startswith("#/") or ref in _seen:
+            return None
+        target: object = spec
+        for part in ref[2:].split("/"):
+            if not isinstance(target, dict):
+                return None
+            target = target.get(part)
+        return _deref(target, spec, _seen | {ref})
+    if schema.get("allOf"):
+        merged: dict = {"type": "object", "properties": {}, "required": []}
+        for part in schema["allOf"]:
+            resolved = _deref(part, spec, _seen) or {}
+            merged["properties"].update(resolved.get("properties") or {})
+            merged["required"].extend(resolved.get("required") or [])
+        return merged
+    return schema
+
+
+def _body_schema(op: dict, spec: dict | None = None) -> dict | None:
     rb = op.get("requestBody") or {}
-    return ((rb.get("content") or {}).get("application/json") or {}).get("schema")
+    schema = ((rb.get("content") or {}).get("application/json") or {}).get("schema")
+    return _deref(schema, spec) if spec is not None else schema
 
 
 def _click_type(schema: dict):
     return _TYPE.get((schema or {}).get("type", "string"), str)
 
 
-def _build_command(op: dict, tag: str) -> click.Command:
+def _build_command(op: dict, tag: str, spec: dict | None = None) -> click.Command:
     name = _op_command_name(op, tag)
     params: list[click.Parameter] = []
     for p in _path_params(op):
@@ -153,27 +185,34 @@ def _build_command(op: dict, tag: str) -> click.Command:
         params.append(click.Option([f"--{_slug(q['name'])}"], required=q.get("required", False),
                                     type=_click_type(q.get("schema", {})),
                                     help=q.get("description", "")))
-    body = _body_schema(op)
+    body = _body_schema(op, spec)
     body_fields: list[str] = []
+    required_fields: set[str] = set()
     if body and body.get("type") == "object":
-        required = set(body.get("required", []))
+        required_fields = set(body.get("required") or [])
         for fname, fschema in (body.get("properties") or {}).items():
             body_fields.append(fname)
+            # Requiredness is enforced at call time, not by Click: marking the
+            # option required here would make `--data '<json>'` unusable on its
+            # own, even though it is documented as overriding the field options.
             params.append(click.Option([f"--{_slug(fname)}", _body_dest(fname)],
-                                        required=fname in required,
+                                        required=False,
                                         type=_click_type(fschema),
                                         help=(fschema or {}).get("description", "")))
     writes = op["_method"] in ("post", "put", "patch")
     if body or writes:
         params.append(click.Option(["--data", "_raw_body"],
                                     help="Raw JSON body (overrides --field options)."))
-    # Bodyless bare-verb CRUD shapes must not fire with an empty body: a
-    # collection POST `create` would mint an untitled row, a resource PUT/PATCH
-    # `replace`/`update` would blank fields. Both demand --data. Action endpoints
+    # Bare-verb CRUD shapes must not fire with an empty body: a collection POST
+    # `create` would mint an untitled row, a resource PUT/PATCH `replace`/`update`
+    # would blank fields. They demand an actual payload — via --data or via the
+    # generated --field options. The check is on the payload that would be SENT,
+    # not on whether the spec documents a body: a documented-but-unfilled body
+    # still serializes to `{}` and mints the same untitled row. Action endpoints
     # (trailing literal like /run, or trailing-param POST like gantt scheduling)
     # are untouched — `name` here is the pre-collision _op_command_name result.
     last_is_param = op["_path"].rstrip("/").split("/")[-1].startswith("{")
-    requires_data = writes and not body and (
+    requires_payload = writes and (
         (op["_method"] == "post" and not last_is_param and name == "create")
         or (op["_method"] in ("put", "patch") and last_is_param
             and name in ("replace", "update"))
@@ -204,10 +243,18 @@ def _build_command(op: dict, tag: str) -> click.Command:
         elif body_fields:
             payload = {f: kwargs[_body_dest(f)] for f in body_fields
                        if kwargs.get(_body_dest(f)) is not None}
-        if requires_data and payload is None:
+            missing = sorted(required_fields - set(payload))
+            if missing:
+                opts = ", ".join(f"--{_slug(f)}" for f in missing)
+                raise click.UsageError(
+                    f"missing required body field(s): {opts} "
+                    "(or pass the whole body with --data '<json>').")
+        if requires_payload and not payload:
+            hint = ("set at least one field option, or pass --data '<json>'"
+                    if body_fields else "pass --data '<json>'")
             raise click.UsageError(
-                "this command writes a JSON body the API spec does not document; "
-                "pass --data '<json>' (or use the curated equivalent command).")
+                f"this command writes a JSON body and would send an empty one; {hint} "
+                "(or use the curated equivalent command).")
         result = client.request(op["_method"].upper(), path, params=query or None, json=payload)
         emit_result(obj, result)
 
@@ -234,7 +281,7 @@ def build_api_group(spec: dict) -> click.Group:
         for op in sorted(by_tag[tag], key=lambda o: (o["_path"], rank.get(o["_method"], 9))):
             if is_excluded_op(op):
                 continue
-            cmd = _build_command(op, tag)
+            cmd = _build_command(op, tag, spec)
             base = cmd.name
             for candidate in _name_candidates(op, tag):
                 if candidate and candidate not in used:

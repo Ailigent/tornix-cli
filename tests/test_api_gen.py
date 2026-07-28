@@ -1,4 +1,6 @@
 import json
+
+import click
 from pathlib import Path
 import httpx
 from click.testing import CliRunner
@@ -239,3 +241,73 @@ def test_generated_names_never_contain_a_raw_wildcard_or_brace():
     bad = [f"{t}.{n}" for t, sub in api.commands.items() for n in sub.commands
            if "*" in n or "{" in n or "}" in n]
     assert bad == [], bad
+
+
+# ── $ref request bodies (2026-07 resync) ──────────────────────────────────
+# The backend documents most write bodies as `$ref: #/components/schemas/X`.
+# Unresolved, such a body is truthy but exposes no properties: the command gets
+# no --field options AND slips past the empty-body write guard, firing a POST
+# with no payload. That is the untitled-row footgun, reintroduced.
+
+REF_SPEC = {
+    "openapi": "3.0.0",
+    "components": {"schemas": {
+        "CreateThingDto": {
+            "type": "object",
+            "properties": {"title": {"type": "string"}, "size": {"type": "number"}},
+            "required": ["title"],
+        },
+        "SelfRef": {"type": "object", "properties": {"child": {"$ref": "#/components/schemas/SelfRef"}}},
+    }},
+    "paths": {"/api/v1/things": {"post": {
+        "operationId": "createThing", "tags": ["things"],
+        "requestBody": {"required": True, "content": {"application/json": {
+            "schema": {"$ref": "#/components/schemas/CreateThingDto"}}}},
+        "responses": {},
+    }}},
+}
+
+
+def test_ref_body_becomes_field_options():
+    captured = {}
+
+    def handler(req):
+        captured["json"] = json.loads(req.content)
+        return httpx.Response(201, json={"data": {"ok": True}})
+
+    grp = build_api_group(REF_SPEC)
+    r = CliRunner().invoke(grp, ["things", "create", "--title", "Villa", "--size", "5"],
+                           obj=_ctx_obj(handler))
+    assert r.exit_code == 0, r.output
+    assert captured["json"] == {"title": "Villa", "size": 5.0}
+
+
+def test_ref_body_required_field_is_enforced():
+    grp = build_api_group(REF_SPEC)
+    r = CliRunner().invoke(grp, ["things", "create"], obj=_ctx_obj(
+        lambda req: httpx.Response(201, json={"data": {}})))
+    assert r.exit_code != 0, "a required $ref body field must be required on the CLI"
+
+
+def test_deref_survives_a_self_referential_schema():
+    from tornix_cli.api_gen import _deref
+    resolved = _deref({"$ref": "#/components/schemas/SelfRef"}, REF_SPEC)
+    assert resolved["type"] == "object"
+
+
+def test_every_documented_write_body_yields_options_or_demands_data():
+    """No generated write command may be able to fire with an empty body."""
+    from tornix_cli.spec import load_spec
+    grp = build_api_group(load_spec())
+    naked = []
+    for tag, sub in grp.commands.items():
+        for name, cmd in sub.commands.items():
+            op = getattr(cmd, "_tornix_op", {})
+            if op.get("_method") not in ("post", "put", "patch"):
+                continue
+            opts = {o for p in cmd.params if isinstance(p, click.Option) for o in p.opts}
+            has_fields = any(o.startswith("--") and o not in ("--data", "--json", "--jsonl")
+                             for o in opts)
+            if not has_fields and "--data" not in opts:
+                naked.append(f"{tag}.{name}")
+    assert naked == [], f"write commands with no way to send a body: {naked}"

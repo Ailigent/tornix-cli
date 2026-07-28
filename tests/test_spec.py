@@ -40,3 +40,27 @@ def test_load_spec_pinned(tmp_path, monkeypatch):
     import tornix_cli.spec as s
     monkeypatch.setattr(s, "PINNED_SPEC", FIX)
     assert load_spec()["openapi"] == "3.0.0"
+
+
+# ── backend resync (2026-07) ──────────────────────────────────────────────
+
+def test_pinned_spec_is_current_prod_surface():
+    spec = load_spec()
+    ops = [(m, p) for p, ms in spec["paths"].items() for m in ms
+           if m in ("get", "post", "put", "patch", "delete")]
+    assert len(spec["paths"]) == 777
+    assert len(ops) == 1037
+
+
+def test_pinned_spec_covers_the_new_backend_tags():
+    tags = {(op.get("tags") or ["misc"])[0]
+            for ms in load_spec()["paths"].values() for op in ms.values()
+            if isinstance(op, dict)}
+    for new in ("agile", "governance", "templates", "memory", "twin",
+                "request-board", "search", "bim", "pre-project",
+                "access-requests", "app-versions", "link-preview", "data"):
+        assert new in tags, f"missing new backend tag: {new}"
+
+
+def test_dead_super_agent_proxy_ops_are_gone():
+    assert "/api/v1/ai/super-agent/*" not in load_spec()["paths"]
