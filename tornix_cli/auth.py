@@ -36,7 +36,7 @@ def _complete_2fa(client, pending_token: str, code: str | None) -> str:
 @auth_group.command("login", help="Authenticate with an API key or email/password. "
                                   "Prefer TORNIX_API_KEY env over --api-key (which is "
                                   "visible in the process list and shell history).")
-@click.option("--api-key", "api_key", default=None, help="Scoped API key (tk_…).")
+@click.option("--api-key", "api_key", default=None, help="Scoped API key (tnx_…).")
 @click.option("--email", default=None)
 @click.option("--password", default=None,
               help="Password (prefer interactive entry; flags leak via ps/history).")

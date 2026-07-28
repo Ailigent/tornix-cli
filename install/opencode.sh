@@ -14,7 +14,7 @@ argument-hint: <tornix subcommand and args>
 
 Run the Tornix CLI and return parsed results. Always pass `--json`.
 
-1. Ensure auth: if a call returns exit code 3, run `tornix auth login --api-key tk_…`
+1. Ensure auth: if a call returns exit code 3, run `tornix auth login --api-key tnx_…`
    or set `TORNIX_API_KEY`.
 2. Run: `tornix --json $ARGUMENTS`
 3. Parse the JSON output. On non-zero exit, read `{"error":{...}}` on stderr and act on `hint`.

@@ -9,7 +9,7 @@ Exposes two slash commands backed by the `tornix` CLI:
 ## Install
 
 1. Install the CLI: `pip install tornix-cli` (or `pipx install tornix-cli`).
-2. Authenticate: `tornix auth login --api-key tk_…` (or set `TORNIX_API_KEY`).
+2. Authenticate: `tornix auth login --api-key tnx_…` (or set `TORNIX_API_KEY`).
 3. Add this plugin to Claude Code (marketplace install, or point Claude Code at this
    `plugins/claude-code` directory).
 

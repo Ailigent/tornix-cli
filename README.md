@@ -12,7 +12,7 @@ every command, and a generated `SKILL.md` plus per-platform agent installers.
 ## How it works
 
 The command surface is **generated from the backend's public OpenAPI spec**
-(587 paths / 816 operations / 59 tags), so it covers the whole API and stays in sync:
+(777 paths / 1037 operations / 72 tags), so it covers the whole API and stays in sync:
 
 - **Generated backbone** — `tornix api <tag> <operation>` covers every backend operation.
 - **Curated overlay** — ergonomic commands for daily-driver domains: `projects`, `tasks`,
@@ -35,8 +35,12 @@ pip install tornix-cli          # or: pipx install tornix-cli
 
 ```bash
 # Authenticate with a scoped API key (created in the Tornix web app, or via the CLI).
-tornix auth login --api-key tk_…           # or: export TORNIX_API_KEY=tk_…
+tornix auth login --api-key tnx_…           # or: export TORNIX_API_KEY=tnx_…
 tornix --json auth whoami
+
+# Email/password login. On a 2FA-enabled account the CLI sends the OTP and
+# prompts for the code; pass --code to stay headless.
+tornix auth login --email you@example.com --password … [--code 123456]
 
 # Discover the whole surface (great for agents).
 tornix --json catalog
@@ -100,6 +104,7 @@ PMO facts are cited as `tornix://<kind>/<id>`; web facts by URL.
 ```bash
 pip install -e ".[dev]"
 pytest -q                       # unit tests (no network)
+tornix doctor                   # diff the pinned snapshot against a live backend
 tornix gen                      # refresh the pinned OpenAPI snapshot
 ```
 
