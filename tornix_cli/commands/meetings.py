@@ -16,7 +16,7 @@ def meetings_group() -> None:
 def meetings_list(obj, project_id):
     params = {"project_id": project_id} if project_id else None
     show(obj, client(obj).get("/api/v1/meetings", params=params),
-         columns=["id", "title", "scheduled_at", "status"])
+         columns=["id", "status", "started_at", "ended_at", "project_id"])
 
 
 @meetings_group.command("get", help="Get a meeting by id.")

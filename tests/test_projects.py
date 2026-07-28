@@ -319,3 +319,20 @@ def test_projects_create_rejects_blank_name():
     r = CliRunner().invoke(projects_group, ["create", "--name", "   "], obj=_obj(handler))
     assert r.exit_code != 0
     assert count["n"] == 0
+
+
+def test_projects_list_table_shows_live_field_names(capsys):
+    """The backend renamed these fields; the columns must follow or the table
+    renders blanks (the reported symptom)."""
+    row = {"project_id": "p1", "name": "TaskFlow", "status": "ACTIVE",
+           "budget": 42}
+
+    def handler(req):
+        return httpx.Response(200, json={"data": [row]})
+
+    obj = _obj(handler)
+    obj["json"] = False
+    r = CliRunner().invoke(projects_group, ["list"], obj=obj)
+    assert r.exit_code == 0, r.output
+    assert "TaskFlow" in r.output and "p1" in r.output
+    assert "42" in r.output, r.output

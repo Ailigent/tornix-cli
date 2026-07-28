@@ -15,7 +15,7 @@ def approvals_group() -> None:
 @click.pass_obj
 def approvals_list(obj, status):
     show(obj, client(obj).get("/api/v1/approvals/requests", params={"status": status}),
-         columns=["id", "type", "status", "requested_by"])
+         columns=["request_id", "title", "approval_type", "status", "priority"])
 
 
 @approvals_group.command("get", help="Get an approval request by id.")

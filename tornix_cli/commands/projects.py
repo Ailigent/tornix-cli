@@ -23,7 +23,7 @@ def projects_list(obj, limit, status):
     if status:
         params["status"] = status
     show(obj, client(obj).get("/api/v1/projects", params=params or None),
-         columns=["id", "name", "status", "progress"])
+         columns=["project_id", "name", "status", "budget"])
 
 
 @projects_group.command("get", help="Get a project by id.")

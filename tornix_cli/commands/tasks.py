@@ -22,13 +22,17 @@ def tasks_group() -> None:
 @tasks_group.command("list", help="List tasks in a project.")
 @click.option("--project", "project_id", required=True, help="Project id (tasks are nested).")
 @click.option("--status", default=None)
+@click.option("--limit", type=int, default=None, help="Maximum number of tasks to return.")
 @click.pass_obj
-def tasks_list(obj, project_id, status):
+def tasks_list(obj, project_id, status, limit):
     params = {}
     if status:
         params["status"] = status
+    if limit is not None:
+        params["limit"] = limit
+    # The backend calls the task title `name`; `title` does not exist on a task.
     show(obj, client(obj).get(f"/api/v1/projects/{project_id}/tasks", params=params or None),
-         columns=["id", "title", "status", "assignee_id", "due_date"])
+         columns=["id", "name", "status", "assignee_id", "due_date"])
 
 
 @tasks_group.command("get", help="Get a task by id.")
@@ -49,7 +53,8 @@ def tasks_create(obj, project_id, title, assignee_id):
     title = title.strip()
     if not title:
         raise click.UsageError("--title must not be blank.")
-    body = {"title": title}
+    # CreateTaskDto requires `name`; the flag stays --title for compatibility.
+    body = {"name": title}
     if assignee_id:
         body["assignee_id"] = assignee_id
     show(obj, client(obj).post(f"/api/v1/projects/{project_id}/tasks", json=body))
