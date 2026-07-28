@@ -62,10 +62,68 @@ def _qualified_name(op: dict, tag: str) -> str | None:
     if not segs:
         return None
     name = _slug("-".join(segs[-2:]))
+    if not name:
+        return None
     # For write methods on a collection, suffix the verb to separate from a GET.
     if op["_method"] in ("post", "patch", "put", "delete"):
-        name = f"{name}-{_VERB.get(op['_method'], op['_method'])}" if name else None
-    return name or None
+        return f"{name}-{_VERB.get(op['_method'], op['_method'])}"
+    # A GET whose path ends in a parameter is a single-resource read colliding
+    # with its own collection GET (`/strategic/kpis` vs `/strategic/kpis/{id}`).
+    # Suffix the read verb rather than falling back to a meaningless `-2`.
+    if op["_method"] == "get" and op["_path"].rstrip("/").split("/")[-1].startswith("{"):
+        return f"{name}-{_VERB['get_one']}"
+    return name
+
+
+def _decorate(base: str, op: dict) -> str:
+    """Attach the verb that distinguishes an operation from its siblings on the
+    same resource: a write verb, or `-get` for a single-resource read."""
+    if not base:
+        return base
+    if op["_method"] in ("post", "patch", "put", "delete"):
+        return f"{base}-{_VERB.get(op['_method'], op['_method'])}"
+    if op["_method"] == "get" and op["_path"].rstrip("/").split("/")[-1].startswith("{"):
+        return f"{base}-{_VERB['get_one']}"
+    return base
+
+
+def _name_candidates(op: dict, tag: str):
+    """Ordered command-name candidates; `build_api_group` takes the first unused
+    one. The first two entries reproduce the historical names exactly, so a
+    command that does not collide is never renamed by a spec refresh. Later
+    entries widen the path window until the name is unique, which keeps
+    genuinely contested names descriptive instead of falling back to `-2`."""
+    yield _op_command_name(op, tag)
+    qualified = _qualified_name(op, tag)
+    if qualified:
+        yield qualified
+
+    raw = op["_path"].replace("/api/v1/", "").strip("/").split("/")
+    norm: list[str] = []
+    for seg in raw:
+        if seg.startswith("{"):
+            norm.append(_slug(seg.strip("{}")))
+        elif seg == "*":
+            norm.append("proxy")          # catch-all passthrough path
+        else:
+            norm.append(_slug(seg))
+    pairs = [(n, r) for n, r in zip(norm, raw) if n]
+    if not pairs:
+        return
+    norm = [n for n, _ in pairs]
+
+    # Named resources carry the meaning; a `*` passthrough and `{param}` slots do
+    # not, so prefer names built from real path segments before falling back to
+    # the raw window. `/ai/reports/*` should read "ai-reports", never "proxy".
+    named = [n for n, r in pairs if not r.startswith("{") and r != "*"]
+    for width in (1, 2):
+        if len(named) >= width:
+            yield _decorate("-".join(named[-width:]), op)
+
+    # Progressively wider windows over the full path, params included, so even
+    # `/strategy/risks/{strategyId}/{riskId}` resolves to a descriptive name.
+    for width in range(2, len(norm) + 1):
+        yield _decorate("-".join(norm[-width:]), op)
 
 
 def _path_params(op: dict) -> list[dict]:
@@ -177,15 +235,16 @@ def build_api_group(spec: dict) -> click.Group:
             if is_excluded_op(op):
                 continue
             cmd = _build_command(op, tag)
-            if cmd.name in used:              # collision → try a path-qualified name
-                alt = _qualified_name(op, tag)
-                if alt:
-                    cmd.name = alt
             base = cmd.name
-            n = 2
-            while cmd.name in used:           # last resort: numeric suffix
-                cmd.name = f"{base}-{n}"
-                n += 1
+            for candidate in _name_candidates(op, tag):
+                if candidate and candidate not in used:
+                    cmd.name = candidate
+                    break
+            else:
+                n = 2
+                while cmd.name in used:       # last resort: numeric suffix
+                    cmd.name = f"{base}-{n}"
+                    n += 1
             used.add(cmd.name)
             sub.add_command(cmd)
         if sub.commands:

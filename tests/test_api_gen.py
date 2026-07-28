@@ -150,3 +150,92 @@ def test_collision_names_prefer_reads_over_deletes():
     sub = grp.commands["notifications"].commands["push-subscribe"]._tornix_op
     assert sub["_method"] == "post"
     assert "push-subscribe-delete" in grp.commands["notifications"].commands
+
+
+# ── collision naming (2026-07 resync) ─────────────────────────────────────
+
+def _mini_spec(paths):
+    return {"openapi": "3.0.0", "paths": paths}
+
+
+def _item_get(tag, param):
+    return {"get": {"operationId": f"get_{param}", "tags": [tag],
+                    "parameters": [{"name": param, "in": "path",
+                                    "schema": {"type": "string"}}],
+                    "responses": {}}}
+
+
+def _list_get(tag, op_id):
+    return {"get": {"operationId": op_id, "tags": [tag], "responses": {}}}
+
+
+def test_a_lone_item_get_keeps_the_bare_read_verb():
+    """With nothing to collide against, `/kpis/{id}` stays `get` — refreshing the
+    spec must not rename commands that were never contested."""
+    api = build_api_group(_mini_spec({
+        "/api/v1/strategic/kpis": _list_get("strategic", "listKpis"),
+        "/api/v1/strategic/kpis/{id}": _item_get("strategic", "id"),
+    }))
+    assert set(api.commands["strategic"].commands) == {"kpis", "get"}
+
+
+def test_contested_item_gets_are_named_after_their_resource():
+    """Two item reads in one tag: the first keeps `get`, the second becomes
+    `kpis-get` rather than a meaningless `kpis-2`."""
+    api = build_api_group(_mini_spec({
+        "/api/v1/strategic/initiatives": _list_get("strategic", "listInitiatives"),
+        "/api/v1/strategic/initiatives/{id}": _item_get("strategic", "id"),
+        "/api/v1/strategic/kpis": _list_get("strategic", "listKpis"),
+        "/api/v1/strategic/kpis/{id}": _item_get("strategic", "id"),
+    }))
+    names = set(api.commands["strategic"].commands)
+    assert names == {"initiatives", "get", "kpis", "kpis-get"}
+
+
+def test_candidates_widen_into_path_params_before_giving_up():
+    """`_name_candidates` is the collision escape ladder: once the resource-scoped
+    name is taken, it must keep offering descriptive names built from more of the
+    path rather than leaving `build_api_group` to fall back to `-2`."""
+    from tornix_cli.api_gen import _name_candidates
+
+    op = {"_method": "get", "_path": "/api/v1/strategy/risks/{strategyId}/{riskId}",
+          "operationId": "getRisk"}
+    names = list(_name_candidates(op, "strategy"))
+    assert "risks-get" in names
+    assert any("riskid" in n for n in names), names
+    assert not any(n.rsplit("-", 1)[-1].isdigit() for n in names)
+
+
+def test_candidates_render_a_wildcard_segment_as_proxy():
+    from tornix_cli.api_gen import _name_candidates
+
+    op = {"_method": "get", "_path": "/api/v1/ai/reports/*", "operationId": "proxyReports"}
+    names = list(_name_candidates(op, "ai-proxy"))
+    assert any("proxy" in n for n in names), names
+    assert not any("*" in n for n in names), names
+
+
+def test_no_generated_command_uses_a_numeric_suffix():
+    api = build_api_group(load_spec())
+    bad = [f"{tag}.{name}"
+           for tag, sub in api.commands.items()
+           for name in sub.commands
+           if name.rsplit("-", 1)[-1].isdigit()]
+    assert bad == [], f"numeric-suffix fallback names remain: {bad}"
+
+
+def test_bare_resource_name_belongs_to_the_collection_not_the_item():
+    """Resyncing freed `cost-control invoices` from `/invoices/{id}` and gave it to
+    the collection endpoint, matching the convention in every other tag: the bare
+    name lists, `-get` reads one. Pinned so a future refactor cannot flip it back
+    silently — callers passing an invoice id now hit a different endpoint."""
+    cc = build_api_group(load_spec()).commands["cost-control"].commands
+    assert cc["invoices"]._tornix_op["_path"] == "/api/v1/organizations/{orgId}/invoices"
+    assert cc["invoices-get"]._tornix_op["_path"] == "/api/v1/invoices/{id}"
+
+
+def test_generated_names_never_contain_a_raw_wildcard_or_brace():
+    api = build_api_group(load_spec())
+    bad = [f"{t}.{n}" for t, sub in api.commands.items() for n in sub.commands
+           if "*" in n or "{" in n or "}" in n]
+    assert bad == [], bad
