@@ -66,7 +66,7 @@ def emit(data: Any, *, json_mode: bool = False, jsonl: bool = False,
 
 def _render_human(data: Any, columns: list[str] | None) -> None:
     if isinstance(data, list) and data and isinstance(data[0], dict):
-        cols = columns or list(data[0].keys())[:8]
+        cols = _resolve_columns(data, columns)
         table = Table(show_lines=False)
         for c in cols:
             table.add_column(str(c))
@@ -79,6 +79,21 @@ def _render_human(data: Any, columns: list[str] | None) -> None:
         _console.print_json(data=data)
     else:
         _console.print(data)
+
+
+def _resolve_columns(rows: list, columns: list[str] | None) -> list[str]:
+    """Keep only the requested columns the payload actually has.
+
+    Curated commands name their columns by hand, so a backend field rename used
+    to render a column of blanks (`id`/`progress` after the API moved to
+    `project_id`/`success_rate`). Dropping absent columns degrades to showing
+    different data rather than silently showing none."""
+    fallback = list(rows[0].keys())[:8]
+    if not columns:
+        return fallback
+    present = {k for row in rows if isinstance(row, dict) for k in row}
+    kept = [c for c in columns if c in present]
+    return kept or fallback
 
 
 def _fmt(v: Any) -> str:
