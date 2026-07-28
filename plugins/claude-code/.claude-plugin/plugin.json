@@ -1,6 +1,6 @@
 {
   "name": "tornix-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Drive the Tornix PMO platform (app.tornix.ai) from Claude Code via the tornix CLI.",
   "commands": ["./commands/tornix.md", "./commands/deep-research.md"]
 }
