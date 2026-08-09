@@ -48,8 +48,8 @@ def test_pinned_spec_is_current_prod_surface():
     spec = load_spec()
     ops = [(m, p) for p, ms in spec["paths"].items() for m in ms
            if m in ("get", "post", "put", "patch", "delete")]
-    assert len(spec["paths"]) == 777
-    assert len(ops) == 1037
+    assert len(spec["paths"]) == 890
+    assert len(ops) == 1164
 
 
 def test_pinned_spec_covers_the_new_backend_tags():

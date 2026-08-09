@@ -10,6 +10,7 @@ from .catalog import catalog_command
 from .client import TornixClient
 from .commands.approvals import approvals_group
 from .commands.deep_research import deep_research_command
+from .commands.files import file_group
 from .commands.meetings import meetings_group
 from .commands.projects import projects_group
 from .commands.tasks import tasks_group
@@ -153,6 +154,7 @@ cli.add_command(deep_research_command)
 cli.add_command(doctor_command)
 cli.add_command(projects_group)
 cli.add_command(tasks_group)
+cli.add_command(file_group)
 cli.add_command(approvals_group)
 cli.add_command(meetings_group)
 cli.add_command(build_api_group(load_spec()))
