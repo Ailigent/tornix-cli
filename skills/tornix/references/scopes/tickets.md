@@ -1,0 +1,55 @@
+# `tornix api tickets` — 51 commands
+
+- `tornix api tickets accept --json` — Accept as suggested, open the backlog item, and optionally assign it
+- `tornix api tickets advance --json` — Move to the next stage; writes the event the client will read
+- `tornix api tickets approval --json` — The flow this ticket is on — the graph, and every step on it
+- `tornix api tickets approval-flows --json` — The approval flows a ticket can be sent down
+- `tornix api tickets assignment-rules --json` — The rules that decide who a ticket goes to, in the order tried
+- `tornix api tickets attachment-url --json` — Signed URL for one attachment on this ticket
+- `tornix api tickets attachments --json` — Add a file, photo or voice note — allowed until we accept the ticket
+- `tornix api tickets cancel --json` — Abandon a run. The ticket stays exactly where it is.
+- `tornix api tickets comments --json` — The ticket conversation. Internal notes are never in a client answer.
+- `tornix api tickets comments-create --json` — Reply on a ticket
+- `tornix api tickets config --json` — Where tickets land for this deployment. Lets the backlog render its intake section in that project only.
+- `tornix api tickets confirm --json` — Accept or correct the AI suggestions and actually send the ticket
+- `tornix api tickets confirm-fixed --json` — The client confirming the fix worked — the one move that is theirs to make
+- `tornix api tickets convert --json` — Open a backlog item for this ticket in the vendor project and link it
+- `tornix api tickets create --json` — Approve or refuse a held move
+- `tornix api tickets decide --json` — Approve or refuse your step in the flow
+- `tornix api tickets default --json` — Choose which approval flow governs tickets
+- `tornix api tickets delete --json` — Remove a routing rule
+- `tornix api tickets discard --json` — Not worth reporting
+- `tornix api tickets drafts --json` — Problems people mentioned in meetings and chat that nobody filed. Each carries the sentence it came from.
+- `tornix api tickets duplicates --json` — Similar tickets with the evidence behind each score
+- `tornix api tickets fields --json` — Override one or more suggested fields
+- `tornix api tickets full --json` — Everything: AI suggestions, duplicates, linked tasks, client timeline
+- `tornix api tickets get --json` — The ticket behind a task: its recorded errors and the AI's match
+- `tornix api tickets inbox --json` — Client tickets waiting to be accepted, ordered by aggregate impact (people blocked × companies), not by priority alone
+- `tornix api tickets master --json` — Master view: affected companies, merge evidence, queue reason, and what each client was told. Vendor-only — it names other companies.
+- `tornix api tickets merge --json` — Fold several tickets into one master. Each client keeps their own.
+- `tornix api tickets mine --json` — Everything this company has reported to us. Powers both the list and the board.
+- `tornix api tickets park --json` — TicketsController_parkDrafts
+- `tornix api tickets pause --json` — Stop the SLA clock while we are waiting on somebody else
+- `tornix api tickets queue --json` — Every ticket filed against us, at any stage
+- `tornix api tickets reanalyse --json` — Run the AI analysis again, replacing whatever is there
+- `tornix api tickets reject --json` — Not taken forward. The reason is shown to the client verbatim.
+- `tornix api tickets restore-defaults --json` — Drop the overrides and go back to the built-in targets
+- `tornix api tickets resume --json` — Start it again, banking the time it was stopped
+- `tornix api tickets send --json` — Turn a draft into a real ticket for a named client
+- `tornix api tickets sla-policy --json` — Per-priority SLA targets for this organization, with the defaults
+- `tornix api tickets stage-approvals --json` — What this ticket is waiting on a sign-off for
+- `tornix api tickets stage-gates --json` — Which stage moves need a sign-off, and from whom
+- `tornix api tickets tasks --json` — Link the backlog items that will fix this ticket
+- `tornix api tickets ticket-triage-approval-create --json` — Send a ticket down an approval flow. It does not move while it walks.
+- `tornix api tickets ticket-triage-assignment-rules-create --json` — Add a routing rule
+- `tornix api tickets ticket-triage-sla-policy-update --json` — Set the target hours for one or more priorities
+- `tornix api tickets ticket-triage-stage-gates-create --json` — Gate a stage move. Re-gating an already-gated move edits it.
+- `tornix api tickets ticket-triage-stage-gates-delete --json` — Remove a gate — that move goes straight through again
+- `tornix api tickets ticket-triage-stage-gates-update --json` — Edit a gate
+- `tornix api tickets ticket-triage-tasks-delete --json` — Break the link between a ticket and a backlog item
+- `tornix api tickets tickets-create --json` — Write a ticket. Returns it with the AI analysis for the review screen — it is NOT sent until /confirm.
+- `tornix api tickets tickets-get --json` — One ticket: the eight-stage timeline, what they sent, and the updates
+- `tornix api tickets unmerge --json` — Pull one ticket back out of its master, events intact
+- `tornix api tickets update --json` — Edit a routing rule
+
+(51 commands)

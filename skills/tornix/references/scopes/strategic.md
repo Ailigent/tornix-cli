@@ -1,0 +1,60 @@
+# `tornix api strategic` — 56 commands
+
+- `tornix api strategic achievement --json` — Compute KPI achievement percentage
+- `tornix api strategic alignment --json` — Compute alignment score for objective
+- `tornix api strategic delete --json` — Delete initiative
+- `tornix api strategic details --json` — Theme with objectives and KPIs
+- `tornix api strategic gaps --json` — StrategicController_getGaps
+- `tornix api strategic get --json` — StrategicController_getConfidenceSnapshots
+- `tornix api strategic history --json` — Get risk history (audit trail)
+- `tornix api strategic initiatives --json` — List initiatives
+- `tornix api strategic initiatives-create --json` — Create initiative with objective links
+- `tornix api strategic initiatives-get --json` — Get initiative with objective links
+- `tornix api strategic initiatives-objective-links-delete --json` — Unlink objective from initiative
+- `tornix api strategic kpis --json` — List strategic KPIs
+- `tornix api strategic kpis-create --json` — Create strategic KPI
+- `tornix api strategic kpis-delete --json` — Delete strategic KPI
+- `tornix api strategic kpis-get --json` — Get strategic KPI with values
+- `tornix api strategic kpis-replace --json` — Update strategic KPI
+- `tornix api strategic launch --json` — Atomic launch: create strategy + themes + objectives + KPIs + initiatives
+- `tornix api strategic legacy-kpis --json` — List legacy KPIs
+- `tornix api strategic legacy-kpis-create --json` — Create legacy KPI
+- `tornix api strategic legacy-kpis-get --json` — Get legacy KPI with objective links
+- `tornix api strategic links --json` — List risk links
+- `tornix api strategic mitigations --json` — List mitigation actions
+- `tornix api strategic objective-links --json` — Link objective to initiative
+- `tornix api strategic objectives --json` — List objectives (org-scoped, optional strategy_id/theme_id filter)
+- `tornix api strategic objectives-create --json` — Create objective
+- `tornix api strategic objectives-delete --json` — Delete objective
+- `tornix api strategic objectives-get --json` — Get objective with KPIs, projects, gaps
+- `tornix api strategic objectives-projects-create --json` — Link project to objective
+- `tornix api strategic objectives-projects-delete --json` — Unlink project from objective
+- `tornix api strategic objectives-replace --json` — Update objective
+- `tornix api strategic overview --json` — Enriched strategy overview with stats
+- `tornix api strategic project-objective-links --json` — Create AI project-objective link
+- `tornix api strategic project-objective-links-delete --json` — Delete project-objective link
+- `tornix api strategic project-objective-links-replace --json` — Update project-objective link
+- `tornix api strategic projects --json` — List linked projects
+- `tornix api strategic replace --json` — Update initiative
+- `tornix api strategic risks --json` — List strategic risks
+- `tornix api strategic risks-create --json` — Create strategic risk
+- `tornix api strategic risks-delete --json` — Delete risk
+- `tornix api strategic risks-get --json` — Get risk with mitigations, links, history
+- `tornix api strategic risks-links-create --json` — Add risk link
+- `tornix api strategic risks-mitigations-create --json` — Add mitigation action
+- `tornix api strategic risks-replace --json` — Update risk (re-computes score)
+- `tornix api strategic risks-risk-mitigations-delete --json` — Delete mitigation action
+- `tornix api strategic risks-risk-mitigations-replace --json` — Update mitigation action
+- `tornix api strategic strategies --json` — List strategies for organization
+- `tornix api strategic strategies-create --json` — Create strategy
+- `tornix api strategic strategies-delete --json` — Delete strategy
+- `tornix api strategic strategies-get --json` — Get strategy with themes, objectives
+- `tornix api strategic strategies-replace --json` — Update strategy
+- `tornix api strategic strategies-themes-create --json` — Create theme under strategy
+- `tornix api strategic strategies-themes-delete --json` — Delete theme
+- `tornix api strategic strategies-themes-replace --json` — Update theme
+- `tornix api strategic themes --json` — List themes for strategy
+- `tornix api strategic timeseries --json` — Get KPI timeseries (date range filter)
+- `tornix api strategic values --json` — Record KPI value (upsert by date)
+
+(56 commands)

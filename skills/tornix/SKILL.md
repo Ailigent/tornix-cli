@@ -194,8 +194,15 @@ Discover the full surface programmatically: `tornix catalog --json`.
   PITFALL: `data select/update/delete` on `documents` needs `--filter "col=eq.val"`
   (raw PostgREST form) — the `--eq col=val` shorthand double-prefixes to `eq.eq.val`
   and silently returns `[]` on this table.
+- **Reading/downloading documents**: `tornix api documents list --project-id <id> --json`
+  (names + sizes + `document_path`), `tornix api documents get <doc-id> --json` (details).
+  To fetch the actual file content: `tornix api storage signed-url --bucket files
+  --path "<document_path>" --download true --json` → signed S3 URL (1h), then curl it.
+  The `document_path` is already `files/<project_id>/<uuid>.<ext>` — pass it verbatim.
 
-## Full command list
-The complete generated command tree (1198 lines) lives in `references/commands.md`.
-Regenerate anytime with `tornix skill generate --out <path>` (then re-apply the
-Authentication section above — the generator emits the platform-token preamble).
+## Full command list (modular)
+The command reference is split per backend scope so you load ONLY what the task needs:
+- **Index**: `references/commands.md` — table of every scope → file (load this first to pick the right file).
+- **Core**: `references/scopes/core.md` — top-level commands (auth, config, data proxy, projects, tasks, file, meetings, deep-research, rpc, catalog, skill).
+- **Per scope**: `references/scopes/<tag>.md` — one file per `tornix api <tag>` (e.g. `agile.md`, `gantt.md`, `documents.md`, `strategy.md`, `meetings.md`, `storage.md`).
+Load via `skill_view(name='tornix', file_path='references/scopes/<tag>.md')`. Regenerate anytime with `tornix skill generate --out <path>` (then re-apply the Authentication section above and re-run the split script).

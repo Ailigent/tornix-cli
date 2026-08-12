@@ -1,0 +1,44 @@
+# `tornix api meetings` — 40 commands
+
+- `tornix api meetings action-items --json` — MeetingsController_getActionItems
+- `tornix api meetings approve --json` — Approve a pending guest join request (host only)
+- `tornix api meetings batch --json` — Batch save transcript segments for a meeting session
+- `tornix api meetings create --json` — MeetingsController_create
+- `tornix api meetings deny --json` — Deny a pending guest join request (host only)
+- `tornix api meetings email --json` — Email a report share link to one or more recipients (best-effort).
+- `tornix api meetings end --json` — Mark a meeting session as ended and enqueue async AI summary generation. Idempotent unless force=true. Only the session host or creator (same org, when the session has one) may end it.
+- `tornix api meetings executive-pdf --json` — Stream the cached executive-summary PDF (404 if not generated yet).
+- `tornix api meetings feeds-backlog --json` — MeetingsController_setFeedsBacklog
+- `tornix api meetings get --json` — Fetch invite metadata (no auth required)
+- `tornix api meetings invite-link --json` — Create or fetch a shareable invite link for a video room (host only). Idempotent by default — returns the existing token if one is still valid. Pass `force: true` to rotate (invalidates previously shared links). Pass `ttl_days: null` or `0` for a permanent link.
+- `tornix api meetings invite-status-get --json` — Poll the status of a guest join request
+- `tornix api meetings list --json` — MeetingsController_findAll
+- `tornix api meetings livekit-token --json` — Generate a LiveKit room token for WebRTC meetings
+- `tornix api meetings meetings-get --json` — MeetingsController_findById
+- `tornix api meetings minutes --json` — MeetingsController_getMinutes
+- `tornix api meetings mute --json` — Force-mute a participant's microphone in a live meeting (authenticated org members only).
+- `tornix api meetings pdf --json` — Stream the shared report PDF (no auth).
+- `tornix api meetings pending-guests --json` — List guest join requests still waiting for approval on this room. Used to rehydrate the People panel when users join after a guest has already knocked.
+- `tornix api meetings playback-url --json` — Get a short-lived presigned URL to play back a finished recording
+- `tornix api meetings recording-start-create --json` — Start a server-side recording for a meeting session (host only)
+- `tornix api meetings recordings --json` — List all playable recordings for a meeting session (segment picker). Excludes the always-on analysis_audio capture and failed rows.
+- `tornix api meetings recordings-share-link-delete --json` — Revoke a recording share link
+- `tornix api meetings remove --json` — Remove (kick) a participant from a live meeting (authenticated org members only). Kicked guests have their invite approval revoked so they cannot immediately rejoin.
+- `tornix api meetings report-pdfs --json` — List the saved executive-summary PDFs (project Documents) for a meeting, newest first.
+- `tornix api meetings report-pdfs-share-link-create --json` — Create (or reuse) a public share link for a saved meeting report. Org-scoped; idempotent while the token is valid. `ttlDays: null|0` = never expires.
+- `tornix api meetings report-pdfs-share-link-delete --json` — Revoke a report share link (invalidates the public URL).
+- `tornix api meetings request-join --json` — Guest requests to join a meeting via invite link
+- `tornix api meetings rooms-invite-link-delete --json` — Revoke an existing invite link
+- `tornix api meetings sessions-executive-pdf-create --json` — Render the executive-summary HTML to PDF, cache it in storage, and stream it back for download.
+- `tornix api meetings share-link --json` — Create or fetch a shareable public link for a recording
+- `tornix api meetings shared-recording-get --json` — Fetch shared recording metadata + playback URL (no auth required)
+- `tornix api meetings shared-report-get --json` — Fetch a shared report by token (no auth). 410 if expired, 404 if revoked/unknown.
+- `tornix api meetings start --json` — Create a new meeting session (fallback for when AI service is unavailable)
+- `tornix api meetings stop --json` — Stop a live recording (host only)
+- `tornix api meetings transcribe --json` — Transcribe a mic audio chunk via Groq Whisper (whisper-large-v3-turbo). Body is raw audio (application/octet-stream). Org must be on the groq_whisper engine.
+- `tornix api meetings transcribe-dictation --json` — Transcribe a one-shot dictation clip via Groq Whisper (whisper-large-v3-turbo). Body is raw audio (application/octet-stream). Returns { text, language? }.
+- `tornix api meetings transcript --json` — MeetingsController_getTranscript
+- `tornix api meetings transcription-engine --json` — Get the org's preferred meeting caption engine
+- `tornix api meetings transcription-engine-replace --json` — Set the org meeting caption engine (super-admin only)
+
+(40 commands)

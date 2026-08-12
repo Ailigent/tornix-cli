@@ -1,0 +1,93 @@
+# `tornix api agile` — 89 commands
+
+- `tornix api agile accept --json` — Accept a proposed item for the team. The proposer may accept their own — both proposed_by and accepted_by are recorded either way. 409 ALREADY_ACCEPTED on a second accept.
+- `tornix api agile accept-all --json` — Accept everything reviewed. 409 REVIEW_INCOMPLETE while any item is still pending.
+- `tornix api agile aging-wip --json` — Aging-WIP: non-done board tasks sorted by time in their current column
+- `tornix api agile assignees --json` — Replace a task's full assignee set (empty array clears)
+- `tornix api agile backlog --json` — Releases → sprints → tasks composition + ranked backlog
+- `tornix api agile baseline --json` — Compare to sprint zero — the first CLOSED sprint against the latest
+- `tornix api agile blocked --json` — Flag/clear a task as blocked (reason cleared on unblock)
+- `tornix api agile board --json` — Board columns + active-sprint tasks (scrum mode)
+- `tornix api agile bulk-delete --json` — Delete several agile tasks (and their sub-tasks) in one transaction
+- `tornix api agile burndown --json` — Sprint burndown (remaining vs linear guideline + scope changes)
+- `tornix api agile burnup --json` — Sprint burnup (scope line vs cumulative completed line)
+- `tornix api agile capacity-members-replace --json` — Bulk set per-member sprint capacities (null removes a row)
+- `tornix api agile cfd --json` — Cumulative Flow Diagram series (one point per day)
+- `tornix api agile changes-since-refinement --json` — What was added, resized and removed since the last refinement (design 20835:796)
+- `tornix api agile close --json` — Commit the round. Agreement closes it; a wide spread stays open for another vote.
+- `tornix api agile columns --json` — Create a board column (appended before the done column)
+- `tornix api agile complete --json` — Complete a sprint; roll incomplete tasks to the target
+- `tornix api agile cycle-time --json` — Cycle/lead time per completed task + percentiles (control chart)
+- `tornix api agile dashboard --json` — Agile Dashboard tiles composed in one round trip
+- `tornix api agile delete --json` — Delete a column; its tasks move to `move_to` (default leftmost)
+- `tornix api agile dependencies --json` — What is holding the sprint, and what clears when it moves (design 20938:731)
+- `tornix api agile dismiss --json` — Ignore an insight (stable key; a recurrence produces a new key)
+- `tornix api agile dod --json` — Definition of Done config: mode + checklist items
+- `tornix api agile dor --json` — Definition of Ready config: checklist items (advisory)
+- `tornix api agile enabled --json` — Show/hide the card; off keeps the clustering so re-enabling is free
+- `tornix api agile epic --json` — Attach/detach a task to an epic (epic_id null detaches)
+- `tornix api agile epics --json` — Epics with progress rollups + velocity-based forecast
+- `tornix api agile epics-delete --json` — Delete an epic (member tasks detach, never deleted)
+- `tornix api agile epics-update --json` — Update an epic (name/color/goal/description/position/status + release/owner/target sprint/target date)
+- `tornix api agile estimate-hours --json` — Set/clear a task time estimate in hours (logged hours come from time entries)
+- `tornix api agile estimation-rounds --json` — Open a planning-poker round
+- `tornix api agile flow-breakdown --json` — Working / waiting on review / blocked / rework, from the typed flow events. `user_id` scopes it to one person.
+- `tornix api agile forecast --json` — Release completion forecast (median-velocity projected finish date)
+- `tornix api agile generate --json` — Re-cluster the backlog by feature/module/goal (billed AI call)
+- `tornix api agile get --json` — Reveal a round — a wide spread is never averaged
+- `tornix api agile hours --json` — Where the sprint hours go + meeting load over time, from tracked time and meetings (overlapping timers merged).
+- `tornix api agile insights --json` — Findings from the board and recorded meetings. Read-only — nothing is applied until someone acts on it.
+- `tornix api agile meetings --json` — The project's recorded meetings that still have work to review
+- `tornix api agile members --json` — Per-member capacity vs assigned points for a sprint
+- `tornix api agile move --json` — Move a task to a column + rank position (done-column sync, WIP warn)
+- `tornix api agile move-to-sprint --json` — Move a task into a sprint, or back to the backlog (sprint_id=null)
+- `tornix api agile performance --json` — One person's cycle: commitments kept, median cycle time, estimate accuracy, time blocked, reviews given, a six-cycle trend and a draft review. `scope=team` returns the project aggregate instead — never another individual.
+- `tornix api agile points --json` — Set/clear a task story-point estimate
+- `tornix api agile portfolio --json` — Org-level agile rollup: every agile project, one row each
+- `tornix api agile projects-dod-replace --json` — Set the Definition of Done (mode off/warn/block + items)
+- `tornix api agile projects-dor-replace --json` — Set the Definition of Ready checklist (no mode — never gates)
+- `tornix api agile projects-epics-create --json` — Create an epic
+- `tornix api agile projects-roles-replace --json` — Assign or clear a PO/SM slot (user_id null clears)
+- `tornix api agile promote --json` — Promote a retro action item into a backlog task (idempotent)
+- `tornix api agile quick-create --json` — Quick-create an agile task (first basic section, ranked at bottom)
+- `tornix api agile rank --json` — Re-rank a backlog task between neighbours
+- `tornix api agile refinement --json` — Turn a recorded meeting into a review queue (idempotent per meeting)
+- `tornix api agile refinement-get --json` — A refinement session: agenda, produced items, review progress
+- `tornix api agile refinement-items-update --json` — Accept / decline / edit one produced item
+- `tornix api agile release --json` — Mark a release RELEASED (409 if sprints not CLOSED unless force)
+- `tornix api agile releases --json` — Create a release
+- `tornix api agile releases-delete --json` — Delete a release (409 if it has sprints)
+- `tornix api agile releases-update --json` — Update a release
+- `tornix api agile reports-forecast --json` — Monte Carlo sprint-completion forecast (probability of finishing on time)
+- `tornix api agile reports-schedule-delete --json` — Stop the scheduled report delivery
+- `tornix api agile reports-schedule-replace --json` — Create or replace the scheduled report delivery (stores the scope too)
+- `tornix api agile retro --json` — Sprint retrospective (went well / improve / action items)
+- `tornix api agile roles --json` — Named agile accountabilities: Product Owner + Scrum Master
+- `tornix api agile schedule --json` — The project's scheduled report delivery, if any
+- `tornix api agile scope --json` — How many work items the current filter leaves in view, plus the filter vocabulary this project actually has.
+- `tornix api agile seed --json` — Idempotently seed default columns + Release 1.0 + Sprint 1
+- `tornix api agile similar --json` — Work that already describes this title — open AND closed tasks, with the project thresholds
+- `tornix api agile sprint-cadence --json` — Sprint length + automatic close/rollover settings
+- `tornix api agile sprint-report --json` — Sprint report: completed/incomplete + scope-change log (Jira-style)
+- `tornix api agile sprints --json` — Create a sprint (PLANNED; duration defaults to project length)
+- `tornix api agile sprints-delete --json` — Delete a sprint (PLANNED only; member tasks → backlog)
+- `tornix api agile sprints-retro-replace --json` — Upsert the sprint retrospective (team-writable)
+- `tornix api agile sprints-update --json` — Update a sprint (field allow-list depends on status)
+- `tornix api agile standup --json` — Standup digest: what moved in a lookback window (default 24h)
+- `tornix api agile start --json` — Start a sprint (one active per project; snapshots committed points)
+- `tornix api agile suggest-breakdown --json` — AI epic breakdown — proposes 3-6 tasks with points, sized against the project’s own history. Read-only: creates nothing.
+- `tornix api agile suggest-draft --json` — AI task draft — from a title, proposes description + epic (from the project’s real epics) + points. Read-only: creates nothing.
+- `tornix api agile suggest-points --json` — AI story-point suggestion from the project's own estimated history (read-only)
+- `tornix api agile summarize --json` — Generate + cache an AI summary of the retro (Phase-3 §4.15)
+- `tornix api agile summary --json` — Agile summary: config, active sprint, backlog/sprint/release counts
+- `tornix api agile tasks-delete --json` — Delete an agile task and its sub-tasks (writes TASK_DELETED)
+- `tornix api agile tasks-dod-update --json` — Check/uncheck a Definition of Done item on a task
+- `tornix api agile tasks-dor-update --json` — Check/uncheck a Definition of Ready item on a task
+- `tornix api agile trends --json` — Throughput, bugs over time, created vs closed and lead time — one call so all four share the same week boundaries.
+- `tornix api agile update --json` — Update a board column (name/WIP/color/position)
+- `tornix api agile velocity --json` — Velocity of the last N CLOSED sprints + trailing average
+- `tornix api agile votes --json` — Cast/replace your vote; the round reveals its consensus
+- `tornix api agile work-grouping --json` — Stored AI work grouping, reconciled against live tasks
+- `tornix api agile work-item-type --json` — Type a work item: task | bug | ticket
+
+(89 commands)

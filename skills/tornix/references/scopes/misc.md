@@ -1,0 +1,43 @@
+# `tornix api misc` — 39 commands
+
+- `tornix api misc ai-services-config --json` — AiServicesConfigController_read
+- `tornix api misc apply --json` — GanttAiController_apply
+- `tornix api misc apply-direct --json` — GanttAiController_applyDirect
+- `tornix api misc apply-extraction --json` — ApplyExtractionController_apply
+- `tornix api misc confirm --json` — OdooCostController_confirm
+- `tornix api misc consume --json` — CreditManagerCompatController_consume
+- `tornix api misc consumption-cost --json` — OdooConsumptionCallbackController_handle
+- `tornix api misc contract-lines --json` — OdooContractLinesController_create
+- `tornix api misc cost-actual --json` — OdooProcurementCallbackController_ingestCostActual
+- `tornix api misc costs --json` — OdooCostController_create
+- `tornix api misc create --json` — StorageCompatController_listFiles
+- `tornix api misc delete --json` — OdooContractLinesController_remove
+- `tornix api misc get --json` — SystemSettingsController_read
+- `tornix api misc list --json` — StorageCompatController_downloadFile
+- `tornix api misc llm-config --json` — LlmConfigController_read
+- `tornix api misc milestones --json` — OdooMilestoneController_list
+- `tornix api misc object-create --json` — StorageCompatController_uploadFile
+- `tornix api misc oravex-status --json` — OdooCertificateCallbackController_updateOravexStatus
+- `tornix api misc preview --json` — GanttAiController_preview
+- `tornix api misc procurement-requests-status-create --json` — OdooProcurementCallbackController_updateStatus
+- `tornix api misc procurements --json` — OdooProcurementController_create
+- `tornix api misc projects --json` — OdooProjectController_create
+- `tornix api misc query --json` — PrismaQueryController_query
+- `tornix api misc refund --json` — CreditManagerCompatController_refund
+- `tornix api misc reject --json` — OdooCostController_reject
+- `tornix api misc replace --json` — SystemSettingsController_write
+- `tornix api misc reserve --json` — CreditManagerCompatController_reserve
+- `tornix api misc schedule-preview --json` — SchedulePreviewController_preview
+- `tornix api misc sender-pm-approval --json` — OdooSenderPmCallbackController_create
+- `tornix api misc sign-create --json` — StorageCompatController_createSignedDownloadUrl
+- `tornix api misc snapshot --json` — OdooWarehouseController_ingestSnapshot
+- `tornix api misc stage-approved --json` — OdooProcurementCallbackController_recordStageApproval
+- `tornix api misc status --json` — OdooHrCallbackController_updateStatus
+- `tornix api misc sync --json` — OdooWarehouseController_syncWarehouse
+- `tornix api misc system-settings-ai-services-config-replace --json` — AiServicesConfigController_write
+- `tornix api misc system-settings-llm-config-replace --json` — LlmConfigController_write
+- `tornix api misc undo --json` — GanttAiController_undo
+- `tornix api misc upload-sign-create --json` — StorageCompatController_createSignedUploadUrl
+- `tornix api misc v1-object-delete --json` — StorageCompatController_deleteFiles
+
+(39 commands)

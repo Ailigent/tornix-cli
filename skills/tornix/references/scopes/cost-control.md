@@ -1,0 +1,42 @@
+# `tornix api cost-control` — 38 commands
+
+- `tornix api cost-control approve --json` — CostControlController_approveChangeOrder
+- `tornix api cost-control attachments --json` — CostControlController_getChangeOrderAttachments
+- `tornix api cost-control change-orders --json` — CostControlController_getOrgChangeOrders
+- `tornix api cost-control change-orders-attachments-create --json` — CostControlController_uploadChangeOrderAttachment
+- `tornix api cost-control complete --json` — CostControlController_completePaymentScheduleItem
+- `tornix api cost-control confirm --json` — CostControlController_confirmPayment
+- `tornix api cost-control contracts --json` — CostControlController_getProjectContracts
+- `tornix api cost-control contracts-payment-schedule-create --json` — CostControlController_createPaymentSchedule
+- `tornix api cost-control contracts-payments-create --json` — CostControlController_recordPayment
+- `tornix api cost-control contracts-retention-create --json` — CostControlController_createRetentionConfig
+- `tornix api cost-control delete --json` — CostControlController_deleteChangeOrderAttachment
+- `tornix api cost-control download --json` — CostControlController_downloadChangeOrderAttachment
+- `tornix api cost-control get --json` — CostControlController_getChangeOrderById
+- `tornix api cost-control invoice-attachments-delete --json` — CostControlController_deleteInvoiceAttachment
+- `tornix api cost-control invoice-attachments-download --json` — CostControlController_downloadInvoiceAttachment
+- `tornix api cost-control invoices --json` — CostControlController_getOrgInvoices
+- `tornix api cost-control invoices-approve-create --json` — CostControlController_approveInvoice
+- `tornix api cost-control invoices-attachments --json` — CostControlController_getInvoiceAttachments
+- `tornix api cost-control invoices-attachments-create --json` — CostControlController_uploadInvoiceAttachment
+- `tornix api cost-control invoices-get --json` — CostControlController_getInvoiceById
+- `tornix api cost-control invoices-reject-create --json` — CostControlController_rejectInvoice
+- `tornix api cost-control invoices-replace --json` — CostControlController_updateInvoice
+- `tornix api cost-control invoices-submit-create --json` — CostControlController_submitInvoice
+- `tornix api cost-control payment-schedule --json` — CostControlController_getPaymentSchedules
+- `tornix api cost-control payment-schedule-items-replace --json` — CostControlController_updatePaymentScheduleItem
+- `tornix api cost-control payment-schedules-delete --json` — CostControlController_deletePaymentSchedule
+- `tornix api cost-control payment-schedules-get --json` — CostControlController_getPaymentScheduleById
+- `tornix api cost-control payments --json` — CostControlController_getPayments
+- `tornix api cost-control projects-change-orders --json` — CostControlController_getChangeOrders
+- `tornix api cost-control projects-change-orders-create --json` — CostControlController_createChangeOrder
+- `tornix api cost-control projects-invoices --json` — CostControlController_getInvoices
+- `tornix api cost-control projects-invoices-create --json` — CostControlController_createInvoice
+- `tornix api cost-control reject --json` — CostControlController_rejectChangeOrder
+- `tornix api cost-control replace --json` — CostControlController_updateChangeOrder
+- `tornix api cost-control retention --json` — CostControlController_getRetentionConfig
+- `tornix api cost-control submit --json` — CostControlController_submitChangeOrder
+- `tornix api cost-control submit-to-odoo --json` — CostControlController_submitInvoiceToOdoo
+- `tornix api cost-control void --json` — CostControlController_voidInvoice
+
+(38 commands)

@@ -1,0 +1,41 @@
+# `tornix api procurement` — 37 commands
+
+- `tornix api procurement ai-suggest --json` — ProcurementController_aiSuggest
+- `tornix api procurement batch --json` — ProcurementController_createMultiVendorDocuments
+- `tornix api procurement bulk --json` — ProcurementController_createPartnersBulk
+- `tornix api procurement comments --json` — ProcurementController_getDocumentComments
+- `tornix api procurement comparison --json` — ProcurementController_saveComparison
+- `tornix api procurement compliance-policies-create --json` — ProcurementController_createPolicy
+- `tornix api procurement compliance-report-get --json` — ProcurementController_getComplianceReport
+- `tornix api procurement contracts --json` — ProcurementController_getContracts
+- `tornix api procurement contracts-create --json` — ProcurementController_createContract
+- `tornix api procurement delete --json` — ProcurementController_deletePolicy
+- `tornix api procurement documents --json` — ProcurementController_getDocuments
+- `tornix api procurement documents-comments-create --json` — ProcurementController_addDocumentComment
+- `tornix api procurement documents-create --json` — ProcurementController_createDocument
+- `tornix api procurement documents-get --json` — ProcurementController_getDocumentById
+- `tornix api procurement documents-replace --json` — ProcurementController_updateDocument
+- `tornix api procurement docx --json` — ProcurementController_getContractDocx
+- `tornix api procurement evaluate --json` — ProcurementController_evaluateRequest
+- `tornix api procurement get --json` — ProcurementController_getPolicy
+- `tornix api procurement partners --json` — ProcurementController_getPartners
+- `tornix api procurement partners-create --json` — ProcurementController_createPartner
+- `tornix api procurement policies --json` — ProcurementController_getPolicies
+- `tornix api procurement poll-vendor-responses --json` — ProcurementController_triggerPollVendorResponses
+- `tornix api procurement replace --json` — ProcurementController_updatePolicy
+- `tornix api procurement requests --json` — ProcurementController_getRequests
+- `tornix api procurement requests-comments --json` — ProcurementController_getRequestComments
+- `tornix api procurement requests-comments-create --json` — ProcurementController_addRequestComment
+- `tornix api procurement requests-create --json` — ProcurementController_createRequest
+- `tornix api procurement requests-delete --json` — ProcurementController_deleteRequest
+- `tornix api procurement requests-get --json` — ProcurementController_getRequestById
+- `tornix api procurement requests-replace --json` — ProcurementController_updateRequest
+- `tornix api procurement requests-status-update --json` — ProcurementController_updateRequestStatus
+- `tornix api procurement select --json` — ProcurementController_selectVendor
+- `tornix api procurement send-emails --json` — ProcurementController_sendVendorEmails
+- `tornix api procurement status --json` — ProcurementController_updateDocumentStatus
+- `tornix api procurement vendor-offers --json` — ProcurementController_getVendorOffers
+- `tornix api procurement vendors --json` — ProcurementController_getVendorResponses
+- `tornix api procurement wizard --json` — ProcurementController_createWizardRequest
+
+(37 commands)
