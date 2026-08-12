@@ -8,16 +8,30 @@ description: Drive the Tornix PMO platform (app.tornix.ai) from the CLI — proj
 `tornix` is an agent-native CLI for the Tornix PMO backend. **Always pass `--json`**
 for machine-readable output (it works before or after any subcommand).
 
-## Authentication (this machine)
-Auth is ALREADY configured — do NOT run `tornix auth login` and NEVER ask the user
-for an API key. The active profile is **prod** (`https://app.tornix.ai`) with the
-user's API key + org id stored in `~/.config/tornix/config.toml` (0600). The stage
-profile backup lives at `~/.config/tornix/config-stage.toml.bak` (restore by copying
-it over config.toml). If a command fails with exit code 3 (401), tell the user the
-API key is invalid/expired and needs a new one from the Tornix web app — do NOT
-retry or re-authenticate. Scope a request to an org with `--org <id>` or `TORNIX_ORG`.
+## Authentication
+Auth is ALREADY configured on the machine — do NOT run `tornix auth login` and NEVER
+ask the user for an API key. The active profile is **prod** (`https://app.tornix.ai`)
+with the user's API key + org id stored in `~/.config/tornix/config.toml` (0600).
+If a command fails with exit code 3 (401), tell the user the API key is
+invalid/expired and needs a new one from the Tornix web app — do NOT retry or
+re-authenticate. Scope a request to an org with `--org <id>` or `TORNIX_ORG`.
 
 Discover the full surface programmatically: `tornix catalog --json`.
+
+## User profile & discovery (MANDATORY first step)
+This skill is multi-user. NEVER assume the caller is a specific person or org.
+At the start of every session:
+1. `tornix auth whoami --json` → the caller's user id + email.
+2. Load the matching profile: `skill_view(name='tornix', file_path='profiles/<email>.md')`.
+   - If it exists → use its ids (user id, org, default project, team) for everything.
+   - If it does NOT exist → **bootstrap**: run `tornix api organizations list --json`
+     (orgs), `tornix projects list --json` (projects), `tornix api projects members
+     <project-id> --json` (team user_ids), then create `profiles/<email>.md` from
+     `profiles/_template.md` and fill it. Ask the user to confirm the default project.
+3. When the user names a project/team member, resolve ids from the profile — never
+   guess or hardcode. If an id is missing from the profile, discover it live
+   (`tornix projects list`, `tornix api projects members`, `tornix api users list`)
+   and update the profile.
 
 ## Conventions
 - Output: add `--json` to any command. Errors go to stderr as `{"error": {...}}` with
@@ -27,6 +41,18 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - Deep research: `tornix deep-research "<question>" --source pmo|web|both --project <id> --json`.
   Default returns a structured cited corpus for you to synthesize; add `--synthesize`
   to have Tornix AI write the report.
+- Language: follow the user's language (profile.language). Egyptian Arabic + English
+  is common; code/commands stay in English.
+
+## Self-improvement loop
+The skill grows from real usage. Rules:
+- **Every pitfall, user correction, or discovered workflow gets a dated entry** in
+  `lessons/YYYY-MM.md` (see `lessons/README.md`). Keep entries 2-4 lines.
+- A lesson is **promoted** into SKILL.md once proven (applied successfully 2+ times
+  or caused a user correction once). SKILL.md holds only active rules; lessons/ keeps history.
+- When the backend adds scopes, regenerate: `tornix skill generate --out <path>`,
+  re-apply this preamble, re-run `scripts/split_skill_scopes.py`, and note it in lessons.
+- User-specific facts (ids, team, default project) belong in `profiles/`, NEVER in SKILL.md.
 
 ## Meeting (video) rooms — curated CLI commands
 - **Meeting rooms live in the `video_rooms` table, NOT `chat_rooms`.** A `chat_rooms`
@@ -44,26 +70,20 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - **Chat rooms live in `chat_rooms`** (CommunicationController). Do NOT confuse with
   meeting/video rooms (`video_rooms` table — see Meeting section above).
 - `tornix api chat rooms-create --data '{"name":"Home","description":"..."}' --json` → room id
-  (room is created by the API-key user = demo@tornix.com "Tornix" account, who becomes OWNER).
+  (room is created by the API-key user, who becomes OWNER).
 - Add participants: `tornix api chat rooms-participants-create <room-id> --user-id <uid> --json`
-  (role defaults to MEMBER). Known user ids: Karem `c0c8f264-04d2-48fe-a45b-b5993fa3a5b1`,
-  ElSenoussi `5206ae52-c15d-4a68-b9df-bd021c1c6429`, Tornix/demo `96343a65-17ca-49b5-a5c6-82847d2710f8`.
-- Verify: `tornix api chat participants <room-id> --json` (profiles carry full_name/email).
+  (role defaults to MEMBER). Resolve user ids from the profile or
+  `tornix api chat participants <room-id> --json` (profiles carry full_name/email).
 
-## Key workflows (Dr Karem's setup)
-- **Default project = AILIGENT** (`841b88f9-dfb4-4f9a-866d-33f36615a946`) — when the user
-  doesn't name a project, use this one.
-- **Dr Karem's user id**: `c0c8f264-04d2-48fe-a45b-b5993fa3a5b1` (drkarem@tornix.com).
-- **Team members (AILIGENT org)**: design→Dina `5e34c8e1-8898-432c-a1ee-29f0d9a50a2f`,
-  Tornix→Ibrahim `def06c6b-02b0-4693-8f58-fa5e4cf69d8e`, Oravex→Ehab `971bcb21-5d58-43a3-b73a-298c6770f2cf`,
-  Marketing→Omar/Amr Sabot `c784df74-093e-442f-97a5-61c2263ae4f9` (amr@tornix.ai),
-  Dr Ahmed ElSenoussi `5206ae52-c15d-4a68-b9df-bd021c1c6429` (dr-ahmed@tornix.com).
+## Key workflows
+- **Default project** = the profile's `default_project` — when the user doesn't name
+  a project, use that one. Resolve its id from the profile.
 - **NEW PROJECTS: always AGILE from the start** — the user picks the AGILE template when
   creating a project (`template_used=AGILE`). Never create a plain/waterfall project.
   If a project was created without the template, fix it via
-  `api projects replace <id> --template-used AGILE` (and match AILIGENT's agile config:
+  `api projects replace <id> --template-used AGILE` (and match the org's agile config:
   `default_sprint_length_weeks=1`, `board_mode=scrum`, `auto_close_enabled=true`).
-- **TRADITIONAL (Waterfall) projects** — for client delivery projects (e.g. Al-Eoun PMO & Tornix):
+- **TRADITIONAL (Waterfall) projects** — for client delivery projects:
   `template_used=BLANK` + `project_methodology=WATERFALL` (TRADITIONAL is NOT a valid value —
   the API rejects it; valid: CONSTRUCTION, SOFTWARE_DELIVERY, EVENT_PLANNING, MARKETING_CAMPAIGN,
   RESEARCH_THESIS, BLANK, AGILE for template; AGILE, SCRUM, KANBAN, WATERFALL, PRINCE2, HYBRID,
@@ -161,7 +181,7 @@ Discover the full surface programmatically: `tornix catalog --json`.
   `api agile start` (requires non-empty sprint) → set planned dates via
   `data update project_tasks --data '{"planned_start": ..., "planned_finish": ...}'`.
 - **Task statuses**: `NONE` (default) / `IN_PROGRESS` / `IN_RISK` / `COMPLETED` (تامة).
-- **Agile flow (new tasks)**: create task → assign to Dr Karem (`--assignee-id`) →
+- **Agile flow (new tasks)**: create task → assign to the caller (profile user id) →
   move to the **CURRENT/ACTIVE sprint** (`api agile move-to-sprint`) → set planned
   dates for Timeline (`data update project_tasks --data '{"planned_start": ...,
   "planned_finish": ...}'`) → mark done with `is_done: true` + `percent_complete: 100`
@@ -172,9 +192,9 @@ Discover the full surface programmatically: `tornix catalog --json`.
   **RULE: marking a task done = move it to the Done column** (`api agile move
   --to-column-id <done-column-id>`) + `is_done: true` + `percent_complete: 100` +
   status COMPLETED. Setting is_done alone leaves the card stranded in its old column
-  (e.g. Proposed) — the board shows the column, not the flag. Done column id for
-  AILIGENT: `1a4dbae2-69d4-4ae2-8cf6-8b9edb99c1c2` (resolve fresh via `api agile board`).
-- **Active sprint (AILIGENT)**: resolve fresh via `api agile summary` — do not hardcode
+  (e.g. Proposed) — the board shows the column, not the flag. Resolve the done column
+  id fresh via `api agile board` (do not hardcode).
+- **Active sprint**: resolve fresh via `api agile summary` — do not hardcode
   (sprints roll weekly; the id changes).
 - **Task detail ops**: `api agile blocked` (blockers), `api tasks dependencies` /
   `dependencies-create` (deps), `api tasks progress` / `progress-create` (progress),
@@ -186,6 +206,14 @@ Discover the full surface programmatically: `tornix catalog --json`.
 - **Timeline/Gantt**: tasks appear when `planned_start`/`planned_finish` are set
   (via `data update project_tasks`). `api gantt wbs-get` / `schedule` / `variance` /
   `baselines` for schedule work.
+- **WBS tree**: the Gantt renders a real WBS hierarchy when `gantt_wbs` rows exist
+  and tasks carry `wbs_id` (frontend `gantt-adapter.service.ts` `transformWithWbsTree`).
+  Sections are ignored when a WBS tree exists. `ganttWbs` IS in
+  `PROJECT_SCOPED_DELEGATES` (direct) → INSERT allowed via data proxy:
+  `tornix data insert gantt_wbs --data '{"project_id":"<id>","name":"...","code":"...",
+  "level":0,"sort_order":0,"path":"..."}' --json`, then link tasks:
+  `tornix data update project_tasks --eq id=<task> --data '{"wbs_id":"<node>"}' --json`.
+  Empty branches are dropped from the Gantt — only nodes with tasks beneath them render.
 - **File upload to File Center**: `tornix file upload <path> --project <id> [--task <id>]`
   uploads a local file to S3 (presigned URL) and syncs it into the project's File
   Center in one step. `--task` attaches it to a task (stored in document metadata
