@@ -50,6 +50,8 @@ The skill grows from real usage. Rules:
   `lessons/YYYY-MM.md` (see `lessons/README.md`). Keep entries 2-4 lines.
 - A lesson is **promoted** into SKILL.md once proven (applied successfully 2+ times
   or caused a user correction once). SKILL.md holds only active rules; lessons/ keeps history.
+- **Promotion + git push happen ONLY when the user asks** ("حدّث الـ skill" / "اعمل push").
+  Never auto-promote or auto-push on your own — the user decides when to curate.
 - When the backend adds scopes, regenerate: `tornix skill generate --out <path>`,
   re-apply this preamble, re-run `scripts/split_skill_scopes.py`, and note it in lessons.
 - User-specific facts (ids, team, default project) belong in `profiles/`, NEVER in SKILL.md.
