@@ -209,7 +209,8 @@ The skill grows from real usage. Rules:
 - **Agile estimates & commitment (NEW 2026-08-17)**: each task carries estimate (hours),
   confidence, risks, deadline (with source/owner), spent, and forecast. Commands:
   `api agile estimate-hours` (set), `commitment` (estimate+deadline+confidence+risks in one call),
-  `estimate-history`, `forecast` (remaining hours + reason), `forecast-analysis`,
+  `estimate-history`, `tasks-forecast` (GET: hours left, landing date), `tasks-forecast-update` (PATCH: remaining hours + reason),
+ `forecast-analysis`,
   `decision` (cut_scope/move_date/add_help/accept_slip), `impact` (1-5).
 - **My checks / personal checks (NEW)**: per-user standing steps on tasks.
   `api agile my-checks` (list yours), `my-checks-create` / `update` / `delete` / `reorder` /
