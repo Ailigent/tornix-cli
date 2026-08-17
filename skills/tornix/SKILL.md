@@ -196,6 +196,19 @@ The skill grows from real usage. Rules:
   status COMPLETED. Setting is_done alone leaves the card stranded in its old column
   (e.g. Proposed) — the board shows the column, not the flag. Resolve the done column
   id fresh via `api agile board` (do not hardcode).
+  **RULE: `board_column_id` is REQUIRED for a task to appear on the Kanban board.**
+  A task created via `data insert project_tasks` with `sprint_id` set but no
+  `board_column_id` will NOT show up on the board — it sits in the DB invisible.
+  Always set both. Resolve the To Do column id fresh via `api agile board` (do not
+  hardcode — column ids are per-project). (Pitfall verified 2026-08-17.)
+  **RULE: `task_assignees` table + `accepted_by` are REQUIRED for board visibility.**
+  `data insert project_tasks` with `assignee_id` set does NOT create a `task_assignees`
+  row — the board reads assignees from that table, not from `project_tasks.assignee_id`.
+  After inserting via data proxy, also: `tornix data insert task_assignees --data
+  '{"task_id":"<id>","user_id":"<uid>","assigned_by":"<creator_uid>"}'` and
+  `tornix data update project_tasks --eq id=<id> --data '{"accepted_by":"<creator_uid>",
+  "proposed_by":"<creator_uid>","accepted_at":"<ISO>"}'`. Or use `tornix tasks create`
+  which handles this via the backend `createTask` endpoint. (Pitfall verified 2026-08-17.)
 - **Active sprint**: resolve fresh via `api agile summary` — do not hardcode
   (sprints roll weekly; the id changes).
 - **Task detail ops**: `api agile blocked` (blockers), `api tasks dependencies` /
