@@ -1,5 +1,7 @@
-# `tornix api misc` — 39 commands
+# `tornix api misc` — 42 commands
 
+- `tornix api misc ai-engine --json` — AiEngineController_read
+- `tornix api misc ai-engine-replace --json` — AiEngineController_write
 - `tornix api misc ai-services-config --json` — AiServicesConfigController_read
 - `tornix api misc apply --json` — GanttAiController_apply
 - `tornix api misc apply-direct --json` — GanttAiController_applyDirect
@@ -18,6 +20,7 @@
 - `tornix api misc milestones --json` — OdooMilestoneController_list
 - `tornix api misc object-create --json` — StorageCompatController_uploadFile
 - `tornix api misc oravex-status --json` — OdooCertificateCallbackController_updateOravexStatus
+- `tornix api misc organizations --json` — AiEngineController_list
 - `tornix api misc preview --json` — GanttAiController_preview
 - `tornix api misc procurement-requests-status-create --json` — OdooProcurementCallbackController_updateStatus
 - `tornix api misc procurements --json` — OdooProcurementController_create
@@ -40,4 +43,4 @@
 - `tornix api misc upload-sign-create --json` — StorageCompatController_createSignedUploadUrl
 - `tornix api misc v1-object-delete --json` — StorageCompatController_deleteFiles
 
-(39 commands)
+(42 commands)

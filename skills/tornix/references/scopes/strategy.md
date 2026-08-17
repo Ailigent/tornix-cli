@@ -1,4 +1,4 @@
-# `tornix api strategy` — 104 commands
+# `tornix api strategy` — 106 commands
 
 - `tornix api strategy accept --json` — Accept a strategic recommendation
 - `tornix api strategy actual --json` — Update the actual value of a project-objective KPI
@@ -6,11 +6,13 @@
 - `tornix api strategy ai-usage --json` — Admin: list AI Anthropic calls (paginated). Used by the AI Usage admin page.
 - `tornix api strategy alignment --json` — Update the alignment score between a project and an objective
 - `tornix api strategy all --json` — Delete all strategic risks for a strategy (used before Re-analyze)
+- `tornix api strategy backfill-links --json` — Link unlinked active-strategy objectives to the projects that measure them, then roll up
 - `tornix api strategy benefit --json` — Update the expected benefit for a project-objective link
 - `tornix api strategy bsc --json` — Get Balanced Scorecard (BSC) summary for a strategy
 - `tornix api strategy calculate --json` — Calculate alignment score for an objective-project pair
 - `tornix api strategy candidate-projects --json` — Candidate projects for a risk (derived from linked objectives)
 - `tornix api strategy cascade --json` — Real (saved) cascade edges for an objective: parent + children
+- `tornix api strategy complete --json` — AI-complete the active strategy: KPIs, initiative links, owners, lanes, targets
 - `tornix api strategy confidence-history --json` — Get strategy confidence history
 - `tornix api strategy config --json` — Perspectives master switch + the org registry
 - `tornix api strategy create --json` — Recalculate alignment for all projects linked to an objective
@@ -105,4 +107,4 @@
 - `tornix api strategy whatif-get --json` — Get all what-if scenarios for an organization
 - `tornix api strategy whatif-replace --json` — Update a what-if scenario
 
-(104 commands)
+(106 commands)

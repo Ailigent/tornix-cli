@@ -50,6 +50,8 @@ The skill grows from real usage. Rules:
   `lessons/YYYY-MM.md` (see `lessons/README.md`). Keep entries 2-4 lines.
 - A lesson is **promoted** into SKILL.md once proven (applied successfully 2+ times
   or caused a user correction once). SKILL.md holds only active rules; lessons/ keeps history.
+- **Promotion + git push happen ONLY when the user asks** ("حدّث الـ skill" / "اعمل push").
+  Never auto-promote or auto-push on your own — the user decides when to curate.
 - When the backend adds scopes, regenerate: `tornix skill generate --out <path>`,
   re-apply this preamble, re-run `scripts/split_skill_scopes.py`, and note it in lessons.
 - User-specific facts (ids, team, default project) belong in `profiles/`, NEVER in SKILL.md.
@@ -202,7 +204,28 @@ The skill grows from real usage. Rules:
   `work-item-type` / `epic` / `assignees` / `accept` / `dod` / `dor` (task-level agile).
 - **New agile reports**: `api agile performance` / `trends` / `scope` / `hours` /
   `baseline` / `flow-breakdown` / `schedule` / `changes-since-refinement` / `insights` /
-  `work-grouping` / `estimation-rounds` (poker) / `refinement` / `similar` / `suggest-draft`.
+  `work-grouping` / `estimation-rounds` (poker) / `refinement` / `similar` / `suggest-draft` /
+  `estimate-quality` / `estimate-accuracy` / `forecast-accuracy`.
+- **Agile estimates & commitment (NEW 2026-08-17)**: each task carries estimate (hours),
+  confidence, risks, deadline (with source/owner), spent, and forecast. Commands:
+  `api agile estimate-hours` (set), `commitment` (estimate+deadline+confidence+risks in one call),
+  `estimate-history`, `forecast` (remaining hours + reason), `forecast-analysis`,
+  `decision` (cut_scope/move_date/add_help/accept_slip), `impact` (1-5).
+- **My checks / personal checks (NEW)**: per-user standing steps on tasks.
+  `api agile my-checks` (list yours), `my-checks-create` / `update` / `delete` / `reorder` /
+  `suggest` (AI suggests checks). `api agile personal-checks <taskId>` = other assignees'
+  steps (read-only).
+- **Priority review (NEW)**: AI priority suggestions per project.
+  `api agile priority-review <projectId>`, `priority-review-generate`, `priority-review-decide`.
+- **Backlog intake (NEW)**: which project auto-receives meeting action items as proposals.
+  `api agile backlog-intake` (GET), `backlog-intake-replace` (PUT).
+- **Refinement items (NEW)**: `api agile refinement-items-update` (accept/decline/edit),
+  `to-refinement` (queue a proposal), `decline` (turn down a proposal with note).
+- **Time & commitment panel**: deadline/estimate/spent/forecast rendered per task
+  (matches UI screenshots: "Time and commitment" + "Time on this task").
+- **My week / calendar**: `GET /api/v1/calendar/my-events` returns the personal week
+  schedule (standup, refinement, sprint review). Tasks need points/estimate to be
+  auto-placed on the calendar.
 - **Timeline/Gantt**: tasks appear when `planned_start`/`planned_finish` are set
   (via `data update project_tasks`). `api gantt wbs-get` / `schedule` / `variance` /
   `baselines` for schedule work.

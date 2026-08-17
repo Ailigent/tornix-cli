@@ -1,8 +1,9 @@
-# `tornix api approvals` — 52 commands
+# `tornix api approvals` — 53 commands
 
 - `tornix api approvals ai-review --json` — Get cached AI review result for a request
 - `tornix api approvals ai-settings --json` — Get org Approval AI settings (defaults if unset)
 - `tornix api approvals ai-settings-replace --json` — Update org Approval AI settings
+- `tornix api approvals analytics --json` — Requests Dashboard rollups: KPIs, submitted/approved trend, status + type + department breakdowns, pending-by-age and approver workload
 - `tornix api approvals approve --json` — Approve an approval step
 - `tornix api approvals backfill-project-codes --json` — Give every project in the org its 2-letter LATIN request code, translating the name (مول الذهب → GO) rather than transliterating it. Skips projects that already hold a Latin code unless force=true; an Arabic code left by the old scheme is always replaced.
 - `tornix api approvals bulk-download --json` — Download the files of SEVERAL requests as one zip — each request in its own REF-v{version}/ folder. Requests outside the caller's org, or with no readable file, are skipped rather than failing the archive.
@@ -53,4 +54,4 @@
 - `tornix api approvals workflows-get --json` — Get workflow by ID
 - `tornix api approvals workflows-replace --json` — Update approval workflow
 
-(52 commands)
+(53 commands)

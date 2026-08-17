@@ -1,4 +1,4 @@
-# `tornix api time-tracking` — 21 commands
+# `tornix api time-tracking` — 22 commands
 
 - `tornix api time-tracking current --json` — TimerController_current
 - `tornix api time-tracking delete --json` — TimeEntriesController_remove
@@ -11,6 +11,7 @@
 - `tornix api time-tracking rates-delete --json` — BillableRatesController_remove
 - `tornix api time-tracking rates-update --json` — BillableRatesController_update
 - `tornix api time-tracking resume --json` — TimerController_resume
+- `tornix api time-tracking scope --json` — TimeEntriesController_scope
 - `tornix api time-tracking sessions --json` — TimerController_sessions
 - `tornix api time-tracking start --json` — TimerController_start
 - `tornix api time-tracking stop --json` — TimerController_stop
@@ -22,4 +23,4 @@
 - `tornix api time-tracking timer-current-update --json` — TimerController_updateRunning
 - `tornix api time-tracking update --json` — TimeEntriesController_update
 
-(21 commands)
+(22 commands)

@@ -28,11 +28,15 @@ Top-level `tornix` commands — auth, config, data proxy, projects, tasks, file,
 - `tornix data update --json` — Update rows matching --eq filters.
 - `tornix deep-research --json` — Multi-source research over PMO data and/or the web.
 - `tornix doctor --json` — Diff the pinned OpenAPI snapshot against a live backend. Exits non-zero on drift, so CI can gate on it.
+- `tornix file upload --json` — Upload a local file to a project's File Center.
 - `tornix gen --json` — Refresh the pinned OpenAPI snapshot from a backend.
 - `tornix meetings action-items --json` — Get a meeting's action items.
 - `tornix meetings get --json` — Get a meeting by id.
 - `tornix meetings list --json` — List meetings (optionally by project).
 - `tornix meetings minutes --json` — Get a meeting's minutes.
+- `tornix meetings room-create --json` — Create a meeting (video) room in the org.
+- `tornix meetings room-delete --json` — Deactivate/delete a meeting (video) room.
+- `tornix meetings room-list --json` — List active meeting (video) rooms in the org.
 - `tornix meetings transcript --json` — Get a meeting's transcript.
 - `tornix projects create --json` — Create a project.
 - `tornix projects get --json` — Get a project by id.
@@ -48,4 +52,4 @@ Top-level `tornix` commands — auth, config, data proxy, projects, tasks, file,
 - `tornix tasks list --json` — List tasks in a project.
 - `tornix tasks update --json` — Update a task (PUT) with a JSON body.
 
-(45 commands)
+(49 commands)

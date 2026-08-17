@@ -1,4 +1,4 @@
-# `tornix api tickets` — 51 commands
+# `tornix api tickets` — 66 commands
 
 - `tornix api tickets accept --json` — Accept as suggested, open the backlog item, and optionally assign it
 - `tornix api tickets advance --json` — Move to the next stage; writes the event the client will read
@@ -25,23 +25,36 @@
 - `tornix api tickets full --json` — Everything: AI suggestions, duplicates, linked tasks, client timeline
 - `tornix api tickets get --json` — The ticket behind a task: its recorded errors and the AI's match
 - `tornix api tickets inbox --json` — Client tickets waiting to be accepted, ordered by aggregate impact (people blocked × companies), not by priority alone
+- `tornix api tickets internal-approval --json` — Insist this client approves a ticket internally before sending it
 - `tornix api tickets master --json` — Master view: affected companies, merge evidence, queue reason, and what each client was told. Vendor-only — it names other companies.
 - `tornix api tickets merge --json` — Fold several tickets into one master. Each client keeps their own.
 - `tornix api tickets mine --json` — Everything this company has reported to us. Powers both the list and the board.
+- `tornix api tickets offer --json` — The offers made on this ticket, and what the next one would say
+- `tornix api tickets offer-approval --json` — Insist this client approves the cost before work starts
+- `tornix api tickets offer-cancel-create --json` — Withdraw an offer that is still with the client
+- `tornix api tickets offers --json` — Offers Tornix has sent this company, and where each one stands
+- `tornix api tickets offers-retry-create --json` — Send an answered offer’s decision again after Tornix could not be reached
 - `tornix api tickets park --json` — TicketsController_parkDrafts
 - `tornix api tickets pause --json` — Stop the SLA clock while we are waiting on somebody else
+- `tornix api tickets pre-check --json` — Do we already do this? Answered against the feature catalog, before a ticket exists
 - `tornix api tickets queue --json` — Every ticket filed against us, at any stage
 - `tornix api tickets reanalyse --json` — Run the AI analysis again, replacing whatever is there
 - `tornix api tickets reject --json` — Not taken forward. The reason is shown to the client verbatim.
 - `tornix api tickets restore-defaults --json` — Drop the overrides and go back to the built-in targets
 - `tornix api tickets resume --json` — Start it again, banking the time it was stopped
+- `tornix api tickets retry --json` — Send an offer again after the client deployment could not be reached
 - `tornix api tickets send --json` — Turn a draft into a real ticket for a named client
 - `tornix api tickets sla-policy --json` — Per-priority SLA targets for this organization, with the defaults
 - `tornix api tickets stage-approvals --json` — What this ticket is waiting on a sign-off for
 - `tornix api tickets stage-gates --json` — Which stage moves need a sign-off, and from whom
+- `tornix api tickets submission-policy --json` — Does a ticket from this company need its administrator’s approval first, and whose?
+- `tornix api tickets submissions --json` — Reports of mine that are waiting on an internal approval
+- `tornix api tickets submissions-cancel-create --json` — Withdraw a report that has not been sent
+- `tornix api tickets submissions-retry-create --json` — Send an approved report again after the vendor could not be reached
 - `tornix api tickets tasks --json` — Link the backlog items that will fix this ticket
 - `tornix api tickets ticket-triage-approval-create --json` — Send a ticket down an approval flow. It does not move while it walks.
 - `tornix api tickets ticket-triage-assignment-rules-create --json` — Add a routing rule
+- `tornix api tickets ticket-triage-offer-create --json` — Send the cost, duration and scope to the client for approval
 - `tornix api tickets ticket-triage-sla-policy-update --json` — Set the target hours for one or more priorities
 - `tornix api tickets ticket-triage-stage-gates-create --json` — Gate a stage move. Re-gating an already-gated move edits it.
 - `tornix api tickets ticket-triage-stage-gates-delete --json` — Remove a gate — that move goes straight through again
@@ -51,5 +64,7 @@
 - `tornix api tickets tickets-get --json` — One ticket: the eight-stage timeline, what they sent, and the updates
 - `tornix api tickets unmerge --json` — Pull one ticket back out of its master, events intact
 - `tornix api tickets update --json` — Edit a routing rule
+- `tornix api tickets visibility --json` — Is the Support Tickets surface shown to this user, and who may change that
+- `tornix api tickets visibility-replace --json` — Narrow Support Tickets to administrators (org admin), or flip the feature (super-admin)
 
-(51 commands)
+(66 commands)
