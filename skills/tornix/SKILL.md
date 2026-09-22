@@ -56,13 +56,52 @@ The skill grows from real usage. Rules:
   re-apply this preamble, re-run `scripts/split_skill_scopes.py`, and note it in lessons.
 - User-specific facts (ids, team, default project) belong in `profiles/`, NEVER in SKILL.md.
 
-## Meeting (video) rooms — curated CLI commands
+## Meetings — use `tornix calendar`, NOT `meetings room-create`
+
+**"Create a meeting" means `tornix calendar create`.** A meeting the user can see
+is THREE things written together, and `meetings room-create` writes only the first:
+
+1. a `video_rooms` row whose `metadata` carries `scheduledStartDate` /
+   `scheduledEndDate` / `calendarEventTitle` / `invitedParticipants` — without
+   `scheduledStartDate` the Meetings tab renders it as a bare ad-hoc "quick room";
+2. a `calendar_events` row (`title`, `start_date`, `end_date`, `participants[]`,
+   `meeting_link`, `video_room_id`) — **this is the only thing the calendar reads**;
+3. nothing: the invitation is not a third call. The data proxy notifies every
+   `participants[]` entry carrying an `id`, on INSERT *and* on UPDATE.
+
+A room with no calendar event is on nobody's calendar and invites nobody. That was
+the state of this surface until 2026-09-22.
+
+- `tornix calendar create --title "…" --start 2026-10-01T14:00:00Z [--duration 60 |
+  --end …] [--attendee <id|email|name>]… [--no-video] [--all-day]` — books all three.
+  `--attendee` is repeatable and resolves against the org roster; an unknown or
+  ambiguous name FAILS the command rather than quietly inviting nobody.
+- `tornix calendar list [--from … --to … | --days 7]` — the caller's meetings,
+  **theirs AND the ones they were invited to**. Reads `GET /calendar/my-events`.
+- `tornix calendar invite <event_id> --attendee …` — merges into `participants`
+  (never replaces) and notifies. `uninvite` removes; nobody is told of a removal.
+- `tornix calendar update <event_id> [--title …] [--start …] [--end …]` — `--start`
+  alone MOVES the meeting, carrying its duration. A reschedule notifies nobody.
+- `tornix calendar delete <event_id>` — cancels and deactivates the room
+  (`--keep-room` to leave it).
+- `tornix calendar members [--query …]` — who can be invited, with their user ids.
+
+### Reading a meeting is not the same as reading a calendar
+- `tornix meetings list` = recorded SESSIONS (transcripts, minutes, action items),
+  org-wide. It is history, not a schedule — never call these "the user's meetings".
+- `tornix api meetings create` creates a `meeting_session` (a recording record with
+  no title and no attendees). It is **not** how you schedule a meeting.
+- `tornix data select calendar_events` is creator-scoped (the table has no
+  `organization_id`), so it can never return a meeting somebody else booked you
+  into. Use `tornix calendar list` for that.
+
+### Meeting (video) rooms — still here, for ad-hoc rooms only
 - **Meeting rooms live in the `video_rooms` table, NOT `chat_rooms`.** A `chat_rooms`
   row is a team chat, never a meeting room — creating one there will NOT show up in
   the Meetings tab. (Pitfall verified 2026-08-11.)
-- `tornix meetings room-create --name "room name"` — creates a video room in the
-  active org (name must be unique in the org; room_name follows the frontend
-  convention `room-{orgId}-{ts}-{rand}`).
+- `tornix meetings room-create --name "room name"` — an UNSCHEDULED room ("open a
+  room now and send me the link"). For anything with a time or an attendee, use
+  `tornix calendar create`.
 - `tornix meetings room-list` — list active video rooms in the org.
 - `tornix meetings room-delete <room_id>` — deactivate; `--hard` deletes the row.
 - These wrap `/api/v1/data/{table}` (data proxy) — the same path `tornix data`

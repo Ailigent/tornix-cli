@@ -17,6 +17,14 @@ Top-level `tornix` commands — auth, config, data proxy, projects, tasks, file,
 - `tornix auth login --json` — Authenticate with an API key or email/password. Prefer TORNIX_API_KEY env over --api-key (which is visible in the process list and shell history).
 - `tornix auth logout --json` — Clear the stored API key / token.
 - `tornix auth whoami --json` — Show the authenticated user.
+- `tornix calendar create --json` — Schedule a meeting: calendar entry + video room + invitations.
+- `tornix calendar delete --json` — Cancel a meeting you created.
+- `tornix calendar invite --json` — Add people to a meeting you created (and notify them).
+- `tornix calendar list --json` — Your meetings in a window — yours AND ones you were invited to.
+- `tornix calendar members --json` — People you can invite (this org's members).
+- `tornix calendar show --json` — One meeting you created, with its attendees.
+- `tornix calendar uninvite --json` — Remove people from a meeting you created.
+- `tornix calendar update --json` — Retitle or reschedule a meeting you created.
 - `tornix catalog --json` — Print the full command tree (use --json for agents).
 - `tornix config get --json` — Print a single config value.
 - `tornix config org --json` — Set and persist the active organization id.
@@ -52,4 +60,4 @@ Top-level `tornix` commands — auth, config, data proxy, projects, tasks, file,
 - `tornix tasks list --json` — List tasks in a project.
 - `tornix tasks update --json` — Update a task (PUT) with a JSON body.
 
-(49 commands)
+(57 commands)
