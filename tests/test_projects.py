@@ -29,57 +29,54 @@ def _obj(handler, *, org_id=None):
 
 # ── list ──────────────────────────────────────────────────────────────────
 
-def test_projects_list_hits_endpoint():
-    seen = {}
+def _paged(pages, me="u1"):
+    """A handler serving /auth/me plus `pages` of /projects with real `meta`."""
+    seen = []
 
     def handler(req):
-        seen["path"] = req.url.path
-        seen["params"] = dict(req.url.params)
-        return httpx.Response(200, json={"data": [{"id": "p1", "name": "A"}]})
+        if req.url.path == "/api/v1/auth/me":
+            return httpx.Response(200, json={"id": me})
+        seen.append(dict(req.url.params))
+        page = int(req.url.params.get("page", "1"))
+        return httpx.Response(200, json={"data": pages[page - 1],
+                                         "meta": {"page": page, "totalPages": len(pages)}})
+    return handler, seen
 
+
+MINE = {"project_id": "p1", "name": "Mine", "created_by": "u1", "members": []}
+MEMBER = {"project_id": "p2", "name": "Member", "created_by": "x", "members": [{"user_id": "u1"}]}
+OTHER = {"project_id": "p3", "name": "Other", "created_by": "x", "members": [{"user_id": "u9"}]}
+
+
+def test_projects_list_is_the_callers_own_projects():
+    # «مشاريعي» must not answer with the whole organization.
+    handler, _ = _paged([[MINE, MEMBER, OTHER]])
     r = CliRunner().invoke(projects_group, ["list"], obj=_obj(handler))
     assert r.exit_code == 0, r.output
-    assert seen["path"] == "/api/v1/projects"
-    # No --limit / --status → no query params sent at all.
-    assert seen["params"] == {}
+    assert [p["project_id"] for p in json.loads(r.output)] == ["p1", "p2"]
 
 
-def test_projects_list_limit_param():
-    seen = {}
-
-    def handler(req):
-        seen["params"] = dict(req.url.params)
-        return httpx.Response(200, json={"data": []})
-
-    r = CliRunner().invoke(projects_group, ["list", "--limit", "5"], obj=_obj(handler))
+def test_projects_list_reads_every_page_not_the_default_twenty():
+    # The endpoint's default page (20) was once reported as the user's whole list.
+    handler, seen = _paged([[MINE], [MEMBER], [OTHER]])
+    r = CliRunner().invoke(projects_group, ["list", "--all"], obj=_obj(handler))
     assert r.exit_code == 0, r.output
-    assert seen["params"] == {"limit": "5"}
+    assert [q["page"] for q in seen] == ["1", "2", "3"]
+    assert len(json.loads(r.output)) == 3
 
 
-def test_projects_list_status_param():
-    seen = {}
+def test_projects_list_all_is_org_wide_and_limit_caps_rows():
+    handler, _ = _paged([[MINE, MEMBER, OTHER]])
+    r = CliRunner().invoke(projects_group, ["list", "--all", "--limit", "2"], obj=_obj(handler))
+    assert r.exit_code == 0, r.output
+    assert [p["project_id"] for p in json.loads(r.output)] == ["p1", "p2"]
 
-    def handler(req):
-        seen["params"] = dict(req.url.params)
-        return httpx.Response(200, json={"data": []})
 
+def test_projects_list_status_param_is_forwarded():
+    handler, seen = _paged([[MINE]])
     r = CliRunner().invoke(projects_group, ["list", "--status", "active"], obj=_obj(handler))
     assert r.exit_code == 0, r.output
-    assert seen["params"] == {"status": "active"}
-
-
-def test_projects_list_limit_and_status_params():
-    seen = {}
-
-    def handler(req):
-        seen["params"] = dict(req.url.params)
-        return httpx.Response(200, json={"data": []})
-
-    r = CliRunner().invoke(
-        projects_group, ["list", "--limit", "10", "--status", "active"], obj=_obj(handler)
-    )
-    assert r.exit_code == 0, r.output
-    assert seen["params"] == {"limit": "10", "status": "active"}
+    assert seen[0]["status"] == "active" and seen[0]["limit"] == "100"
 
 
 # ── get / health / members ─────────────────────────────────────────────────

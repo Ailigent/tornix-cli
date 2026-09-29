@@ -111,6 +111,8 @@ def test_passed_obj_preserved():
 def test_config_perms(monkeypatch, tmp_path):
     import os
     import tornix_cli.config as cfgmod
+    monkeypatch.delenv("HERMES_HOME", raising=False)
+    monkeypatch.delenv("TORNIX_CONFIG", raising=False)
     monkeypatch.setattr(cfgmod, "CONFIG_PATH", tmp_path / "sub" / "config.toml")
     monkeypatch.delenv("TORNIX_API_KEY", raising=False)
     Config(api_key="tk_secret").save()

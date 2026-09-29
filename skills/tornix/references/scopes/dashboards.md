@@ -1,4 +1,4 @@
-# `tornix api dashboards` — 16 commands
+# `tornix api dashboards` — 18 commands
 
 - `tornix api dashboards create --json` — Create a dashboard
 - `tornix api dashboards delete --json` — Delete a dashboard
@@ -12,9 +12,11 @@
 - `tornix api dashboards portfolio-scorecards --json` — Per-portfolio scorecards: canonical confidence score, quarterly trend, 4 metric bars
 - `tornix api dashboards portfolios --json` — Portfolios dashboard: KPI strip, alignment-vs-value bubbles, investment donut, rebalancing recs
 - `tornix api dashboards programs --json` — Programs dashboard: 4 top-strip stats and per-program rows (health/SPI/CPI/benefits/dependencies)
+- `tornix api dashboards progress-forecast --json` — Statistical (TimesFM 2.5) P10-P90 band over the next 3 months of ONE project percent complete
+- `tornix api dashboards project-metrics-forecast --json` — Statistical (TimesFM 2.5) P10-P90 band over the next 3 months of avg SPI/CPI/earned value
 - `tornix api dashboards project-metrics-history --json` — Monthly avg SPI/CPI/earned-value series for the org, plus vs-3-months-ago deltas
 - `tornix api dashboards project-metrics-history-snapshot-create --json` — Force the monthly project-metrics snapshot (cron runs 04:00 daily)
 - `tornix api dashboards snapshot --json` — Force a snapshot of the open quarter for every portfolio (the daily cron does this at 03:00)
 - `tornix api dashboards update --json` — Update a dashboard
 
-(16 commands)
+(18 commands)

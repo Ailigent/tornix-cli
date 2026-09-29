@@ -1,20 +1,41 @@
-# `tornix api documents` — 16 commands
+# `tornix api documents` — 37 commands
 
 - `tornix api documents ai-edit --json` — AI-powered document editing
 - `tornix api documents analysis --json` — RAG analysis (summary + passages) for one document
+- `tornix api documents backfill --json` — Enqueue enrichment for this org's undescribed files
+- `tornix api documents board --json` — Documents board — the recent-files section
 - `tornix api documents breadcrumbs --json` — Get folder breadcrumb path
 - `tornix api documents counts --json` — Per-folder document counts for a scope
+- `tornix api documents coverage --json` — Registration coverage per external attachment source
 - `tornix api documents delete --json` — Delete folder
+- `tornix api documents enrich --json` — Enrich a single document synchronously
+- `tornix api documents enrich-coverage --json` — AI enrichment coverage for this organization
+- `tornix api documents extractions-review-update --json` — Record that a person judged this extraction.
+- `tornix api documents files --json` — Record a batch of uploaded files as documents (idempotent)
 - `tornix api documents find-or-create --json` — Find or create a project folder in a section
 - `tornix api documents folders --json` — Create folder
 - `tornix api documents folders-list --json` — List folders by project
 - `tornix api documents get --json` — Get document by ID
+- `tornix api documents hybrid --json` — Hybrid search over file names and file content
+- `tornix api documents import-folders-create --json` — Create the folder tree for a bulk import (idempotent)
+- `tornix api documents index --json` — Register this org's external attachments into the File Center
+- `tornix api documents index-all --json` — Register external attachments deployment-wide (super-admin)
 - `tornix api documents list --json` — List documents by project
+- `tornix api documents log --json` — Recorded release-gate checks for one CAD drawing
 - `tornix api documents move --json` — Move folder to another parent
 - `tornix api documents move-to-folder --json` — Move documents to a folder
+- `tornix api documents overview --json` — Documents board — figures, smart groups and storage
+- `tornix api documents qa --json` — Engineering QA checks for one CAD drawing
 - `tornix api documents reindex-all --json` — Backfill RAG index for existing files (super-admin)
+- `tornix api documents resync --json` — Re-point a document at a new storage path after an in-place edit
+- `tornix api documents review --json` — AI extractions still awaiting a human look: the ones the pipeline flagged, plus any scored below the confidence floor.
 - `tornix api documents search --json` — Semantic (RAG) search over uploaded files
+- `tornix api documents seen --json` — Clear the caller's unread upload notifications for one folder, or for a section's root
+- `tornix api documents status --json` — What of this import batch has already been committed
+- `tornix api documents summary --json` — Engineering QA roll-up over the CAD drawings of one project
 - `tornix api documents sync --json` — Sync a file to the File Center (find-or-create folders + document)
+- `tornix api documents text --json` — Read a document's text (sliced)
+- `tornix api documents unread --json` — Per-folder count of uploads the caller has not looked at yet, rolled up through the tree
 - `tornix api documents update --json` — Rename folder
 
-(16 commands)
+(37 commands)

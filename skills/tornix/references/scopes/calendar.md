@@ -1,5 +1,7 @@
-# `tornix api calendar` — 1 commands
+# `tornix api calendar` — 3 commands
 
+- `tornix api calendar get --json` — One meeting the caller creates OR attends
 - `tornix api calendar my-events --json` — Calendar events overlapping a range where the caller is creator OR participant
+- `tornix api calendar update --json` — Update a meeting the caller creates OR attends
 
-(1 commands)
+(3 commands)

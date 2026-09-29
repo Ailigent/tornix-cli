@@ -12,18 +12,76 @@ def projects_group() -> None:
     pass
 
 
-@projects_group.command("list", help="List projects in the active organization.")
-@click.option("--limit", type=int, default=None)
+# talon: caller-scoped projects list
+_LIST_COLUMNS = ["project_id", "name", "status", "budget"]
+
+
+def _caller_id(cl):
+    """The signed-in user's id — who "mine" means."""
+    me = cl.get("/api/v1/auth/me")
+    for holder in (me, me.get("user") if isinstance(me, dict) else None):
+        if isinstance(holder, dict):
+            for k in ("id", "user_id", "userId"):
+                if holder.get(k):
+                    return str(holder[k])
+    return None
+
+
+def _is_mine(project, uid):
+    """True when the caller is on this project — a member, or the one who made it."""
+    if uid is None:
+        return True
+    if str(project.get("created_by") or "") == uid:
+        return True
+    for m in project.get("members") or []:
+        if isinstance(m, dict) and str(m.get("user_id") or "") == uid:
+            return True
+    return False
+
+
+def _all_pages(cl, params):
+    """Every project, not page one. The endpoint defaults to limit=20 and says so in
+    `meta`; the CLI used to hand that first page back as the whole answer."""
+    rows, page = [], 1
+    while True:
+        q = dict(params)
+        q["page"] = page
+        body = cl.get("/api/v1/projects", params=q, envelope=True)
+        if isinstance(body, list):
+            return body
+        if not isinstance(body, dict):
+            return rows
+        chunk = body.get("data")
+        rows.extend(chunk if isinstance(chunk, list) else [])
+        meta = body.get("meta") if isinstance(body.get("meta"), dict) else {}
+        total_pages = meta.get("totalPages")
+        if not isinstance(total_pages, int) or page >= total_pages or page >= 50:
+            return rows
+        page += 1
+
+
+@projects_group.command(
+    "list",
+    help="List YOUR projects (the ones you are a member of). Add --all for every "
+         "project in the organization.",
+)
+@click.option("--limit", type=int, default=None, help="Cap the rows returned.")
 @click.option("--status", default=None)
+@click.option("--all", "org_wide", is_flag=True, default=False,
+              help="Every project in the organization, not just yours.")
 @click.pass_obj
-def projects_list(obj, limit, status):
-    params = {}
-    if limit is not None:
-        params["limit"] = limit
+def projects_list(obj, limit, status, org_wide):
+    cl = client(obj)
+    params = {"limit": 100}
     if status:
         params["status"] = status
-    show(obj, client(obj).get("/api/v1/projects", params=params or None),
-         columns=["project_id", "name", "status", "budget"])
+    rows = _all_pages(cl, params)
+    if not org_wide:
+        uid = _caller_id(cl)
+        rows = [p for p in rows if _is_mine(p, uid)]
+    if limit is not None:
+        rows = rows[:limit]
+    show(obj, rows, columns=_LIST_COLUMNS)
 
 
 @projects_group.command("get", help="Get a project by id.")

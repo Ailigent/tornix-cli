@@ -2,20 +2,22 @@
 
 Top-level `tornix` commands — auth, config, data proxy, projects, tasks, file, meetings, deep-research.
 
+> **Profile-scoped config:** on multi-profile hosts, use `HERMES_HOME` or an explicit
+> profile-specific `TORNIX_CONFIG`; never use a shared/default config. Stop if neither is available.
+> **Caller and organization safety:** before the first data request in each session, run
+> `tornix auth whoami --json` and `tornix config show --json`; list memberships with
+> `tornix api organizations list --json`. Verify a configured `org_id` is in those memberships.
+> If it is absent, use only one explicit profile-to-org mapping and verify that membership;
+> if none or ambiguous, stop; never guess or choose the first org.
+> `whoami` is the only allowed `tornix auth` command. Never invoke login/logout/keys.
+> Password-bearing account creation, password reset, account and connected-mailbox deletion, and import commands are human-only and withheld;
+> never pass passwords via command options or `--data`.
+> `config show` is safe (it reveals `has_key`, not the key); never inspect raw config files or `.env`.
+
 - `tornix approvals approve --json` — Approve a workflow step.
 - `tornix approvals get --json` — Get an approval request by id.
 - `tornix approvals list --json` — List approval requests by status.
 - `tornix approvals reject --json` — Reject a workflow step.
-- `tornix auth keys create --json` — Create a new API key (raw key shown once).
-- `tornix auth keys delete --json` — Delete an API key by id.
-- `tornix auth keys get --json` — Show one API key by id.
-- `tornix auth keys list --json` — List your API keys.
-- `tornix auth keys revoke --json` — Revoke an API key by id.
-- `tornix auth keys scopes --json` — List available permission scopes.
-- `tornix auth keys update --json` — Update an API key (PATCH) with a JSON body.
-- `tornix auth keys usage --json` — Show usage statistics for an API key.
-- `tornix auth login --json` — Authenticate with an API key or email/password. Prefer TORNIX_API_KEY env over --api-key (which is visible in the process list and shell history).
-- `tornix auth logout --json` — Clear the stored API key / token.
 - `tornix auth whoami --json` — Show the authenticated user.
 - `tornix calendar create --json` — Schedule a meeting: calendar entry + video room + invitations.
 - `tornix calendar delete --json` — Cancel a meeting you created.
@@ -60,4 +62,4 @@ Top-level `tornix` commands — auth, config, data proxy, projects, tasks, file,
 - `tornix tasks list --json` — List tasks in a project.
 - `tornix tasks update --json` — Update a task (PUT) with a JSON body.
 
-(57 commands)
+(47 available commands; auth and credential lifecycle operations withheld)

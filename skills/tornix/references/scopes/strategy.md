@@ -1,12 +1,15 @@
-# `tornix api strategy` — 106 commands
+# `tornix api strategy` — 118 commands
 
 - `tornix api strategy accept --json` — Accept a strategic recommendation
 - `tornix api strategy actual --json` — Update the actual value of a project-objective KPI
+- `tornix api strategy admin-enabled-replace --json` — SUPER-ADMIN: turn the perspectives layer on/off for any org
+- `tornix api strategy advice --json` — Atlas's advice for one initiative
 - `tornix api strategy ai-refresh --json` — Refresh AI insights for a strategic risk
 - `tornix api strategy ai-usage --json` — Admin: list AI Anthropic calls (paginated). Used by the AI Usage admin page.
 - `tornix api strategy alignment --json` — Update the alignment score between a project and an objective
-- `tornix api strategy all --json` — Delete all strategic risks for a strategy (used before Re-analyze)
-- `tornix api strategy backfill-links --json` — Link unlinked active-strategy objectives to the projects that measure them, then roll up
+- `tornix api strategy all --json` — Delete this strategy's strategic risks — all of them, or only `?ids=` (Re-analyze retires the previous set once the new run has succeeded)
+- `tornix api strategy assessment --json` — Set or clear a strategic risk's likelihood/impact rating (org admin)
+- `tornix api strategy backfill-links --json` — Link unlinked active-strategy objectives and initiatives to the projects that measure and deliver them, then roll up
 - `tornix api strategy benefit --json` — Update the expected benefit for a project-objective link
 - `tornix api strategy bsc --json` — Get Balanced Scorecard (BSC) summary for a strategy
 - `tornix api strategy calculate --json` — Calculate alignment score for an objective-project pair
@@ -14,14 +17,14 @@
 - `tornix api strategy cascade --json` — Real (saved) cascade edges for an objective: parent + children
 - `tornix api strategy complete --json` — AI-complete the active strategy: KPIs, initiative links, owners, lanes, targets
 - `tornix api strategy confidence-history --json` — Get strategy confidence history
-- `tornix api strategy config --json` — Perspectives master switch + the org registry
+- `tornix api strategy config --json` — Is verified benefit delivery switched on for the caller org?
 - `tornix api strategy create --json` — Recalculate alignment for all projects linked to an objective
 - `tornix api strategy create-manual --json` — Manually create a strategic risk
 - `tornix api strategy delete --json` — Delete a strategic initiative
 - `tornix api strategy details --json` — Get theme details including objectives and KPIs
 - `tornix api strategy detect --json` — Detect and persist strategic gaps for the current organization
 - `tornix api strategy dismiss --json` — Dismiss a strategic recommendation
-- `tornix api strategy enabled --json` — SUPER-ADMIN: turn the perspectives layer on/off for any org
+- `tornix api strategy enabled --json` — Turn benefits tracking on/off for the caller org (org admin)
 - `tornix api strategy escalate --json` — Escalate project risk to strategic level
 - `tornix api strategy existing-get --json` — Get the latest existing strategy for an organization
 - `tornix api strategy explain --json` — Get confidence explanation
@@ -33,6 +36,7 @@
 - `tornix api strategy get --json` — Get confidence history snapshots for an entity
 - `tornix api strategy health --json` — Health check
 - `tornix api strategy health-objective-get --json` — Calculate health score for a strategic objective
+- `tornix api strategy health-snapshots-create --json` — Record today's health reading for a theme (idempotent per day)
 - `tornix api strategy history --json` — Get confidence history by query params
 - `tornix api strategy ingest --json` — Ingest a single AI usage row from a Python service. Auth: SERVICE_API_KEY in the `apikey` or `Authorization: Bearer` HEADER (query-string keys are rejected).
 - `tornix api strategy initiatives-get --json` — Get initiatives by strategy ID or org ID
@@ -50,7 +54,9 @@
 - `tornix api strategy match-projects --json` — Match projects to objectives — proxied to strategic-navigator:8013
 - `tornix api strategy match-projects-wizard --json` — Match projects during wizard — proxied to strategic-navigator:8013
 - `tornix api strategy materialize-mitigations --json` — Backfill project_tasks for any mitigations on this risk that lack one (e.g. AI-created)
+- `tornix api strategy merge --json` — Fold duplicate perspectives into one, keeping every objective
 - `tornix api strategy mitigation-actions --json` — Create a mitigation action for a strategic risk
+- `tornix api strategy mitigation-target --json` — Set the strategy's mitigation coverage target (0-100, or null)
 - `tornix api strategy objectives --json` — Get KPIs belonging to one or more objectives (query param: objectiveIds[])
 - `tornix api strategy objectives-create --json` — Create a strategic objective
 - `tornix api strategy objectives-delete --json` — Delete a strategic objective
@@ -64,8 +70,10 @@
 - `tornix api strategy overview-get --json` — Get strategy overview stats for an organization
 - `tornix api strategy parent --json` — Align an objective under a higher-level objective (or null to clear). Rejects self-parenting and cycles.
 - `tornix api strategy perspectives --json` — Add a custom perspective
+- `tornix api strategy perspectives-config --json` — Perspectives master switch + the org registry
 - `tornix api strategy perspectives-delete --json` — Delete a perspective (refused while objectives still use it)
 - `tornix api strategy perspectives-enabled-replace --json` — Turn the perspectives layer on/off for the caller org (org admin)
+- `tornix api strategy progress --json` — Report an objective's progress (owner or strategy admin)
 - `tornix api strategy project-kpis-delete --json` — Unlink a KPI from a project-objective relationship
 - `tornix api strategy project-kpis-get --json` — Get KPIs linked to a specific project-objective pair
 - `tornix api strategy project-kpis-link --json` — Get the project-objective link record
@@ -88,10 +96,13 @@
 - `tornix api strategy risks-mitigation-actions-replace --json` — Update a mitigation action for a strategic risk
 - `tornix api strategy run --json` — Run the S3-1 progress rollup for the caller org now
 - `tornix api strategy save --json` — Save complete strategy (delegates to launch)
+- `tornix api strategy snapshots --json` — Health snapshots: the reading N days ago and the latest
+- `tornix api strategy status --json` — Close or reopen a strategic risk (org admin: C_LEVEL or organization owner)
 - `tornix api strategy strategies --json` — List strategies for organization (query param)
 - `tornix api strategy strategies-create --json` — Create a new strategy
 - `tornix api strategy strategies-delete --json` — Delete strategy by ID
 - `tornix api strategy strategies-get --json` — Get single strategy by ID
+- `tornix api strategy strategies-objectives --json` — Get every objective in a strategy (enriched, for the map)
 - `tornix api strategy strategies-replace --json` — Update strategy
 - `tornix api strategy strategy-delete --json` — Delete a strategy by ID
 - `tornix api strategy strategy-risks-get --json` — Get detailed information for a specific strategic risk
@@ -102,9 +113,10 @@
 - `tornix api strategy themes-replace --json` — Update a theme
 - `tornix api strategy timeseries --json` — Get KPI value timeseries with optional date range filter
 - `tornix api strategy update --json` — Rename / recolour / reorder / (de)activate a perspective
+- `tornix api strategy update-requests --json` — Ask each objective's owner for a progress update
 - `tornix api strategy whatif --json` — Create a new what-if scenario
 - `tornix api strategy whatif-delete --json` — Delete a what-if scenario
 - `tornix api strategy whatif-get --json` — Get all what-if scenarios for an organization
 - `tornix api strategy whatif-replace --json` — Update a what-if scenario
 
-(106 commands)
+(118 commands)

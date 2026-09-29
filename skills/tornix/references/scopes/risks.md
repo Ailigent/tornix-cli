@@ -1,4 +1,4 @@
-# `tornix api risks` — 11 commands
+# `tornix api risks` — 12 commands
 
 - `tornix api risks ai-settings --json` — Get org proactive AI risk detection setting
 - `tornix api risks ai-settings-replace --json` — Update org proactive AI risk detection setting
@@ -10,6 +10,7 @@
 - `tornix api risks mitigations-create --json` — RisksController_addMitigation
 - `tornix api risks replace --json` — RisksController_update
 - `tornix api risks scan-all --json` — Start a background AI risk scan across all org projects
+- `tornix api risks score-forecast --json` — Daily mean risk score for a project + a TimesFM 2.5 P10-P90 band over the next fortnight
 - `tornix api risks status --json` — Poll background AI risk scan progress
 
-(11 commands)
+(12 commands)

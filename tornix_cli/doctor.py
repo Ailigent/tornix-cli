@@ -3,7 +3,7 @@ from __future__ import annotations
 import click
 
 from .output import emit
-from .spec import fetch_spec, load_spec
+from .spec import fetch_spec, load_spec, normalize_spec_paths
 
 _HTTP = ("get", "post", "put", "patch", "delete")
 
@@ -17,7 +17,8 @@ def spec_operations(spec: dict) -> set[tuple[str, str]]:
 
 def diff_specs(pinned: dict, live: dict) -> dict:
     """Compare the pinned snapshot against a live backend spec."""
-    pinned_ops, live_ops = spec_operations(pinned), spec_operations(live)
+    pinned_ops = spec_operations(normalize_spec_paths(pinned))
+    live_ops = spec_operations(normalize_spec_paths(live))
     added = sorted([m, path] for m, path in live_ops - pinned_ops)
     removed = sorted([m, path] for m, path in pinned_ops - live_ops)
     return {"pinned_ops": len(pinned_ops), "live_ops": len(live_ops),

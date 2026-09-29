@@ -1,4 +1,4 @@
-# `tornix api strategic` — 56 commands
+# `tornix api strategic` — 57 commands
 
 - `tornix api strategic achievement --json` — Compute KPI achievement percentage
 - `tornix api strategic alignment --json` — Compute alignment score for objective
@@ -35,6 +35,7 @@
 - `tornix api strategic project-objective-links-delete --json` — Delete project-objective link
 - `tornix api strategic project-objective-links-replace --json` — Update project-objective link
 - `tornix api strategic projects --json` — List linked projects
+- `tornix api strategic register --json` — KPI register with coverage, health, triage and attention
 - `tornix api strategic replace --json` — Update initiative
 - `tornix api strategic risks --json` — List strategic risks
 - `tornix api strategic risks-create --json` — Create strategic risk
@@ -57,4 +58,4 @@
 - `tornix api strategic timeseries --json` — Get KPI timeseries (date range filter)
 - `tornix api strategic values --json` — Record KPI value (upsert by date)
 
-(56 commands)
+(57 commands)

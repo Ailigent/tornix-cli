@@ -1,12 +1,13 @@
-# `tornix api approvals` — 53 commands
+# `tornix api approvals` — 59 commands
 
 - `tornix api approvals ai-review --json` — Get cached AI review result for a request
-- `tornix api approvals ai-settings --json` — Get org Approval AI settings (defaults if unset)
-- `tornix api approvals ai-settings-replace --json` — Update org Approval AI settings
+- `tornix api approvals ai-settings --json` — Get org Approval AI settings (defaults if unset), plus whether automatic approval can actually run — reading this also disarms an org left switched on with no authority matrix behind it
+- `tornix api approvals ai-settings-replace --json` — Update org Approval AI settings (organization admin only). Turning automatic approval on is refused while the org has authored no financial authority matrix (DOA).
 - `tornix api approvals analytics --json` — Requests Dashboard rollups: KPIs, submitted/approved trend, status + type + department breakdowns, pending-by-age and approver workload
 - `tornix api approvals approve --json` — Approve an approval step
 - `tornix api approvals backfill-project-codes --json` — Give every project in the org its 2-letter LATIN request code, translating the name (مول الذهب → GO) rather than transliterating it. Skips projects that already hold a Latin code unless force=true; an Arabic code left by the old scheme is always replaced.
 - `tornix api approvals bulk-download --json` — Download the files of SEVERAL requests as one zip — each request in its own REF-v{version}/ folder. Requests outside the caller's org, or with no readable file, are skipped rather than failing the archive.
+- `tornix api approvals cancel --json` — Cancel own pending request
 - `tornix api approvals comments --json` — Get comments on an approval request
 - `tornix api approvals compliance-policies-create --json` — Create compliance policy
 - `tornix api approvals delete --json` — Delete compliance policy
@@ -21,7 +22,9 @@
 - `tornix api approvals org-request-workflow --json` — Super-admin: enable/disable the request-workflow feature for an organization
 - `tornix api approvals overview --json` — Requests-page payload in one call: the active tab page (server-side filters + pagination) + badge counts for all three tabs
 - `tornix api approvals policies --json` — List compliance policies for org
+- `tornix api approvals provision-types --json` — Create a request type for each approval path and link them
 - `tornix api approvals reject --json` — Reject an approval step
+- `tornix api approvals reminders-run-create --json` — Run the stalled-approval reminder sweep now (super-admin; dry unless ?dry=false)
 - `tornix api approvals reorder --json` — Reorder statuses by id array
 - `tornix api approvals repair-flow --json` — Bind an in-flight request to its governing flow graph and re-derive its state from the decisions already taken. Settles requests stranded on the legacy linear engine (whose any/quorum joins never fired). Idempotent; no-op when no graph governs the request.
 - `tornix api approvals replace --json` — Update compliance policy
@@ -31,6 +34,7 @@
 - `tornix api approvals requests-create --json` — Create approval request
 - `tornix api approvals requests-delete --json` — Delete a request. Where admin delete is enabled (TAL), this EMPTIES the request and keeps its reference number for re-use, and only an administrator or a granted user may call it. Everywhere else it stays the requester-only hard delete, allowed solely while no approver has acted.
 - `tornix api approvals requests-replace --json` — Edit-and-resend a request as a NEW version (requester only, pending/rejected/approved). Bumps version, freezes the old version into history, resets to pending and re-seeds the provided approver steps.
+- `tornix api approvals run --json` — Send the weekly approval-dwell digest now (super-admin; dry unless ?dry=false)
 - `tornix api approvals seed-defaults --json` — Seed default simple/standard/complex SLA policy if none
 - `tornix api approvals sla-policies --json` — List complexity→SLA-days policies for current org
 - `tornix api approvals sla-policies-delete --json` — Delete an SLA policy
@@ -42,6 +46,8 @@
 - `tornix api approvals statuses-delete --json` — Delete a request stage status
 - `tornix api approvals statuses-replace --json` — Update a request stage status
 - `tornix api approvals statuses-seed-defaults-create --json` — Seed the canonical 9-stage pipeline if the org has none
+- `tornix api approvals step-dwell --json` — Average time spent at each approval step (working hours), the level that is the current bottleneck, and the individual steps sitting past `threshold_working_hours` (default 24, clamped to 1..240 and echoed in the response). Optionally narrowed to one `approval_type` (e.g. payment_certificate) and/or `project_id`; both are echoed back under `filters`.
+- `tornix api approvals summary --json` — Compact approval-request summary for the mobile 'Needs your action' detail screen
 - `tornix api approvals trigger-ai-analysis --json` — Enqueue background AI analysis for a request that was created via the generic data-proxy (which bypasses createRequest).
 - `tornix api approvals types --json` — List custom approval types for current org
 - `tornix api approvals types-create --json` — Create custom approval type
@@ -54,4 +60,4 @@
 - `tornix api approvals workflows-get --json` — Get workflow by ID
 - `tornix api approvals workflows-replace --json` — Update approval workflow
 
-(53 commands)
+(59 commands)

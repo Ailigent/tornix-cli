@@ -1,8 +1,11 @@
-# `tornix api meetings` — 40 commands
+# `tornix api meetings` — 46 commands
 
+- `tornix api meetings action-item --json` — Create an action item from a rectangle drawn on a shared screen, with the cropped image as evidence
 - `tornix api meetings action-items --json` — MeetingsController_getActionItems
+- `tornix api meetings annotations --json` — List the snapshots and evidence images saved for a meeting (fresh signed URLs)
 - `tornix api meetings approve --json` — Approve a pending guest join request (host only)
 - `tornix api meetings batch --json` — Batch save transcript segments for a meeting session
+- `tornix api meetings chat --json` — A meeting session's in-meeting chat (scoped to this call, not the room's whole history)
 - `tornix api meetings create --json` — MeetingsController_create
 - `tornix api meetings deny --json` — Deny a pending guest join request (host only)
 - `tornix api meetings email --json` — Email a report share link to one or more recipients (best-effort).
@@ -10,8 +13,10 @@
 - `tornix api meetings executive-pdf --json` — Stream the cached executive-summary PDF (404 if not generated yet).
 - `tornix api meetings feeds-backlog --json` — MeetingsController_setFeedsBacklog
 - `tornix api meetings get --json` — Fetch invite metadata (no auth required)
+- `tornix api meetings history --json` — Paginated meeting history — filtered and counted in SQL
 - `tornix api meetings invite-link --json` — Create or fetch a shareable invite link for a video room (host only). Idempotent by default — returns the existing token if one is still valid. Pass `force: true` to rotate (invalidates previously shared links). Pass `ttl_days: null` or `0` for a permanent link.
 - `tornix api meetings invite-status-get --json` — Poll the status of a guest join request
+- `tornix api meetings join --json` — One-shot meeting join: verify room access, register presence, and mint the LiveKit token. Replaces the client-side getRoomById + joinRoom + livekit-token sequence, which cost the browser four serial round-trips before WebRTC could start.
 - `tornix api meetings list --json` — MeetingsController_findAll
 - `tornix api meetings livekit-token --json` — Generate a LiveKit room token for WebRTC meetings
 - `tornix api meetings meetings-get --json` — MeetingsController_findById
@@ -33,6 +38,7 @@
 - `tornix api meetings share-link --json` — Create or fetch a shareable public link for a recording
 - `tornix api meetings shared-recording-get --json` — Fetch shared recording metadata + playback URL (no auth required)
 - `tornix api meetings shared-report-get --json` — Fetch a shared report by token (no auth). 410 if expired, 404 if revoked/unknown.
+- `tornix api meetings snapshot --json` — Save a JPEG/PNG snapshot of a shared screen (with its marks) to the meeting
 - `tornix api meetings start --json` — Create a new meeting session (fallback for when AI service is unavailable)
 - `tornix api meetings stop --json` — Stop a live recording (host only)
 - `tornix api meetings transcribe --json` — Transcribe a mic audio chunk via Groq Whisper (whisper-large-v3-turbo). Body is raw audio (application/octet-stream). Org must be on the groq_whisper engine.
@@ -41,4 +47,4 @@
 - `tornix api meetings transcription-engine --json` — Get the org's preferred meeting caption engine
 - `tornix api meetings transcription-engine-replace --json` — Set the org meeting caption engine (super-admin only)
 
-(40 commands)
+(46 commands)

@@ -19,9 +19,9 @@ def test_login_api_key_persists(tmp_path, monkeypatch):
     def handler(req):                # whoami after login
         return httpx.Response(200, json={"data": {"email": "k@t.ai"}})
 
-    r = CliRunner().invoke(auth_group, ["login", "--api-key", "tk_abc"], obj=_obj(handler))
+    r = CliRunner().invoke(auth_group, ["login", "--api-key", "tnx_test_key"], obj=_obj(handler))
     assert r.exit_code == 0, r.output
-    assert Config.load().api_key == "tk_abc"
+    assert Config.load().api_key == "tnx_test_key"
 
 
 def test_whoami(tmp_path, monkeypatch):

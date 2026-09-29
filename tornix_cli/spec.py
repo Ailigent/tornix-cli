@@ -43,6 +43,44 @@ def _allowed_base(base: str) -> bool:
     return False
 
 
+_API_PREFIX = "/api/v1"
+_COMPAT_PREFIXES = ("/rest/v1", "/storage/v1", "/api/credits")
+
+
+def normalize_spec_paths(spec: dict) -> dict:
+    """Apply NestJS's omitted global prefix while preserving legacy API roots.
+
+    The backend OpenAPI exporter omits the global `/api/v1` prefix from ordinary
+    controller routes. The CLI snapshot and request paths use that prefix, but
+    `/rest/v1`, `/storage/v1`, and `/api/credits` are compatibility roots and
+    must remain unchanged. The operation is idempotent and rejects collisions
+    rather than silently dropping routes.
+    """
+    raw_paths = spec.get("paths")
+    if not isinstance(raw_paths, dict):
+        raise ValueError("OpenAPI paths must be an object")
+
+    normalized_paths: dict[str, dict] = {}
+    for path, path_item in raw_paths.items():
+        if not isinstance(path, str) or not path.startswith("/"):
+            raise ValueError(f"OpenAPI path must start with '/': {path!r}")
+        prefixed = (path == _API_PREFIX or path.startswith(_API_PREFIX + "/")
+                    or any(path == root or path.startswith(root + "/")
+                           for root in _COMPAT_PREFIXES))
+        normalized = path if prefixed else _API_PREFIX + path
+        if not isinstance(path_item, dict):
+            raise ValueError(f"OpenAPI path item must be an object: {path!r}")
+        target = normalized_paths.setdefault(normalized, {})
+        for key, value in path_item.items():
+            if key in target and target[key] != value:
+                raise ValueError(f"conflicting OpenAPI paths normalize to {normalized!r}")
+            target[key] = value
+
+    result = dict(spec)
+    result["paths"] = normalized_paths
+    return result
+
+
 def fetch_spec(base_url: str, timeout: float = 30.0) -> dict:
     base = base_url.rstrip("/")
     if not _allowed_base(base):
@@ -53,7 +91,7 @@ def fetch_spec(base_url: str, timeout: float = 30.0) -> dict:
     if not (isinstance(spec, dict) and (spec.get("openapi") or spec.get("swagger"))
             and spec.get("paths")):
         raise ValueError("fetched document is not a valid OpenAPI spec (missing openapi/paths)")
-    return spec
+    return normalize_spec_paths(spec)
 
 
 def operations_by_tag(spec: dict) -> dict[str, list[dict]]:

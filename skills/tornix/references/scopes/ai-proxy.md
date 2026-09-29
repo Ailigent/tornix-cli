@@ -1,10 +1,15 @@
-# `tornix api ai-proxy` — 76 commands
+# `tornix api ai-proxy` — 80 commands
 
 - `tornix api ai-proxy ai-reports --json` — AiProxyController_proxyReports_get
 - `tornix api ai-proxy ai-reports-create --json` — AiProxyController_proxyReportsRoot_post
 - `tornix api ai-proxy ai-reports-delete --json` — AiProxyController_proxyReportsRoot_delete
 - `tornix api ai-proxy ai-reports-replace --json` — AiProxyController_proxyReportsRoot_put
 - `tornix api ai-proxy ai-reports-update --json` — AiProxyController_proxyReportsRoot_patch
+- `tornix api ai-proxy budget --json` — AiProxyController_proxyBudget_get
+- `tornix api ai-proxy budget-create --json` — AiProxyController_proxyBudget_post
+- `tornix api ai-proxy budget-delete --json` — AiProxyController_proxyBudget_delete
+- `tornix api ai-proxy budget-replace --json` — AiProxyController_proxyBudget_put
+- `tornix api ai-proxy budget-update --json` — AiProxyController_proxyBudget_patch
 - `tornix api ai-proxy chat --json` — AiProxyController_proxyChat_get
 - `tornix api ai-proxy chat-create --json` — AiProxyController_proxyChat_post
 - `tornix api ai-proxy chat-delete --json` — AiProxyController_proxyChat_delete
@@ -20,10 +25,10 @@
 - `tornix api ai-proxy contracts-delete --json` — AiProxyController_proxyContracts_delete
 - `tornix api ai-proxy contracts-replace --json` — AiProxyController_proxyContracts_put
 - `tornix api ai-proxy contracts-update --json` — AiProxyController_proxyContracts_patch
-- `tornix api ai-proxy create --json` — AiProxyController_proxyBudget_post
+- `tornix api ai-proxy create --json` — AiProxyController_proxyBimEdit_post
 - `tornix api ai-proxy deck-edit --json` — Turn a natural-language deck edit into slide operations
 - `tornix api ai-proxy deck-image --json` — Generate a slide illustration image
-- `tornix api ai-proxy delete --json` — AiProxyController_proxyBudget_delete
+- `tornix api ai-proxy delete --json` — AiProxyController_proxyBimEdit_delete
 - `tornix api ai-proxy dependency --json` — AiProxyController_proxyDependency_get
 - `tornix api ai-proxy dependency-create --json` — AiProxyController_proxyDependency_post
 - `tornix api ai-proxy dependency-delete --json` — AiProxyController_proxyDependency_delete
@@ -35,12 +40,11 @@
 - `tornix api ai-proxy email-ai-delete --json` — AiProxyController_proxyEmail_delete
 - `tornix api ai-proxy email-ai-replace --json` — AiProxyController_proxyEmail_put
 - `tornix api ai-proxy email-ai-update --json` — AiProxyController_proxyEmail_patch
-- `tornix api ai-proxy evaluate-rules --json` — Evaluate business rules (ported from evaluate-rules edge fn)
 - `tornix api ai-proxy generate-chat --json` — Generate AI chat response (ported from generate-ai-chat edge fn)
 - `tornix api ai-proxy generate-json --json` — Generate AI JSON response (ported from generate-ai-json edge fn)
 - `tornix api ai-proxy generate-stream --json` — Stream Gemini text generation as SSE chunks
 - `tornix api ai-proxy invent-svg --json` — Generate a bespoke SVG illustration for a slide
-- `tornix api ai-proxy list --json` — AiProxyController_proxyBudget_get
+- `tornix api ai-proxy list --json` — AiProxyController_proxyBimEdit_get
 - `tornix api ai-proxy meeting --json` — AiProxyController_proxyMeeting_get
 - `tornix api ai-proxy meeting-create --json` — AiProxyController_proxyMeeting_post
 - `tornix api ai-proxy meeting-delete --json` — AiProxyController_proxyMeeting_delete
@@ -56,7 +60,7 @@
 - `tornix api ai-proxy planning-delete --json` — AiProxyController_proxyPlanning_delete
 - `tornix api ai-proxy planning-replace --json` — AiProxyController_proxyPlanning_put
 - `tornix api ai-proxy planning-update --json` — AiProxyController_proxyPlanning_patch
-- `tornix api ai-proxy replace --json` — AiProxyController_proxyBudget_put
+- `tornix api ai-proxy replace --json` — AiProxyController_proxyBimEdit_put
 - `tornix api ai-proxy reports --json` — AiProxyController_proxyReportsRoot_get
 - `tornix api ai-proxy reports-create --json` — AiProxyController_proxyReports_post
 - `tornix api ai-proxy reports-delete --json` — AiProxyController_proxyReports_delete
@@ -69,12 +73,12 @@
 - `tornix api ai-proxy strategy-update --json` — AiProxyController_proxyStrategy_patch
 - `tornix api ai-proxy textbook-condense --json` — Condense a slide’s prose to a word target
 - `tornix api ai-proxy themed-slide --json` — Render one slide in a reference deck’s visual style
-- `tornix api ai-proxy transcribe --json` — Transcribe audio to plain text via Gemini (multimodal)
-- `tornix api ai-proxy update --json` — AiProxyController_proxyBudget_patch
+- `tornix api ai-proxy transcribe --json` — Transcribe audio to plain text via Groq Whisper
+- `tornix api ai-proxy update --json` — AiProxyController_proxyBimEdit_patch
 - `tornix api ai-proxy vendor --json` — AiProxyController_proxyVendor_get
 - `tornix api ai-proxy vendor-create --json` — AiProxyController_proxyVendor_post
 - `tornix api ai-proxy vendor-delete --json` — AiProxyController_proxyVendor_delete
 - `tornix api ai-proxy vendor-replace --json` — AiProxyController_proxyVendor_put
 - `tornix api ai-proxy vendor-update --json` — AiProxyController_proxyVendor_patch
 
-(76 commands)
+(80 commands)

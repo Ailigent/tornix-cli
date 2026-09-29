@@ -1,36 +1,58 @@
-# `tornix api email` — 32 commands
+# `tornix api email` — 54 commands
 
 - `tornix api email accounts --json` — EmailController_getAccounts
 - `tornix api email accounts-create --json` — EmailController_addAccount
 - `tornix api email actions --json` — Perform email actions: delete, star, markRead (used by AI agent)
 - `tornix api email attachment --json` — Fetch a single IMAP attachment by UID and index
+- `tornix api email briefings --json` — The caller's briefings for the last `days` local days (1-30, default 7), today included, newest first.
+- `tornix api email briefings-today-create --json` — Get-or-generate the caller's briefing for their local today. Idempotent: an existing briefing is returned as-is, and two concurrent calls generate once.
+- `tornix api email categories --json` — The caller's inbox categories in tab order, with unread/total counts over the whole synced mailbox (archived excluded). A user who never customised anything gets the three built-ins with id null — nothing is written on read.
+- `tornix api email categories-create --json` — Add a custom category. `color` is a palette key, never a hex. At most 20 per user.
+- `tornix api email categories-delete --json` — Delete a custom category (built-ins are hidden instead). Its rules go with it; its mail is re-filed by the remaining rules and signals.
+- `tornix api email category --json` — File messages under a category by hand (outranks every rule), or pass `key: null` to hand them back to the rules. At most 200 ids.
+- `tornix api email category-rules --json` — The caller's category rules, in evaluation order.
+- `tornix api email category-rules-create --json` — Add a rule ("if the email contains X, file it under Y") and re-file the mailbox. `affected` is how many emails changed category.
+- `tornix api email category-rules-delete --json` — Delete a rule and re-file the mailbox.
+- `tornix api email category-rules-update --json` — Edit, enable/disable or move a rule, and re-file the mailbox.
 - `tornix api email classify-batch --json` — Enqueue background AI classification for a batch of emails. Returns immediately; classification + project suggestions are persisted asynchronously.
 - `tornix api email connect --json` — Exchange Google OAuth code for tokens and create/update email account
-- `tornix api email delete --json` — EmailController_removeAccount
+- `tornix api email contacts --json` — The reader's correspondents, for recipient suggestions
 - `tornix api email digest-fetch-create --json` — Fetch emails for AI digest (used by Super Agent)
 - `tornix api email fetch --json` — Fetch emails via IMAP (used by AI agent)
 - `tornix api email folders --json` — System folders (Inbox, Starred, Sent, Drafts, Archive, Spam, Trash) with total + unread counts, and the mailbox path each resolved to on this account. NOT the same as /labels, which returns the user’s own tags.
 - `tornix api email history --json` — Relationship history with a sender in the caller's OWN mailbox: prior messages in the sender's conversations, plus their linked projects and any tasks they spawned. Optionally filtered to a project.
 - `tornix api email identity --json` — Resolve a sender email address to the person/entity it belongs to (teammate, partner contact, vendor, …) and the project(s) they relate to. Project links are filtered to the caller's accessible projects.
+- `tornix api email image-proxy --json` — Fetch a remote email image server-side and re-serve it from this origin, bypassing the sender's Cross-Origin-Resource-Policy and hiding the reader from tracking pixels.
 - `tornix api email imap-actions-create --json` — Perform IMAP flag/move actions (star, read, delete, archive)
 - `tornix api email imap-connect-create --json` — Test IMAP+SMTP connection and save credentials
 - `tornix api email imap-fetch-create --json` — Fetch emails via IMAP
 - `tornix api email labels --json` — EmailController_getLabels
+- `tornix api email lookup --json` — Where each message currently sits: category key, what decided it, and whether classification has run. At most 200 ids; ids with no row are absent.
 - `tornix api email messages --json` — EmailController_getMessages
+- `tornix api email order --json` — Persist a drag-reorder: category keys in their new tab order. Keys left out keep their relative order after the ones given.
+- `tornix api email preview --json` — How many of the caller’s emails a condition would match, and the newest 5, before saving it. Uses the same Arabic-safe matcher as the saved rule.
 - `tornix api email previews --json` — Signed preview URLs for a message’s IMAGE attachments, served from the archive in object storage. Only images, only files the archiver has already stored — anything else is simply absent and the client keeps its file glyph.
 - `tornix api email refresh-token --json` — Refresh Gmail access token using stored refresh token
 - `tornix api email reminders --json` — List pending reminders, optionally for one message.
 - `tornix api email reminders-create --json` — Remind me about this email at a time. Server-side, so it survives a reinstall and reaches whichever device the reader is holding.
 - `tornix api email reminders-delete --json` — Cancel a pending reminder.
+- `tornix api email run --json` — Super-admin: run one briefing tick now (dry run unless EMAIL_BRIEFING_RUN=true), or generate for one `userId` (`force` regenerates today).
 - `tornix api email schedule --json` — Queue an email to go out later. The row is durable and re-armed on boot, so a queue flush cannot lose it.
 - `tornix api email scheduled --json` — List the caller’s pending scheduled emails.
 - `tornix api email scheduled-delete --json` — Cancel a pending scheduled email.
 - `tornix api email seen --json` — Mark the mailbox as looked at. Moves the window the briefing counts from. Called when the inbox is OPENED — never on sync, which would zero the briefing for a reader who saw nothing.
 - `tornix api email send --json` — Send email via SMTP (used by AI agent)
 - `tornix api email send-create --json` — Send a transactional email via Brevo SMTP API
+- `tornix api email shown --json` — Record that the greeting popup for this briefing was closed. The caller’s own briefing only; 404 otherwise.
 - `tornix api email smtp-send-create --json` — Send email via SMTP using stored account credentials
-- `tornix api email sync --json` — EmailController_syncAccount
-- `tornix api email sync-now --json` — Pull new Gmail messages for the current user since last_sync_at and enqueue classification. Awaits the Gmail fetch + enqueue (typically <5s) but the LLM work itself runs async in BullMQ.
+- `tornix api email sort-now --json` — Sort the caller's mail on the server, silently — called once when the site opens. Syncs mailboxes not synced in the last 10 minutes and re-triages recent mail that has no verdict, in batches (never one call per email). Waits up to 25s: `running` means it continues in the background. Throttled per user (in flight or started < 10 min ago → `skipped`).
+- `tornix api email state --json` — Record what the mailbox now says about these messages — `isRead` and/or `isStarred` — so the stored counts stay true. An omitted flag is left alone, an id we never synced matches nothing, and the answer is how many rows actually moved. At most 200 ids.
+- `tornix api email sync --json` — Really sync one of the caller’s mailboxes (fetch, store, batch-triage), through the guarded sort path. Does nothing — `skipped: true`, same shape — while the caller has a sort in flight or this mailbox synced in the last 10 minutes. `synced: false` with an `error` when it cannot or did not sync; `last_sync_at` moves only when mail was actually covered.
+- `tornix api email sync-now --json` — LEGACY (old web, mobile): same as POST /email/sort-now — one guarded server-side sort (per-user throttle, in-flight join, 25s wait). Returns the old fields filled from the sort (`enqueued` = verdicts written) plus `status`.
+- `tornix api email threads --json` — One page of the caller's stored mail filed under this category, newest first — read straight off the same category_key the resolver already wrote, no re-derivation. `limit` defaults to 25 (max 50), `offset` defaults to 0. An unknown key returns an empty page rather than a 404.
+- `tornix api email today --json` — The caller's briefing for their local today, or `briefing: null`. Never writes — use POST to get-or-generate.
+- `tornix api email triage-page --json` — Triage the inbox page the client is showing, in ONE model call from headers only, and persist the buckets. This is what fills the briefing. Distinct from /classify-batch, which reads each body and costs one call (and one credit charge) PER EMAIL — right when a message is opened, wrong for a list.
 - `tornix api email triage-summary --json` — Inbox briefing: how many emails are in each triage bucket since the reader last looked, plus the ones needing a decision. Counts come from the classifier, over the WHOLE synced mailbox — not the page the client has loaded.
+- `tornix api email update --json` — Rename, recolour, hide or show a category. `name: null` on a built-in restores its translated default. Hiding moves no mail.
 
-(32 commands)
+(54 commands)

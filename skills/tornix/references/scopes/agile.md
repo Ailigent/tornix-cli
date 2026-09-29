@@ -1,4 +1,4 @@
-# `tornix api agile` — 128 commands
+# `tornix api agile` — 131 commands
 
 - `tornix api agile accept --json` — Accept a proposed item for the team. The proposer may accept their own — both proposed_by and accepted_by are recorded either way. 409 ALREADY_ACCEPTED on a second accept.
 - `tornix api agile accept-all --json` — Accept everything reviewed. 409 REVIEW_INCOMPLETE while any item is still pending.
@@ -23,6 +23,7 @@
 - `tornix api agile columns --json` — Create a board column (appended before the done column)
 - `tornix api agile commitment --json` — Set the estimate + deadline commitment in one write
 - `tornix api agile complete --json` — Complete a sprint; roll incomplete tasks to the target
+- `tornix api agile create --json` — Merge one proposal into another by hand. Moves every mention to the target and DECLINES the source (never deletes it). Requires manage_backlog. 409 ALREADY_ACCEPTED if the source is in a sprint, 400 CROSS_PROJECT across projects.
 - `tornix api agile cycle-time --json` — Cycle/lead time per completed task + percentiles (control chart)
 - `tornix api agile dashboard --json` — Agile Dashboard tiles composed in one round trip
 - `tornix api agile decision --json` — Apply a suggestion (writes impact, and points when proposed) or ignore it
@@ -31,7 +32,7 @@
 - `tornix api agile dependencies --json` — What is holding the sprint, and what clears when it moves (design 20938:731)
 - `tornix api agile dependency-candidates --json` — Tasks this one could be linked to, each cycle-checked
 - `tornix api agile details --json` — Answer a gap the card names — owner, date, estimate. Writes through to the target task when the item has one, so the two can never disagree.
-- `tornix api agile dismiss --json` — Ignore an insight (stable key; a recurrence produces a new key)
+- `tornix api agile dismiss --json` — Answer a "Similar to …" with no: downgrades the suspicion to a recorded 'related' so the card stops asking. Requires manage_backlog.
 - `tornix api agile dod --json` — Definition of Done config: mode + checklist items
 - `tornix api agile dor --json` — Definition of Ready config: checklist items (advisory)
 - `tornix api agile enabled --json` — Show/hide the card; off keeps the clustering so re-enabling is free
@@ -54,6 +55,7 @@
 - `tornix api agile hours --json` — Where the sprint hours go + meeting load over time, from tracked time and meetings (overlapping timers merged).
 - `tornix api agile impact --json` — Set/clear business impact 1–5 (the other axis of the Impact/Effort matrix)
 - `tornix api agile insights --json` — Findings from the board and recorded meetings. Read-only — nothing is applied until someone acts on it.
+- `tornix api agile insights-dismiss-create --json` — Ignore an insight (stable key; a recurrence produces a new key)
 - `tornix api agile items --json` — Raise a blocker, a proposal or a decision by hand — the only writer the "Blockers raised" group has.
 - `tornix api agile meetings --json` — The project's recorded meetings that still have work to review
 - `tornix api agile members --json` — Per-member capacity vs assigned points for a sprint
@@ -122,6 +124,7 @@
 - `tornix api agile tasks-suggest-points-create --json` — AI story-point suggestion from the project's own estimated history (read-only)
 - `tornix api agile to-refinement --json` — Queue a proposal in the project's refinement session and return where it landed. Idempotent per (session, task). Does NOT accept the task — accepting the queued item does. 409 ALREADY_ACCEPTED if it is no longer a proposal.
 - `tornix api agile trends --json` — Throughput, bugs over time, created vs closed and lead time — one call so all four share the same week boundaries.
+- `tornix api agile unmerge --json` — Undo one merge — split a mention back out into its own proposal, restored from the wording that person actually used. Requires manage_backlog. 409 FIRST_MENTION on the mention the task was created from.
 - `tornix api agile update --json` — Update a board column (name/WIP/color/position)
 - `tornix api agile velocity --json` — Velocity of the last N CLOSED sprints + trailing average
 - `tornix api agile votes --json` — Cast/replace your vote; the round reveals its consensus
@@ -129,4 +132,4 @@
 - `tornix api agile work-grouping-generate-create --json` — Re-cluster the backlog by feature/module/goal (billed AI call)
 - `tornix api agile work-item-type --json` — Type a work item: task | bug | ticket
 
-(128 commands)
+(131 commands)

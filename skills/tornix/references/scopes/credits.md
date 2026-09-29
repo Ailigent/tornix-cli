@@ -1,4 +1,4 @@
-# `tornix api credits` — 23 commands
+# `tornix api credits` — 26 commands
 
 - `tornix api credits adjust --json` — CreditsController_adminAdjust
 - `tornix api credits admin-model-pricing-create --json` — CreditsController_adminUpsertModelPricing
@@ -12,6 +12,8 @@
 - `tornix api credits change-plan --json` — CreditsController_adminChangePlan
 - `tornix api credits consume --json` — CreditsController_consume
 - `tornix api credits credits-plans --json` — CreditsController_getPlans
+- `tornix api credits daily --json` — CreditsController_getDailyUsage
+- `tornix api credits forecast --json` — CreditsController_getUsageForecast
 - `tornix api credits model-pricing --json` — CreditsController_adminGetModelPricing
 - `tornix api credits org-ai-access --json` — CreditsController_adminSetOrgAiAccess
 - `tornix api credits packages --json` — CreditsController_getPackages
@@ -19,9 +21,10 @@
 - `tornix api credits refund --json` — CreditsController_refund
 - `tornix api credits reserve --json` — CreditsController_reserve
 - `tornix api credits token-config --json` — CreditsController_adminGetTokenConfig
+- `tornix api credits transaction-series --json` — CreditsController_adminGetTransactionSeries
 - `tornix api credits transactions --json` — CreditsController_getTransactions
 - `tornix api credits upgrade-plan --json` — CreditsController_upgradePlan
 - `tornix api credits user-credits --json` — CreditsController_adminGetUserCredits
 - `tornix api credits user-transactions --json` — CreditsController_adminGetUserTransactions
 
-(23 commands)
+(26 commands)

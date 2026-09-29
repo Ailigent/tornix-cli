@@ -10,7 +10,7 @@
 - `tornix api strategy-draft drafts-sources-delete --json` — Remove a source (the items it produced survive)
 - `tornix api strategy-draft extract --json` — Read every queued source and stream the items as they land (SSE)
 - `tornix api strategy-draft get --json` — Get a draft with its sources, items, flags, counters and warnings
-- `tornix api strategy-draft items --json` — Add an item by hand (theme / objective / kpi / initiative)
+- `tornix api strategy-draft items --json` — Add an item by hand (theme / objective / kpi / initiative / risk)
 - `tornix api strategy-draft phase --json` — Report where a long build has got to (phase, one-line detail, steps done/total)
 - `tornix api strategy-draft resolve --json` — Resolve a conflict or duplicate flag
 - `tornix api strategy-draft retry --json` — Re-read a source that failed or produced nothing

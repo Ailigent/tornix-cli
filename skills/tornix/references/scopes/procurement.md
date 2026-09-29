@@ -1,4 +1,4 @@
-# `tornix api procurement` — 37 commands
+# `tornix api procurement` — 38 commands
 
 - `tornix api procurement ai-suggest --json` — ProcurementController_aiSuggest
 - `tornix api procurement batch --json` — ProcurementController_createMultiVendorDocuments
@@ -22,6 +22,7 @@
 - `tornix api procurement partners-create --json` — ProcurementController_createPartner
 - `tornix api procurement policies --json` — ProcurementController_getPolicies
 - `tornix api procurement poll-vendor-responses --json` — ProcurementController_triggerPollVendorResponses
+- `tornix api procurement price-deviation --json` — ProcurementController_getPriceDeviation
 - `tornix api procurement replace --json` — ProcurementController_updatePolicy
 - `tornix api procurement requests --json` — ProcurementController_getRequests
 - `tornix api procurement requests-comments --json` — ProcurementController_getRequestComments
@@ -38,4 +39,4 @@
 - `tornix api procurement vendors --json` — ProcurementController_getVendorResponses
 - `tornix api procurement wizard --json` — ProcurementController_createWizardRequest
 
-(37 commands)
+(38 commands)

@@ -4,6 +4,7 @@ import os
 import tomllib
 from dataclasses import dataclass, field
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import tomli_w
 
@@ -15,6 +16,17 @@ PROFILES = {
 
 CONFIG_PATH = Path(os.environ.get("TORNIX_CONFIG",
                    str(Path.home() / ".config" / "tornix" / "config.toml")))
+
+
+def _effective_config_path() -> Path:
+    """Prefer an explicit path, then isolate each Hermes profile from shared HOME."""
+    explicit = os.environ.get("TORNIX_CONFIG")
+    if explicit:
+        return Path(explicit)
+    hermes_home = os.environ.get("HERMES_HOME")
+    if hermes_home:
+        return Path(hermes_home) / ".config" / "tornix" / "config.toml"
+    return CONFIG_PATH
 
 
 @dataclass
@@ -36,12 +48,38 @@ class Config:
 
     @classmethod
     def load(cls) -> "Config":
+        config_path = _effective_config_path()
         data: dict = {}
-        if CONFIG_PATH.exists():
-            data = tomllib.loads(CONFIG_PATH.read_text())
+        if config_path.exists():
+            data = tomllib.loads(config_path.read_text())
         profile = os.environ.get("TORNIX_PROFILE") or data.get("profile") or "prod"
         api_url = os.environ.get("TORNIX_API_URL") or data.get("api_url")
-        api_key = os.environ.get("TORNIX_API_KEY") or data.get("api_key")
+        if api_url is None:
+            legacy_url = os.environ.get("API_URL")
+            if legacy_url:
+                parsed = urlsplit(legacy_url)
+                allowed_hosts = {"app.tornix.ai", "app-stage.tornix.ai"}
+                if (
+                    parsed.scheme == "https"
+                    and parsed.hostname in allowed_hosts
+                    and parsed.username is None
+                    and parsed.password is None
+                    and not parsed.query
+                    and not parsed.fragment
+                ):
+                    api_url = legacy_url.rstrip("/")
+        primary_key = os.environ.get("TORNIX_API_KEY")
+        if primary_key:
+            # Refuse wrong-provider secrets rather than forwarding them to Tornix.
+            api_key = primary_key if primary_key.startswith("tnx_") else None
+        else:
+            legacy_key = os.environ.get("API_KEY")
+            saved_key = data.get("api_key")
+            api_key = (
+                legacy_key if legacy_key and legacy_key.startswith("tnx_")
+                else saved_key if saved_key and saved_key.startswith("tnx_")
+                else None
+            )
         token = os.environ.get("TORNIX_TOKEN") or data.get("token")
         org_id = os.environ.get("TORNIX_ORG") or data.get("org_id")
         return cls(profile=profile, api_url=api_url, api_key=api_key,
@@ -49,7 +87,8 @@ class Config:
 
     def save(self) -> None:
         # Restrict the parent dir (it holds a plaintext secret) to owner-only.
-        parent = CONFIG_PATH.parent
+        config_path = _effective_config_path()
+        parent = config_path.parent
         parent.mkdir(parents=True, exist_ok=True)
         try:
             os.chmod(parent, 0o700)
@@ -60,9 +99,9 @@ class Config:
             "api_key": self.api_key, "token": self.token, "org_id": self.org_id,
         }.items() if v is not None}
         # Create the file 0600 atomically (no world-readable window before chmod).
-        fd = os.open(CONFIG_PATH, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        fd = os.open(config_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
         try:
             os.write(fd, tomli_w.dumps(out).encode("utf-8"))
         finally:
             os.close(fd)
-        os.chmod(CONFIG_PATH, 0o600)  # ensure perms even if the file pre-existed
+        os.chmod(config_path, 0o600)  # ensure perms even if the file pre-existed

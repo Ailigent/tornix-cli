@@ -1,9 +1,10 @@
-# `tornix api tickets` — 66 commands
+# `tornix api tickets` — 69 commands
 
 - `tornix api tickets accept --json` — Accept as suggested, open the backlog item, and optionally assign it
 - `tornix api tickets advance --json` — Move to the next stage; writes the event the client will read
 - `tornix api tickets approval --json` — The flow this ticket is on — the graph, and every step on it
 - `tornix api tickets approval-flows --json` — The approval flows a ticket can be sent down
+- `tornix api tickets approval-path --json` — The one approval path every ticket walks
 - `tornix api tickets assignment-rules --json` — The rules that decide who a ticket goes to, in the order tried
 - `tornix api tickets attachment-url --json` — Signed URL for one attachment on this ticket
 - `tornix api tickets attachments --json` — Add a file, photo or voice note — allowed until we accept the ticket
@@ -18,6 +19,7 @@
 - `tornix api tickets decide --json` — Approve or refuse your step in the flow
 - `tornix api tickets default --json` — Choose which approval flow governs tickets
 - `tornix api tickets delete --json` — Remove a routing rule
+- `tornix api tickets detach --json` — Give tickets their own copy of the approval path
 - `tornix api tickets discard --json` — Not worth reporting
 - `tornix api tickets drafts --json` — Problems people mentioned in meetings and chat that nobody filed. Each carries the sentence it came from.
 - `tornix api tickets duplicates --json` — Similar tickets with the evidence behind each score
@@ -40,6 +42,7 @@
 - `tornix api tickets queue --json` — Every ticket filed against us, at any stage
 - `tornix api tickets reanalyse --json` — Run the AI analysis again, replacing whatever is there
 - `tornix api tickets reject --json` — Not taken forward. The reason is shown to the client verbatim.
+- `tornix api tickets restart --json` — Put the ticket back on the approval path as it is drawn now
 - `tornix api tickets restore-defaults --json` — Drop the overrides and go back to the built-in targets
 - `tornix api tickets resume --json` — Start it again, banking the time it was stopped
 - `tornix api tickets retry --json` — Send an offer again after the client deployment could not be reached
@@ -67,4 +70,4 @@
 - `tornix api tickets visibility --json` — Is the Support Tickets surface shown to this user, and who may change that
 - `tornix api tickets visibility-replace --json` — Narrow Support Tickets to administrators (org admin), or flip the feature (super-admin)
 
-(66 commands)
+(69 commands)
