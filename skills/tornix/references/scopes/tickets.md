@@ -1,7 +1,8 @@
-# `tornix api tickets` — 69 commands
+# `tornix api tickets` — 71 commands
 
 - `tornix api tickets accept --json` — Accept as suggested, open the backlog item, and optionally assign it
 - `tornix api tickets advance --json` — Move to the next stage; writes the event the client will read
+- `tornix api tickets already-resolved --json` — Already resolved — the fix is live; moves the ticket to released for the client to confirm
 - `tornix api tickets approval --json` — The flow this ticket is on — the graph, and every step on it
 - `tornix api tickets approval-flows --json` — The approval flows a ticket can be sent down
 - `tornix api tickets approval-path --json` — The one approval path every ticket walks
@@ -47,6 +48,7 @@
 - `tornix api tickets resume --json` — Start it again, banking the time it was stopped
 - `tornix api tickets retry --json` — Send an offer again after the client deployment could not be reached
 - `tornix api tickets send --json` — Turn a draft into a real ticket for a named client
+- `tornix api tickets similar --json` — The 4-5 reports of this company that read most like what is being typed
 - `tornix api tickets sla-policy --json` — Per-priority SLA targets for this organization, with the defaults
 - `tornix api tickets stage-approvals --json` — What this ticket is waiting on a sign-off for
 - `tornix api tickets stage-gates --json` — Which stage moves need a sign-off, and from whom
@@ -70,4 +72,4 @@
 - `tornix api tickets visibility --json` — Is the Support Tickets surface shown to this user, and who may change that
 - `tornix api tickets visibility-replace --json` — Narrow Support Tickets to administrators (org admin), or flip the feature (super-admin)
 
-(69 commands)
+(71 commands)

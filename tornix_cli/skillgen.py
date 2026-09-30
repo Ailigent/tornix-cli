@@ -69,6 +69,7 @@ AGENT_WITHHELD_API_COMMANDS = frozenset({
     ("company-admin", "members-create"),
     ("company-admin", "password"),
     ("company-admin-excel", "apply"),
+    ("company-admin-excel", "send-credentials"),
     ("company-admin-talon", "talon-users-create"),
     ("company-admin-talon", "update"),
     ("company-admin-talon", "import"),
@@ -80,6 +81,8 @@ AGENT_WITHHELD_API_COMMANDS = frozenset({
     ("company-admin", "delete"),
     ("company-admin-talon", "delete"),
     ("email", "delete"),
+    ("email", "connect"),
+    ("email", "imap-connect"),
 })
 
 

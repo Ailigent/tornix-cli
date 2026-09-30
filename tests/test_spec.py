@@ -190,21 +190,21 @@ def test_pinned_spec_matches_github_talon_surface():
     spec = load_spec()
     ops = [(m, p) for p, ms in spec["paths"].items() for m in ms
            if m.lower() in ("get", "post", "put", "patch", "delete")]
-    assert len(spec["paths"]) == 1290
-    assert len(ops) == 1658
+    assert len(spec["paths"]) == 1343
+    assert len(ops) == 1719
     method_entries = Counter(method.upper() for path_item in spec["paths"].values()
                              for method in path_item)
     assert method_entries == Counter({
-        "DELETE": 154, "GET": 621, "HEAD": 15, "OPTIONS": 14,
-        "PATCH": 94, "POST": 648, "PUT": 141, "SEARCH": 14,
+        "DELETE": 159, "GET": 654, "HEAD": 15, "OPTIONS": 14,
+        "PATCH": 97, "POST": 665, "PUT": 144, "SEARCH": 14,
     })
-    assert sum(method_entries.values()) == 1701
+    assert sum(method_entries.values()) == 1762
 
 
 def test_pinned_spec_covers_the_new_backend_tags():
     tags = {tag for ms in load_spec()["paths"].values() for op in ms.values()
             if isinstance(op, dict) for tag in op.get("tags", [])}
-    assert len(tags) == 93
+    assert len(tags) == 95
     for new in ("agile", "governance", "templates", "memory", "twin",
                 "request-board", "search", "bim", "pre-project",
                 "access-requests", "app-versions", "link-preview", "data",
@@ -235,3 +235,16 @@ def test_pinned_spec_preserves_global_prefix_exceptions():
 
 def test_dead_super_agent_proxy_ops_are_gone():
     assert "/api/v1/ai/super-agent/*" not in load_spec()["paths"]
+
+
+def test_pinned_spec_carries_the_bim_register_4d_5d_surface():
+    """BIM phases 1-3 (register, 4D, 5D) are what an agent reads the model through."""
+    paths = load_spec()["paths"]
+    for route in ("/api/v1/bim/register/elements", "/api/v1/bim/register/summary",
+                  "/api/v1/bim/register/elements/{id}", "/api/v1/bim/locations",
+                  "/api/v1/bim/models/{id}/cde-history", "/api/v1/bim/4d/summary",
+                  "/api/v1/bim/4d/sequence", "/api/v1/bim/4d/lookahead",
+                  "/api/v1/bim/5d/summary", "/api/v1/bim/5d/elements",
+                  "/api/v1/bim/5d/quantities", "/api/v1/bim/5d/progress-rules",
+                  "/api/v1/bim/5d/elements/{id}/cost"):
+        assert route in paths, route

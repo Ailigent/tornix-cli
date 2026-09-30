@@ -1,4 +1,4 @@
-# `tornix api approvals` — 59 commands
+# `tornix api approvals` — 60 commands
 
 - `tornix api approvals ai-review --json` — Get cached AI review result for a request
 - `tornix api approvals ai-settings --json` — Get org Approval AI settings (defaults if unset), plus whether automatic approval can actually run — reading this also disarms an org left switched on with no authority matrix behind it
@@ -14,6 +14,7 @@
 - `tornix api approvals delete-access --json` — The caller's own delete rights: whether the org has admin delete at all, whether they may empty a request, and whether they may grant that to others.
 - `tornix api approvals delete-grants --json` — List the users who hold a delete grant (administrators only)
 - `tornix api approvals delete-grants-replace --json` — Switch one user's delete permission on or off (administrators only)
+- `tornix api approvals departments --json` — The org's departments for the request form: governance org-chart department nodes + departments already used on its requests
 - `tornix api approvals download --json` — Download every file on a request as one zip — the CURRENT version's attachments, each one's latest signed copy when it has been stamped. Named after the request reference (REQ-…-v{version}.zip).
 - `tornix api approvals get --json` — Get approval request by ID
 - `tornix api approvals instantiate-flow --json` — Compile the governing flow graph into a flow_snapshot and seed the initial pending steps (graph-driven approval engine). No-op if the request has no governing graph.
@@ -60,4 +61,4 @@
 - `tornix api approvals workflows-get --json` — Get workflow by ID
 - `tornix api approvals workflows-replace --json` — Update approval workflow
 
-(59 commands)
+(60 commands)

@@ -1,10 +1,11 @@
-# `tornix api documents` — 37 commands
+# `tornix api documents` — 38 commands
 
 - `tornix api documents ai-edit --json` — AI-powered document editing
 - `tornix api documents analysis --json` — RAG analysis (summary + passages) for one document
 - `tornix api documents backfill --json` — Enqueue enrichment for this org's undescribed files
 - `tornix api documents board --json` — Documents board — the recent-files section
 - `tornix api documents breadcrumbs --json` — Get folder breadcrumb path
+- `tornix api documents children --json` — Children of one folder (or a section root), with counts
 - `tornix api documents counts --json` — Per-folder document counts for a scope
 - `tornix api documents coverage --json` — Registration coverage per external attachment source
 - `tornix api documents delete --json` — Delete folder
@@ -38,4 +39,4 @@
 - `tornix api documents unread --json` — Per-folder count of uploads the caller has not looked at yet, rolled up through the tree
 - `tornix api documents update --json` — Rename folder
 
-(37 commands)
+(38 commands)

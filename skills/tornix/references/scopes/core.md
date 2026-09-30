@@ -51,7 +51,7 @@ Top-level `tornix` commands — auth, config, data proxy, projects, tasks, file,
 - `tornix projects create --json` — Create a project.
 - `tornix projects get --json` — Get a project by id.
 - `tornix projects health --json` — Get a project's health summary.
-- `tornix projects list --json` — List projects in the active organization.
+- `tornix projects list --json` — List YOUR projects (the ones you are a member of). Add --all for every project in the organization.
 - `tornix projects members --json` — List a project's members.
 - `tornix projects update --json` — Update a project (PUT) with a JSON body.
 - `tornix rpc --json` — Call a backend RPC function.

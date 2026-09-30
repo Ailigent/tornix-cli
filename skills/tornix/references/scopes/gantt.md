@@ -1,4 +1,4 @@
-# `tornix api gantt` — 33 commands
+# `tornix api gantt` — 34 commands
 
 - `tornix api gantt activate --json` — Activate an approved baseline (snapshot + lock)
 - `tornix api gantt baselines --json` — Create a baseline (project_id in body)
@@ -24,6 +24,7 @@
 - `tornix api gantt restore-baseline-create --json` — Restore schedule from a baseline (dates_only or full mode)
 - `tornix api gantt schedule --json` — Run CPM scheduling (project_id in body)
 - `tornix api gantt schedule-create --json` — Run CPM scheduling (forward/backward pass)
+- `tornix api gantt set-locked --json` — Lock (freeze) or unlock a baseline as a fixed comparison snapshot
 - `tornix api gantt set-primary --json` — Set a baseline as primary (atomic)
 - `tornix api gantt update --json` — Update WBS administrative fields
 - `tornix api gantt update-status --json` — Update baseline status
@@ -34,4 +35,4 @@
 - `tornix api gantt xer --json` — Export to P6 XER format (project_id in body)
 - `tornix api gantt xer-create --json` — Import P6 XER file
 
-(33 commands)
+(34 commands)

@@ -1,4 +1,4 @@
-# `tornix api governance` — 66 commands
+# `tornix api governance` — 77 commands
 
 - `tornix api governance accept --json` — GovernanceController_acceptEditRequest
 - `tornix api governance access --json` — GovernanceController_getAccess
@@ -17,20 +17,26 @@
 - `tornix api governance comments --json` — GovernanceController_listComments
 - `tornix api governance comments-resolve-create --json` — GovernanceController_resolveComment
 - `tornix api governance consistency --json` — GovernanceController_getConsistency
-- `tornix api governance content --json` — GovernanceController_getManualContent
+- `tornix api governance content --json` — GovernanceFilesController_content
 - `tornix api governance content-versions-get --json` — GovernanceController_getManualContentVersion
 - `tornix api governance delete --json` — GovernanceController_deleteBinding
 - `tornix api governance diagrams --json` — GovernanceController_getDiagrams
 - `tornix api governance diff --json` — GovernanceController_diffVersions
+- `tornix api governance download --json` — GovernanceFilesController_download
 - `tornix api governance draft --json` — GovernanceController_getManualDraft
 - `tornix api governance drain --json` — GovernanceController_drainComments
 - `tornix api governance edit-requests --json` — GovernanceController_listEditRequests
-- `tornix api governance get --json` — GovernanceController_getCommentThread
+- `tornix api governance files --json` — GovernanceFilesController_list
+- `tornix api governance files-create --json` — GovernanceFilesController_create
+- `tornix api governance files-delete --json` — GovernanceFilesController_remove
+- `tornix api governance get --json` — GovernanceFilesController_get
 - `tornix api governance governance-versions --json` — GovernanceController_listVersions
 - `tornix api governance graphics --json` — GovernanceController_listManualGraphics
 - `tornix api governance manual --json` — GovernanceController_getManual
 - `tornix api governance manual-comments-create --json` — GovernanceController_createComment
 - `tornix api governance manual-comments-delete --json` — GovernanceController_deleteComment
+- `tornix api governance manual-comments-get --json` — GovernanceController_getCommentThread
+- `tornix api governance manual-content --json` — GovernanceController_getManualContent
 - `tornix api governance manual-content-replace --json` — GovernanceController_saveManualContent
 - `tornix api governance manual-draft-delete --json` — GovernanceController_discardManualDraft
 - `tornix api governance manual-draft-replace --json` — GovernanceController_saveManualDraft
@@ -52,8 +58,10 @@
 - `tornix api governance render --json` — GovernanceController_renderManualSection
 - `tornix api governance reorder --json` — GovernanceController_reorderManualSections
 - `tornix api governance replace --json` — GovernanceController_upsertAuthorityLevel
+- `tornix api governance reprocess --json` — GovernanceFilesController_reprocess
 - `tornix api governance resolve --json` — GovernanceController_resolveDoa
 - `tornix api governance review --json` — GovernanceController_reviewManualDraft
+- `tornix api governance search --json` — GovernanceAiToolsController_searchManual
 - `tornix api governance sections --json` — GovernanceController_listManualSections
 - `tornix api governance sections-draft --json` — GovernanceController_getManualSectionDraft
 - `tornix api governance sections-draft-delete --json` — GovernanceController_discardManualSectionDraft
@@ -63,8 +71,11 @@
 - `tornix api governance settings --json` — GovernanceController_getSettings
 - `tornix api governance settings-replace --json` — GovernanceController_upsertSettings
 - `tornix api governance stream --json` — GovernanceController_aiEditManualStream
+- `tornix api governance text --json` — GovernanceAiToolsController_sectionText
 - `tornix api governance update --json` — GovernanceController_updateComment
+- `tornix api governance upload-url --json` — GovernanceFilesController_uploadUrl
+- `tornix api governance verify --json` — GovernanceAiToolsController_verifyEdits
 - `tornix api governance versions --json` — GovernanceController_listManualContentVersions
 - `tornix api governance versions-get --json` — GovernanceController_getVersion
 
-(66 commands)
+(77 commands)

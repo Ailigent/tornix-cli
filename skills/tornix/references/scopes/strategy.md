@@ -1,4 +1,4 @@
-# `tornix api strategy` — 118 commands
+# `tornix api strategy` — 123 commands
 
 - `tornix api strategy accept --json` — Accept a strategic recommendation
 - `tornix api strategy actual --json` — Update the actual value of a project-objective KPI
@@ -8,6 +8,7 @@
 - `tornix api strategy ai-usage --json` — Admin: list AI Anthropic calls (paginated). Used by the AI Usage admin page.
 - `tornix api strategy alignment --json` — Update the alignment score between a project and an objective
 - `tornix api strategy all --json` — Delete this strategy's strategic risks — all of them, or only `?ids=` (Re-analyze retires the previous set once the new run has succeeded)
+- `tornix api strategy archive --json` — Archive a KPI without deleting its history
 - `tornix api strategy assessment --json` — Set or clear a strategic risk's likelihood/impact rating (org admin)
 - `tornix api strategy backfill-links --json` — Link unlinked active-strategy objectives and initiatives to the projects that measure and deliver them, then roll up
 - `tornix api strategy benefit --json` — Update the expected benefit for a project-objective link
@@ -20,6 +21,7 @@
 - `tornix api strategy config --json` — Is verified benefit delivery switched on for the caller org?
 - `tornix api strategy create --json` — Recalculate alignment for all projects linked to an objective
 - `tornix api strategy create-manual --json` — Manually create a strategic risk
+- `tornix api strategy definition-history --json` — Read immutable KPI definition versions
 - `tornix api strategy delete --json` — Delete a strategic initiative
 - `tornix api strategy details --json` — Get theme details including objectives and KPIs
 - `tornix api strategy detect --json` — Detect and persist strategic gaps for the current organization
@@ -50,6 +52,7 @@
 - `tornix api strategy kpis-history --json` — Get KPI value history
 - `tornix api strategy kpis-replace --json` — Update a strategic KPI
 - `tornix api strategy launch --json` — Atomically launch a strategy with themes, objectives, KPIs, initiatives, and project links
+- `tornix api strategy legacy-kpis-delete --json` — Permanently delete a KPI Management KPI and its strategic twins
 - `tornix api strategy link --json` — Link KPIs to a project-objective relationship
 - `tornix api strategy match-projects --json` — Match projects to objectives — proxied to strategic-navigator:8013
 - `tornix api strategy match-projects-wizard --json` — Match projects during wizard — proxied to strategic-navigator:8013
@@ -112,6 +115,8 @@
 - `tornix api strategy themes-objectives --json` — Get objectives belonging to a theme
 - `tornix api strategy themes-replace --json` — Update a theme
 - `tornix api strategy timeseries --json` — Get KPI value timeseries with optional date range filter
+- `tornix api strategy twin --json` — Ensure the strategic KPI twin of a KPI Management link
+- `tornix api strategy unarchive --json` — Restore an archived KPI
 - `tornix api strategy update --json` — Rename / recolour / reorder / (de)activate a perspective
 - `tornix api strategy update-requests --json` — Ask each objective's owner for a progress update
 - `tornix api strategy whatif --json` — Create a new what-if scenario
@@ -119,4 +124,4 @@
 - `tornix api strategy whatif-get --json` — Get all what-if scenarios for an organization
 - `tornix api strategy whatif-replace --json` — Update a what-if scenario
 
-(118 commands)
+(123 commands)

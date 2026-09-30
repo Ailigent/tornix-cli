@@ -339,6 +339,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api approvals delete-access --json` — The caller's own delete rights: whether the org has admin delete at all, whether they may empty a request, and whether they may grant that to others.
 - `tornix api approvals delete-grants --json` — List the users who hold a delete grant (administrators only)
 - `tornix api approvals delete-grants-replace --json` — Switch one user's delete permission on or off (administrators only)
+- `tornix api approvals departments --json` — The org's departments for the request form: governance org-chart department nodes + departments already used on its requests
 - `tornix api approvals download --json` — Download every file on a request as one zip — the CURRENT version's attachments, each one's latest signed copy when it has been stamped. Named after the request reference (REQ-…-v{version}.zip).
 - `tornix api approvals get --json` — Get approval request by ID
 - `tornix api approvals instantiate-flow --json` — Compile the governing flow graph into a flow_snapshot and seed the initial pending steps (graph-driven approval engine). No-op if the request has no governing graph.
@@ -391,10 +392,39 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api benefits list --json` — List benefits for a project
 - `tornix api benefits organization --json` — List all benefits for the user's organization
 - `tornix api benefits replace --json` — Update a benefit
+- `tornix api bim 5d-elements --json` — Per-element cost and CPI band (for the 3D viewer)
+- `tornix api bim 5d-progress-rules-replace --json` — Save the organization's weighted progress-measurement stages (manage_bim)
+- `tornix api bim 5d-summary --json` — Model BAC/PV/EV/AC/committed/EAC, CPI/SPI, coverage and cost breakdowns on a date
 - `tornix api bim acknowledge --json` — Clear the scope-change flags a reviewer has looked at
+- `tornix api bim bulk --json` — BimRegisterController_bulk
+- `tornix api bim cde-history --json` — BimRegisterController_history
+- `tornix api bim cde-transition --json` — BimRegisterController_transition
+- `tornix api bim cost --json` — One element: quantity → BOQ → cost code → budget → committed → actual → forecast
+- `tornix api bim delete --json` — BimRegisterController_deleteZone
+- `tornix api bim element-ids --json` — Model + GlobalId of every element matching the register filters (for Show in 3D)
+- `tornix api bim elements --json` — Per-element planned/actual state and status on a date (for the 3D viewer)
+- `tornix api bim elements-issues-delete --json` — BimRegisterController_unlinkIssue
+- `tornix api bim get --json` — BimRegisterController_elementCard
+- `tornix api bim issues --json` — BimRegisterController_linkIssue
+- `tornix api bim locations --json` — BimRegisterController_locations
+- `tornix api bim locations-create --json` — BimRegisterController_createZone
+- `tornix api bim lookahead --json` — Activities with model elements planned in the next weeks
+- `tornix api bim models --json` — Latest model versions visible to the caller (WIP: uploader and BIM managers only)
 - `tornix api bim my-permissions --json` — Resolve the caller's effective BIM permissions for a project
+- `tornix api bim new --json` — BimRegisterController_createIssue
+- `tornix api bim options --json` — Zones, WBS nodes, BOQ items and members to pick from when editing elements
+- `tornix api bim progress-rules --json` — Bim5dController_rules
+- `tornix api bim quantities --json` — Model quantity takeoff and BOQ quantity check
+- `tornix api bim register-elements --json` — BimRegisterController_elements
+- `tornix api bim register-elements-update --json` — BimRegisterController_patchElement
+- `tornix api bim register-summary --json` — BimRegisterController_summary
 - `tornix api bim scope-changes --json` — A project's activities whose modelled scope changed
 - `tornix api bim scope-changes-create --json` — Reflect a committed BIM edit onto the activities that claim those elements
+- `tornix api bim sequence --json` — Construction sequence: activities with elements, in planned order
+- `tornix api bim sequence-elements --json` — Bim4dController_sequenceElements
+- `tornix api bim summary --json` — Element schedule status, planned vs actual %, and deviations on a date
+- `tornix api bim sync --json` — Read a model into the BIM element register (keeps user-entered data)
+- `tornix api bim update --json` — BimRegisterController_updateLocation
 - `tornix api calendar get --json` — One meeting the caller creates OR attends
 - `tornix api calendar my-events --json` — Calendar events overlapping a range where the caller is creator OR participant
 - `tornix api calendar update --json` — Update a meeting the caller creates OR attends
@@ -450,15 +480,24 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api company-admin job-titles --json` — [Org admin] One organization's job titles (organization_roles) with member counts, ordered by member count desc — the real per-project permission layer, distinct from the two-value global role
 - `tornix api company-admin job-titles-create --json` — [Org admin] Create a new job title by cloning an existing one's permissions — the safer path for "change it for just this one member", optionally assigning the new title to one member in the same call
 - `tornix api company-admin job-titles-permissions-update --json` — [Org admin] Update a job title's permissions — writes the SHARED role, affecting every member who currently holds it, not only the member the caller has open
+- `tornix api company-admin mail-accounts --json` — [Org admin] The mailboxes members of one organization have connected
+- `tornix api company-admin mail-settings --json` — [Org admin] The company mail settings for one organization
+- `tornix api company-admin mail-settings-replace --json` — [Org admin] Create or update one company mail setting
 - `tornix api company-admin members --json` — [Org admin] Members of ONE organization — search/filter/sort/paginate on the server
+- `tornix api company-admin members-delete --json` — [Org admin] Delete a member's ACCOUNT (not just its membership). Refuses the caller's own account, an identity-locked account, an account holding super-admin access, and an account referenced by partner reviews / supplier evaluations (reason `referenced_by_business_records` — reject its access instead).
 - `tornix api company-admin organization-settings --json` — [Org admin] AI access / transcription engine / perspectives toggles for one organization
 - `tornix api company-admin organization-settings-update --json` — [Org admin] Update only the settings keys provided
 - `tornix api company-admin organizations --json` — Organizations the caller administers (member + owner/C_LEVEL). A platform super admin gets the ones they belong to, or every organization with ?all=true
 - `tornix api company-admin permissions --json` — [Org admin] One job title's full permission set (~73 booleans)
 - `tornix api company-admin projects --json` — [Org admin] Set the FINAL SET of projects a member belongs to within one organization — the server diffs against current memberships and adds/removes only the delta. Never touches this member's memberships in other organizations.
 - `tornix api company-admin role --json` — [Org admin] Set a member's global role (C_LEVEL / REGULAR_MANAGER / null) — org-scoped equivalent of /users/admin/set-role. Refuses the caller's own account and an identity-locked account.
+- `tornix api company-admin ticket-approval-flow --json` — [Org admin] Choose (or clear) the approval flow a support ticket walks
+- `tornix api company-admin ticket-approval-flows --json` — [Org admin] Approval flows a support ticket can walk before it is sent
+- `tornix api company-admin unlock-login --json` — [Org admin] Lift a member's login lockout (too many failed password / 2FA attempts) before its 5 minutes run out. Changes no credential, so it is not identity-locked.
 - `tornix api company-admin update --json` — [Org admin] Update full_name/phone/job_title/email — role, access_status, password and super-admin status go through /users/admin/*, not here
 - `tornix api company-admin-excel lookup --json` — [Org admin] Read-only pre-flight for the import preview — which of the file's emails already exist in Tornix (anywhere, not just this organization), whether they are already members here, and what this caller is allowed to change about them. Writes nothing.
+- `tornix api company-admin-hawkamah roster --json` — This organization's members merged with their Hawkamah governance-exam status (not_started | registered | grading | completed), keyed on work e-mail
+- `tornix api company-admin-hawkamah status --json` — Is this deployment configured with a Hawkamah API key, and does it verify
 - `tornix api company-admin-talon adjust --json` — [Super admin] Correct one Talon user's balance in either direction — a NEGATIVE amount is the only way to take credit back
 - `tornix api company-admin-talon status --json` — [Super admin] Is this deployment configured to talk to a sibling Talon box, and is it reachable
 - `tornix api company-admin-talon topup --json` — [Super admin] Add credit to one Talon user's wallet — forwarded to Talon's `/credits/admin/accounts/:id/topup`, which writes its own ledger line
@@ -598,6 +637,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api documents backfill --json` — Enqueue enrichment for this org's undescribed files
 - `tornix api documents board --json` — Documents board — the recent-files section
 - `tornix api documents breadcrumbs --json` — Get folder breadcrumb path
+- `tornix api documents children --json` — Children of one folder (or a section root), with counts
 - `tornix api documents counts --json` — Per-folder document counts for a scope
 - `tornix api documents coverage --json` — Registration coverage per external attachment source
 - `tornix api documents delete --json` — Delete folder
@@ -645,7 +685,6 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api email category-rules-delete --json` — Delete a rule and re-file the mailbox.
 - `tornix api email category-rules-update --json` — Edit, enable/disable or move a rule, and re-file the mailbox.
 - `tornix api email classify-batch --json` — Enqueue background AI classification for a batch of emails. Returns immediately; classification + project suggestions are persisted asynchronously.
-- `tornix api email connect --json` — Exchange Google OAuth code for tokens and create/update email account
 - `tornix api email contacts --json` — The reader's correspondents, for recipient suggestions
 - `tornix api email digest-fetch-create --json` — Fetch emails for AI digest (used by Super Agent)
 - `tornix api email fetch --json` — Fetch emails via IMAP (used by AI agent)
@@ -654,15 +693,14 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api email identity --json` — Resolve a sender email address to the person/entity it belongs to (teammate, partner contact, vendor, …) and the project(s) they relate to. Project links are filtered to the caller's accessible projects.
 - `tornix api email image-proxy --json` — Fetch a remote email image server-side and re-serve it from this origin, bypassing the sender's Cross-Origin-Resource-Policy and hiding the reader from tracking pixels.
 - `tornix api email imap-actions-create --json` — Perform IMAP flag/move actions (star, read, delete, archive)
-- `tornix api email imap-connect-create --json` — Test IMAP+SMTP connection and save credentials
 - `tornix api email imap-fetch-create --json` — Fetch emails via IMAP
 - `tornix api email labels --json` — EmailController_getLabels
 - `tornix api email lookup --json` — Where each message currently sits: category key, what decided it, and whether classification has run. At most 200 ids; ids with no row are absent.
+- `tornix api email mail-settings --json` — The company mail settings that apply to the caller — and, when an address is supplied, to that address’ domain. `configured` says the organization has settings at all, `matched` says one answers the address (its own domain, else the organization default). The connect form uses it to decide whether it draws the technical fields; the values carry no credential, so serving them to any member is safe.
 - `tornix api email messages --json` — EmailController_getMessages
 - `tornix api email order --json` — Persist a drag-reorder: category keys in their new tab order. Keys left out keep their relative order after the ones given.
 - `tornix api email preview --json` — How many of the caller’s emails a condition would match, and the newest 5, before saving it. Uses the same Arabic-safe matcher as the saved rule.
 - `tornix api email previews --json` — Signed preview URLs for a message’s IMAGE attachments, served from the archive in object storage. Only images, only files the archiver has already stored — anything else is simply absent and the client keeps its file glyph.
-- `tornix api email refresh-token --json` — Refresh Gmail access token using stored refresh token
 - `tornix api email reminders --json` — List pending reminders, optionally for one message.
 - `tornix api email reminders-create --json` — Remind me about this email at a time. Server-side, so it survives a reinstall and reaches whichever device the reader is holding.
 - `tornix api email reminders-delete --json` — Cancel a pending reminder.
@@ -712,6 +750,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api gantt restore-baseline-create --json` — Restore schedule from a baseline (dates_only or full mode)
 - `tornix api gantt schedule --json` — Run CPM scheduling (project_id in body)
 - `tornix api gantt schedule-create --json` — Run CPM scheduling (forward/backward pass)
+- `tornix api gantt set-locked --json` — Lock (freeze) or unlock a baseline as a fixed comparison snapshot
 - `tornix api gantt set-primary --json` — Set a baseline as primary (atomic)
 - `tornix api gantt update --json` — Update WBS administrative fields
 - `tornix api gantt update-status --json` — Update baseline status
@@ -750,20 +789,26 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api governance comments --json` — GovernanceController_listComments
 - `tornix api governance comments-resolve-create --json` — GovernanceController_resolveComment
 - `tornix api governance consistency --json` — GovernanceController_getConsistency
-- `tornix api governance content --json` — GovernanceController_getManualContent
+- `tornix api governance content --json` — GovernanceFilesController_content
 - `tornix api governance content-versions-get --json` — GovernanceController_getManualContentVersion
 - `tornix api governance delete --json` — GovernanceController_deleteBinding
 - `tornix api governance diagrams --json` — GovernanceController_getDiagrams
 - `tornix api governance diff --json` — GovernanceController_diffVersions
+- `tornix api governance download --json` — GovernanceFilesController_download
 - `tornix api governance draft --json` — GovernanceController_getManualDraft
 - `tornix api governance drain --json` — GovernanceController_drainComments
 - `tornix api governance edit-requests --json` — GovernanceController_listEditRequests
-- `tornix api governance get --json` — GovernanceController_getCommentThread
+- `tornix api governance files --json` — GovernanceFilesController_list
+- `tornix api governance files-create --json` — GovernanceFilesController_create
+- `tornix api governance files-delete --json` — GovernanceFilesController_remove
+- `tornix api governance get --json` — GovernanceFilesController_get
 - `tornix api governance governance-versions --json` — GovernanceController_listVersions
 - `tornix api governance graphics --json` — GovernanceController_listManualGraphics
 - `tornix api governance manual --json` — GovernanceController_getManual
 - `tornix api governance manual-comments-create --json` — GovernanceController_createComment
 - `tornix api governance manual-comments-delete --json` — GovernanceController_deleteComment
+- `tornix api governance manual-comments-get --json` — GovernanceController_getCommentThread
+- `tornix api governance manual-content --json` — GovernanceController_getManualContent
 - `tornix api governance manual-content-replace --json` — GovernanceController_saveManualContent
 - `tornix api governance manual-draft-delete --json` — GovernanceController_discardManualDraft
 - `tornix api governance manual-draft-replace --json` — GovernanceController_saveManualDraft
@@ -785,8 +830,10 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api governance render --json` — GovernanceController_renderManualSection
 - `tornix api governance reorder --json` — GovernanceController_reorderManualSections
 - `tornix api governance replace --json` — GovernanceController_upsertAuthorityLevel
+- `tornix api governance reprocess --json` — GovernanceFilesController_reprocess
 - `tornix api governance resolve --json` — GovernanceController_resolveDoa
 - `tornix api governance review --json` — GovernanceController_reviewManualDraft
+- `tornix api governance search --json` — GovernanceAiToolsController_searchManual
 - `tornix api governance sections --json` — GovernanceController_listManualSections
 - `tornix api governance sections-draft --json` — GovernanceController_getManualSectionDraft
 - `tornix api governance sections-draft-delete --json` — GovernanceController_discardManualSectionDraft
@@ -796,7 +843,10 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api governance settings --json` — GovernanceController_getSettings
 - `tornix api governance settings-replace --json` — GovernanceController_upsertSettings
 - `tornix api governance stream --json` — GovernanceController_aiEditManualStream
+- `tornix api governance text --json` — GovernanceAiToolsController_sectionText
 - `tornix api governance update --json` — GovernanceController_updateComment
+- `tornix api governance upload-url --json` — GovernanceFilesController_uploadUrl
+- `tornix api governance verify --json` — GovernanceAiToolsController_verifyEdits
 - `tornix api governance versions --json` — GovernanceController_listManualContentVersions
 - `tornix api governance versions-get --json` — GovernanceController_getVersion
 - `tornix api graphql approve --json` — Approve a pending project deletion (human sessions only — an agent token is refused)
@@ -806,6 +856,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api graphql operations --json` — Operation registry: which operations exist and which are writes
 - `tornix api graphql schema --json` — SDL. Pass ?section=<name> for one section (cheap), or omit it for the whole schema (~1,450 lines).
 - `tornix api graphql sections --json` — Section index — one or two operations per API area, and what each replaces
+- `tornix api home summary --json` — The personal Home KPI payload for the signed-in user, in their current org
 - `tornix api hr-approval-settings approval-settings --json` — HrApprovalSettingsController_get
 - `tornix api hr-approval-settings hr-approval-settings-replace --json` — HrApprovalSettingsController_upsert
 - `tornix api hr-requests access --json` — HrRequestsController_myAccess
@@ -867,6 +918,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api meetings approve --json` — Approve a pending guest join request (host only)
 - `tornix api meetings batch --json` — Batch save transcript segments for a meeting session
 - `tornix api meetings chat --json` — A meeting session's in-meeting chat (scoped to this call, not the room's whole history)
+- `tornix api meetings co-hosts --json` — List the room's admins (any member of the room's organization).
 - `tornix api meetings create --json` — MeetingsController_create
 - `tornix api meetings deny --json` — Deny a pending guest join request (host only)
 - `tornix api meetings email --json` — Email a report share link to one or more recipients (best-effort).
@@ -883,17 +935,20 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api meetings meetings-get --json` — MeetingsController_findById
 - `tornix api meetings minutes --json` — MeetingsController_getMinutes
 - `tornix api meetings mute --json` — Force-mute a participant's microphone in a live meeting (authenticated org members only).
+- `tornix api meetings options --json` — Update a live meeting's options — auto-record, auto-admit guests, feed the backlog (room owner or an appointed admin).
+- `tornix api meetings participants-remove-create --json` — Remove (kick) a participant from a live meeting (authenticated org members only). Kicked guests have their invite approval revoked so they cannot immediately rejoin.
 - `tornix api meetings pdf --json` — Stream the shared report PDF (no auth).
 - `tornix api meetings pending-guests --json` — List guest join requests still waiting for approval on this room. Used to rehydrate the People panel when users join after a guest has already knocked.
 - `tornix api meetings playback-url --json` — Get a short-lived presigned URL to play back a finished recording
 - `tornix api meetings recording-start-create --json` — Start a server-side recording for a meeting session (host only)
 - `tornix api meetings recordings --json` — List all playable recordings for a meeting session (segment picker). Excludes the always-on analysis_audio capture and failed rows.
 - `tornix api meetings recordings-share-link-delete --json` — Revoke a recording share link
-- `tornix api meetings remove --json` — Remove (kick) a participant from a live meeting (authenticated org members only). Kicked guests have their invite approval revoked so they cannot immediately rejoin.
+- `tornix api meetings remove --json` — Dismiss a meeting admin (room owner only).
 - `tornix api meetings report-pdfs --json` — List the saved executive-summary PDFs (project Documents) for a meeting, newest first.
 - `tornix api meetings report-pdfs-share-link-create --json` — Create (or reuse) a public share link for a saved meeting report. Org-scoped; idempotent while the token is valid. `ttlDays: null|0` = never expires.
 - `tornix api meetings report-pdfs-share-link-delete --json` — Revoke a report share link (invalidates the public URL).
 - `tornix api meetings request-join --json` — Guest requests to join a meeting via invite link
+- `tornix api meetings rooms-co-hosts-create --json` — Appoint a meeting participant as an admin — they mute and remove like the owner (room owner only).
 - `tornix api meetings rooms-invite-link-delete --json` — Revoke an existing invite link
 - `tornix api meetings sessions-executive-pdf-create --json` — Render the executive-summary HTML to PDF, cache it in storage, and stream it back for download.
 - `tornix api meetings share-link --json` — Create or fetch a shareable public link for a recording
@@ -1314,6 +1369,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api strategy ai-usage --json` — Admin: list AI Anthropic calls (paginated). Used by the AI Usage admin page.
 - `tornix api strategy alignment --json` — Update the alignment score between a project and an objective
 - `tornix api strategy all --json` — Delete this strategy's strategic risks — all of them, or only `?ids=` (Re-analyze retires the previous set once the new run has succeeded)
+- `tornix api strategy archive --json` — Archive a KPI without deleting its history
 - `tornix api strategy assessment --json` — Set or clear a strategic risk's likelihood/impact rating (org admin)
 - `tornix api strategy backfill-links --json` — Link unlinked active-strategy objectives and initiatives to the projects that measure and deliver them, then roll up
 - `tornix api strategy benefit --json` — Update the expected benefit for a project-objective link
@@ -1326,6 +1382,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api strategy config --json` — Is verified benefit delivery switched on for the caller org?
 - `tornix api strategy create --json` — Recalculate alignment for all projects linked to an objective
 - `tornix api strategy create-manual --json` — Manually create a strategic risk
+- `tornix api strategy definition-history --json` — Read immutable KPI definition versions
 - `tornix api strategy delete --json` — Delete a strategic initiative
 - `tornix api strategy details --json` — Get theme details including objectives and KPIs
 - `tornix api strategy detect --json` — Detect and persist strategic gaps for the current organization
@@ -1356,6 +1413,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api strategy kpis-history --json` — Get KPI value history
 - `tornix api strategy kpis-replace --json` — Update a strategic KPI
 - `tornix api strategy launch --json` — Atomically launch a strategy with themes, objectives, KPIs, initiatives, and project links
+- `tornix api strategy legacy-kpis-delete --json` — Permanently delete a KPI Management KPI and its strategic twins
 - `tornix api strategy link --json` — Link KPIs to a project-objective relationship
 - `tornix api strategy match-projects --json` — Match projects to objectives — proxied to strategic-navigator:8013
 - `tornix api strategy match-projects-wizard --json` — Match projects during wizard — proxied to strategic-navigator:8013
@@ -1418,6 +1476,8 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api strategy themes-objectives --json` — Get objectives belonging to a theme
 - `tornix api strategy themes-replace --json` — Update a theme
 - `tornix api strategy timeseries --json` — Get KPI value timeseries with optional date range filter
+- `tornix api strategy twin --json` — Ensure the strategic KPI twin of a KPI Management link
+- `tornix api strategy unarchive --json` — Restore an archived KPI
 - `tornix api strategy update --json` — Rename / recolour / reorder / (de)activate a perspective
 - `tornix api strategy update-requests --json` — Ask each objective's owner for a progress update
 - `tornix api strategy whatif --json` — Create a new what-if scenario
@@ -1446,6 +1506,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api supplier-evaluations delete --json` — Delete an evaluation (rater only)
 - `tornix api supplier-evaluations list --json` — List supplier evaluations (filter by partner/project/rater)
 - `tornix api supplier-evaluations update --json` — Update an evaluation (rater only)
+- `tornix api system-settings governance-resync --json` — Queue every governance row of one organisation for Oravex
 - `tornix api system-settings odoo-bridge --json` — Read the effective Odoo bridge config (secrets masked)
 - `tornix api system-settings odoo-bridge-replace --json` — Write the Odoo bridge config (super admin)
 - `tornix api system-settings test --json` — Probe the configured Odoo bridge (super admin)
@@ -1489,6 +1550,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api templates templates-get --json` — Get a request template (with signed source URL)
 - `tornix api tickets accept --json` — Accept as suggested, open the backlog item, and optionally assign it
 - `tornix api tickets advance --json` — Move to the next stage; writes the event the client will read
+- `tornix api tickets already-resolved --json` — Already resolved — the fix is live; moves the ticket to released for the client to confirm
 - `tornix api tickets approval --json` — The flow this ticket is on — the graph, and every step on it
 - `tornix api tickets approval-flows --json` — The approval flows a ticket can be sent down
 - `tornix api tickets approval-path --json` — The one approval path every ticket walks
@@ -1534,6 +1596,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api tickets resume --json` — Start it again, banking the time it was stopped
 - `tornix api tickets retry --json` — Send an offer again after the client deployment could not be reached
 - `tornix api tickets send --json` — Turn a draft into a real ticket for a named client
+- `tornix api tickets similar --json` — The 4-5 reports of this company that read most like what is being typed
 - `tornix api tickets sla-policy --json` — Per-priority SLA targets for this organization, with the defaults
 - `tornix api tickets stage-approvals --json` — What this ticket is waiting on a sign-off for
 - `tornix api tickets stage-gates --json` — Which stage moves need a sign-off, and from whom
@@ -1599,8 +1662,8 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api users list --json` — [Super admin] List all users with search/pagination
 - `tornix api users me --json` — Get current user profile
 - `tornix api users me-replace --json` — Update current user profile
-- `tornix api users privacy-settings --json` — Get user privacy settings (creates defaults if missing)
-- `tornix api users privacy-settings-replace --json` — Update privacy settings
+- `tornix api users privacy-settings --json` — Get MY privacy settings (creates defaults if missing)
+- `tornix api users privacy-settings-replace --json` — Update MY privacy settings
 - `tornix api users security-settings --json` — Get MY security settings (creates defaults if missing)
 - `tornix api users security-settings-replace --json` — Update MY security settings (2FA fields are refused here)
 - `tornix api users set-access-status --json` — [Super admin] Set a user's self-serve access status

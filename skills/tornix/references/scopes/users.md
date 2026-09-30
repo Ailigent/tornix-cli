@@ -10,8 +10,8 @@
 - `tornix api users list --json` — [Super admin] List all users with search/pagination
 - `tornix api users me --json` — Get current user profile
 - `tornix api users me-replace --json` — Update current user profile
-- `tornix api users privacy-settings --json` — Get user privacy settings (creates defaults if missing)
-- `tornix api users privacy-settings-replace --json` — Update privacy settings
+- `tornix api users privacy-settings --json` — Get MY privacy settings (creates defaults if missing)
+- `tornix api users privacy-settings-replace --json` — Update MY privacy settings
 - `tornix api users security-settings --json` — Get MY security settings (creates defaults if missing)
 - `tornix api users security-settings-replace --json` — Update MY security settings (2FA fields are refused here)
 - `tornix api users set-access-status --json` — [Super admin] Set a user's self-serve access status

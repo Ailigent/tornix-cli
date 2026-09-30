@@ -1,4 +1,4 @@
-# `tornix api meetings` — 46 commands
+# `tornix api meetings` — 50 commands
 
 - `tornix api meetings action-item --json` — Create an action item from a rectangle drawn on a shared screen, with the cropped image as evidence
 - `tornix api meetings action-items --json` — MeetingsController_getActionItems
@@ -6,6 +6,7 @@
 - `tornix api meetings approve --json` — Approve a pending guest join request (host only)
 - `tornix api meetings batch --json` — Batch save transcript segments for a meeting session
 - `tornix api meetings chat --json` — A meeting session's in-meeting chat (scoped to this call, not the room's whole history)
+- `tornix api meetings co-hosts --json` — List the room's admins (any member of the room's organization).
 - `tornix api meetings create --json` — MeetingsController_create
 - `tornix api meetings deny --json` — Deny a pending guest join request (host only)
 - `tornix api meetings email --json` — Email a report share link to one or more recipients (best-effort).
@@ -22,17 +23,20 @@
 - `tornix api meetings meetings-get --json` — MeetingsController_findById
 - `tornix api meetings minutes --json` — MeetingsController_getMinutes
 - `tornix api meetings mute --json` — Force-mute a participant's microphone in a live meeting (authenticated org members only).
+- `tornix api meetings options --json` — Update a live meeting's options — auto-record, auto-admit guests, feed the backlog (room owner or an appointed admin).
+- `tornix api meetings participants-remove-create --json` — Remove (kick) a participant from a live meeting (authenticated org members only). Kicked guests have their invite approval revoked so they cannot immediately rejoin.
 - `tornix api meetings pdf --json` — Stream the shared report PDF (no auth).
 - `tornix api meetings pending-guests --json` — List guest join requests still waiting for approval on this room. Used to rehydrate the People panel when users join after a guest has already knocked.
 - `tornix api meetings playback-url --json` — Get a short-lived presigned URL to play back a finished recording
 - `tornix api meetings recording-start-create --json` — Start a server-side recording for a meeting session (host only)
 - `tornix api meetings recordings --json` — List all playable recordings for a meeting session (segment picker). Excludes the always-on analysis_audio capture and failed rows.
 - `tornix api meetings recordings-share-link-delete --json` — Revoke a recording share link
-- `tornix api meetings remove --json` — Remove (kick) a participant from a live meeting (authenticated org members only). Kicked guests have their invite approval revoked so they cannot immediately rejoin.
+- `tornix api meetings remove --json` — Dismiss a meeting admin (room owner only).
 - `tornix api meetings report-pdfs --json` — List the saved executive-summary PDFs (project Documents) for a meeting, newest first.
 - `tornix api meetings report-pdfs-share-link-create --json` — Create (or reuse) a public share link for a saved meeting report. Org-scoped; idempotent while the token is valid. `ttlDays: null|0` = never expires.
 - `tornix api meetings report-pdfs-share-link-delete --json` — Revoke a report share link (invalidates the public URL).
 - `tornix api meetings request-join --json` — Guest requests to join a meeting via invite link
+- `tornix api meetings rooms-co-hosts-create --json` — Appoint a meeting participant as an admin — they mute and remove like the owner (room owner only).
 - `tornix api meetings rooms-invite-link-delete --json` — Revoke an existing invite link
 - `tornix api meetings sessions-executive-pdf-create --json` — Render the executive-summary HTML to PDF, cache it in storage, and stream it back for download.
 - `tornix api meetings share-link --json` — Create or fetch a shareable public link for a recording
@@ -47,4 +51,4 @@
 - `tornix api meetings transcription-engine --json` — Get the org's preferred meeting caption engine
 - `tornix api meetings transcription-engine-replace --json` — Set the org meeting caption engine (super-admin only)
 
-(46 commands)
+(50 commands)
