@@ -190,21 +190,21 @@ def test_pinned_spec_matches_github_talon_surface():
     spec = load_spec()
     ops = [(m, p) for p, ms in spec["paths"].items() for m in ms
            if m.lower() in ("get", "post", "put", "patch", "delete")]
-    assert len(spec["paths"]) == 1343
-    assert len(ops) == 1719
+    assert len(spec["paths"]) == 1361
+    assert len(ops) == 1738
     method_entries = Counter(method.upper() for path_item in spec["paths"].values()
                              for method in path_item)
     assert method_entries == Counter({
-        "DELETE": 159, "GET": 654, "HEAD": 15, "OPTIONS": 14,
-        "PATCH": 97, "POST": 665, "PUT": 144, "SEARCH": 14,
+        "DELETE": 161, "GET": 665, "HEAD": 15, "OPTIONS": 14,
+        "PATCH": 97, "POST": 669, "PUT": 146, "SEARCH": 14,
     })
-    assert sum(method_entries.values()) == 1762
+    assert sum(method_entries.values()) == 1781
 
 
 def test_pinned_spec_covers_the_new_backend_tags():
     tags = {tag for ms in load_spec()["paths"].values() for op in ms.values()
             if isinstance(op, dict) for tag in op.get("tags", [])}
-    assert len(tags) == 95
+    assert len(tags) == 96
     for new in ("agile", "governance", "templates", "memory", "twin",
                 "request-board", "search", "bim", "pre-project",
                 "access-requests", "app-versions", "link-preview", "data",

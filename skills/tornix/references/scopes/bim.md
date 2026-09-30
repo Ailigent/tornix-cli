@@ -1,4 +1,4 @@
-# `tornix api bim` — 33 commands
+# `tornix api bim` — 37 commands
 
 - `tornix api bim 5d-elements --json` — Per-element cost and CPI band (for the 3D viewer)
 - `tornix api bim 5d-progress-rules-replace --json` — Save the organization's weighted progress-measurement stages (manage_bim)
@@ -9,9 +9,11 @@
 - `tornix api bim cde-transition --json` — BimRegisterController_transition
 - `tornix api bim cost --json` — One element: quantity → BOQ → cost code → budget → committed → actual → forecast
 - `tornix api bim delete --json` — BimRegisterController_deleteZone
+- `tornix api bim early-warnings --json` — Ranked early warnings across schedule, procurement, quality, cost and risk (evaluated now, read-only)
 - `tornix api bim element-ids --json` — Model + GlobalId of every element matching the register filters (for Show in 3D)
 - `tornix api bim elements --json` — Per-element planned/actual state and status on a date (for the 3D viewer)
 - `tornix api bim elements-issues-delete --json` — BimRegisterController_unlinkIssue
+- `tornix api bim executive-summary --json` — Where are we / what changed / where is the problem / why / what is expected / decision needed
 - `tornix api bim get --json` — BimRegisterController_elementCard
 - `tornix api bim issues --json` — BimRegisterController_linkIssue
 - `tornix api bim locations --json` — BimRegisterController_locations
@@ -23,9 +25,11 @@
 - `tornix api bim options --json` — Zones, WBS nodes, BOQ items and members to pick from when editing elements
 - `tornix api bim progress-rules --json` — Bim5dController_rules
 - `tornix api bim quantities --json` — Model quantity takeoff and BOQ quantity check
-- `tornix api bim register-elements --json` — BimRegisterController_elements
+- `tornix api bim refresh --json` — Evaluate now and write/resolve the warnings in Insights (manage_bim)
+- `tornix api bim register-elements --json` — Register elements, filtered and paged
 - `tornix api bim register-elements-update --json` — BimRegisterController_patchElement
 - `tornix api bim register-summary --json` — BimRegisterController_summary
+- `tornix api bim root-cause --json` — Why is this activity late? Linked causes found in the data, strongest first
 - `tornix api bim scope-changes --json` — A project's activities whose modelled scope changed
 - `tornix api bim scope-changes-create --json` — Reflect a committed BIM edit onto the activities that claim those elements
 - `tornix api bim sequence --json` — Construction sequence: activities with elements, in planned order
@@ -34,4 +38,4 @@
 - `tornix api bim sync --json` — Read a model into the BIM element register (keeps user-entered data)
 - `tornix api bim update --json` — BimRegisterController_updateLocation
 
-(33 commands)
+(37 commands)

@@ -1,4 +1,4 @@
-# `tornix api tickets` — 71 commands
+# `tornix api tickets` — 73 commands
 
 - `tornix api tickets accept --json` — Accept as suggested, open the backlog item, and optionally assign it
 - `tornix api tickets advance --json` — Move to the next stage; writes the event the client will read
@@ -16,6 +16,7 @@
 - `tornix api tickets confirm --json` — Accept or correct the AI suggestions and actually send the ticket
 - `tornix api tickets confirm-fixed --json` — The client confirming the fix worked — the one move that is theirs to make
 - `tornix api tickets convert --json` — Open a backlog item for this ticket in the vendor project and link it
+- `tornix api tickets counts --json` — Exact chip counts for the queue (all/mine/open/resolved/overdue/unassigned)
 - `tornix api tickets create --json` — Approve or refuse a held move
 - `tornix api tickets decide --json` — Approve or refuse your step in the flow
 - `tornix api tickets default --json` — Choose which approval flow governs tickets
@@ -32,6 +33,7 @@
 - `tornix api tickets master --json` — Master view: affected companies, merge evidence, queue reason, and what each client was told. Vendor-only — it names other companies.
 - `tornix api tickets merge --json` — Fold several tickets into one master. Each client keeps their own.
 - `tornix api tickets mine --json` — Everything this company has reported to us. Powers both the list and the board.
+- `tornix api tickets mine-counts --json` — Exact chip counts (all/mine/open/resolved/overdue/unassigned)
 - `tornix api tickets offer --json` — The offers made on this ticket, and what the next one would say
 - `tornix api tickets offer-approval --json` — Insist this client approves the cost before work starts
 - `tornix api tickets offer-cancel-create --json` — Withdraw an offer that is still with the client
@@ -72,4 +74,4 @@
 - `tornix api tickets visibility --json` — Is the Support Tickets surface shown to this user, and who may change that
 - `tornix api tickets visibility-replace --json` — Narrow Support Tickets to administrators (org admin), or flip the feature (super-admin)
 
-(71 commands)
+(73 commands)

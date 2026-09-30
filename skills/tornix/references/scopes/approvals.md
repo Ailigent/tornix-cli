@@ -1,4 +1,4 @@
-# `tornix api approvals` — 60 commands
+# `tornix api approvals` — 61 commands
 
 - `tornix api approvals ai-review --json` — Get cached AI review result for a request
 - `tornix api approvals ai-settings --json` — Get org Approval AI settings (defaults if unset), plus whether automatic approval can actually run — reading this also disarms an org left switched on with no authority matrix behind it
@@ -16,7 +16,7 @@
 - `tornix api approvals delete-grants-replace --json` — Switch one user's delete permission on or off (administrators only)
 - `tornix api approvals departments --json` — The org's departments for the request form: governance org-chart department nodes + departments already used on its requests
 - `tornix api approvals download --json` — Download every file on a request as one zip — the CURRENT version's attachments, each one's latest signed copy when it has been stamped. Named after the request reference (REQ-…-v{version}.zip).
-- `tornix api approvals get --json` — Get approval request by ID
+- `tornix api approvals get --json` — Is this request type governed by a governance-manual path? (the request form files it server-side)
 - `tornix api approvals instantiate-flow --json` — Compile the governing flow graph into a flow_snapshot and seed the initial pending steps (graph-driven approval engine). No-op if the request has no governing graph.
 - `tornix api approvals numbering --json` — Reference-numbering scheme for the current org: whether requests are numbered per project (<PREFIX>-100001) and the fallback prefix used by requests with no project
 - `tornix api approvals numbering-replace --json` — Update the org fallback request prefix (super-admin may also flip the per-project numbering scheme)
@@ -34,6 +34,7 @@
 - `tornix api approvals requests-comments-create --json` — Add comment to approval request
 - `tornix api approvals requests-create --json` — Create approval request
 - `tornix api approvals requests-delete --json` — Delete a request. Where admin delete is enabled (TAL), this EMPTIES the request and keeps its reference number for re-use, and only an administrator or a granted user may call it. Everywhere else it stays the requester-only hard delete, allowed solely while no approver has acted.
+- `tornix api approvals requests-get --json` — Get approval request by ID
 - `tornix api approvals requests-replace --json` — Edit-and-resend a request as a NEW version (requester only, pending/rejected/approved). Bumps version, freezes the old version into history, resets to pending and re-seeds the provided approver steps.
 - `tornix api approvals run --json` — Send the weekly approval-dwell digest now (super-admin; dry unless ?dry=false)
 - `tornix api approvals seed-defaults --json` — Seed default simple/standard/complex SLA policy if none
@@ -61,4 +62,4 @@
 - `tornix api approvals workflows-get --json` — Get workflow by ID
 - `tornix api approvals workflows-replace --json` — Update approval workflow
 
-(60 commands)
+(61 commands)

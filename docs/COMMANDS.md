@@ -341,7 +341,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api approvals delete-grants-replace --json` — Switch one user's delete permission on or off (administrators only)
 - `tornix api approvals departments --json` — The org's departments for the request form: governance org-chart department nodes + departments already used on its requests
 - `tornix api approvals download --json` — Download every file on a request as one zip — the CURRENT version's attachments, each one's latest signed copy when it has been stamped. Named after the request reference (REQ-…-v{version}.zip).
-- `tornix api approvals get --json` — Get approval request by ID
+- `tornix api approvals get --json` — Is this request type governed by a governance-manual path? (the request form files it server-side)
 - `tornix api approvals instantiate-flow --json` — Compile the governing flow graph into a flow_snapshot and seed the initial pending steps (graph-driven approval engine). No-op if the request has no governing graph.
 - `tornix api approvals numbering --json` — Reference-numbering scheme for the current org: whether requests are numbered per project (<PREFIX>-100001) and the fallback prefix used by requests with no project
 - `tornix api approvals numbering-replace --json` — Update the org fallback request prefix (super-admin may also flip the per-project numbering scheme)
@@ -359,6 +359,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api approvals requests-comments-create --json` — Add comment to approval request
 - `tornix api approvals requests-create --json` — Create approval request
 - `tornix api approvals requests-delete --json` — Delete a request. Where admin delete is enabled (TAL), this EMPTIES the request and keeps its reference number for re-use, and only an administrator or a granted user may call it. Everywhere else it stays the requester-only hard delete, allowed solely while no approver has acted.
+- `tornix api approvals requests-get --json` — Get approval request by ID
 - `tornix api approvals requests-replace --json` — Edit-and-resend a request as a NEW version (requester only, pending/rejected/approved). Bumps version, freezes the old version into history, resets to pending and re-seeds the provided approver steps.
 - `tornix api approvals run --json` — Send the weekly approval-dwell digest now (super-admin; dry unless ?dry=false)
 - `tornix api approvals seed-defaults --json` — Seed default simple/standard/complex SLA policy if none
@@ -401,9 +402,11 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api bim cde-transition --json` — BimRegisterController_transition
 - `tornix api bim cost --json` — One element: quantity → BOQ → cost code → budget → committed → actual → forecast
 - `tornix api bim delete --json` — BimRegisterController_deleteZone
+- `tornix api bim early-warnings --json` — Ranked early warnings across schedule, procurement, quality, cost and risk (evaluated now, read-only)
 - `tornix api bim element-ids --json` — Model + GlobalId of every element matching the register filters (for Show in 3D)
 - `tornix api bim elements --json` — Per-element planned/actual state and status on a date (for the 3D viewer)
 - `tornix api bim elements-issues-delete --json` — BimRegisterController_unlinkIssue
+- `tornix api bim executive-summary --json` — Where are we / what changed / where is the problem / why / what is expected / decision needed
 - `tornix api bim get --json` — BimRegisterController_elementCard
 - `tornix api bim issues --json` — BimRegisterController_linkIssue
 - `tornix api bim locations --json` — BimRegisterController_locations
@@ -415,9 +418,11 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api bim options --json` — Zones, WBS nodes, BOQ items and members to pick from when editing elements
 - `tornix api bim progress-rules --json` — Bim5dController_rules
 - `tornix api bim quantities --json` — Model quantity takeoff and BOQ quantity check
-- `tornix api bim register-elements --json` — BimRegisterController_elements
+- `tornix api bim refresh --json` — Evaluate now and write/resolve the warnings in Insights (manage_bim)
+- `tornix api bim register-elements --json` — Register elements, filtered and paged
 - `tornix api bim register-elements-update --json` — BimRegisterController_patchElement
 - `tornix api bim register-summary --json` — BimRegisterController_summary
+- `tornix api bim root-cause --json` — Why is this activity late? Linked causes found in the data, strongest first
 - `tornix api bim scope-changes --json` — A project's activities whose modelled scope changed
 - `tornix api bim scope-changes-create --json` — Reflect a committed BIM edit onto the activities that claim those elements
 - `tornix api bim sequence --json` — Construction sequence: activities with elements, in planned order
@@ -436,9 +441,10 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api chat archive --json` — CommunicationController_setRoomArchived
 - `tornix api chat collaboration-rooms --json` — CommunicationController_getCollaborationRooms
 - `tornix api chat delete --json` — CommunicationController_deleteMessage
+- `tornix api chat get --json` — CommunicationController_findDirectRoom
 - `tornix api chat linked-tasks --json` — CommunicationController_getLinkedTasks
 - `tornix api chat lookup --json` — CommunicationController_lookupStarred
-- `tornix api chat messages --json` — CommunicationController_getMessages
+- `tornix api chat messages --json` — CommunicationController_sendFirstDirectMessage
 - `tornix api chat messages-pin-delete --json` — CommunicationController_unpinMessage
 - `tornix api chat messages-star-delete --json` — CommunicationController_unstarMessage
 - `tornix api chat mute --json` — CommunicationController_toggleMute
@@ -451,6 +457,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api chat rooms --json` — CommunicationController_getRooms
 - `tornix api chat rooms-create --json` — CommunicationController_createRoom
 - `tornix api chat rooms-delete --json` — CommunicationController_deleteRoom
+- `tornix api chat rooms-messages --json` — CommunicationController_getMessages
 - `tornix api chat rooms-messages-create --json` — CommunicationController_sendMessage
 - `tornix api chat rooms-participants-create --json` — CommunicationController_addParticipant
 - `tornix api chat rooms-participants-delete --json` — CommunicationController_removeParticipant
@@ -496,8 +503,13 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api company-admin unlock-login --json` — [Org admin] Lift a member's login lockout (too many failed password / 2FA attempts) before its 5 minutes run out. Changes no credential, so it is not identity-locked.
 - `tornix api company-admin update --json` — [Org admin] Update full_name/phone/job_title/email — role, access_status, password and super-admin status go through /users/admin/*, not here
 - `tornix api company-admin-excel lookup --json` — [Org admin] Read-only pre-flight for the import preview — which of the file's emails already exist in Tornix (anywhere, not just this organization), whether they are already members here, and what this caller is allowed to change about them. Writes nothing.
+- `tornix api company-admin-hawkamah attempts --json` — One member's per-attempt scores + previous (reset) sittings — headlines only, never the questions or answers from Hawkamah's report
+- `tornix api company-admin-hawkamah reset-attempts --json` — [Super admin] Reopen a member's Hawkamah attempts (Hawkamah archives the old sitting; the employee starts again at attempt 1 with the same login)
 - `tornix api company-admin-hawkamah roster --json` — This organization's members merged with their Hawkamah governance-exam status (not_started | registered | grading | completed), keyed on work e-mail
-- `tornix api company-admin-hawkamah status --json` — Is this deployment configured with a Hawkamah API key, and does it verify
+- `tornix api company-admin-hawkamah status --json` — Does this organization resolve a Hawkamah API key (DB override or env fallback), and does it verify
+- `tornix api company-admin-integrations get --json` — This organization's resolved state for one integration (DB override / env / default)
+- `tornix api company-admin-integrations integrations --json` — Every integration type this deployment can offer, filtered by scope
+- `tornix api company-admin-integrations override --json` — Revert one field back to its environment/default fallback (never deletes/edits the env var itself)
 - `tornix api company-admin-talon adjust --json` — [Super admin] Correct one Talon user's balance in either direction — a NEGATIVE amount is the only way to take credit back
 - `tornix api company-admin-talon status --json` — [Super admin] Is this deployment configured to talk to a sibling Talon box, and is it reachable
 - `tornix api company-admin-talon topup --json` — [Super admin] Add credit to one Talon user's wallet — forwarded to Talon's `/credits/admin/accounts/:id/topup`, which writes its own ledger line
@@ -1069,6 +1081,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api notifications voip-push-token --json` — Register VoIP push token (iOS PushKit)
 - `tornix api notifications voip-push-token-delete --json` — Unregister VoIP push token
 - `tornix api notifications web-push --json` — Send web push notification to user
+- `tornix api organizations assignment --json` — Set a member's final project set in this organization, and optionally their job title and company label, in one transaction
 - `tornix api organizations create --json` — Create organization
 - `tornix api organizations delete --json` — Delete organization (only the creator can delete)
 - `tornix api organizations get --json` — Get organization by ID
@@ -1079,9 +1092,11 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api organizations member-type --json` — Flip a member between internal (client staff) and provider (Ailigent)
 - `tornix api organizations members --json` — List organization members
 - `tornix api organizations members-create --json` — Add member to organization
+- `tornix api organizations members-delete --json` — Remove a member from the organization (membership + every project membership in it, atomically). Organization admin, or yourself; never the last full-access member.
+- `tornix api organizations project-workloads --json` — Project-specific workload (this project's tasks only) for every project in one query
 - `tornix api organizations provider-members --json` — List the org members flagged as provider (Ailigent) staff
 - `tornix api organizations roles --json` — List organization roles
-- `tornix api organizations team-workload --json` — Per-member workload (remaining hours vs capacity) in one query
+- `tornix api organizations team-workload --json` — Per-member load: real estimated hours of the member's open assigned tasks ÷ their weekly capacity. With project_id it counts only that project (member on THIS project — the same numerator and capacity a project card sums); without it, all the org's projects (member across the org, on a standard week); project_ids narrows the org-wide view to a set of projects. Never guesses hours: null hours/percentage = active work but none estimated.
 - `tornix api payment-certificates approve --json` — PaymentCertificateController_approve
 - `tornix api payment-certificates attach-evidence-archive --json` — PaymentCertificateController_attachEvidenceArchive
 - `tornix api payment-certificates cancel --json` — PaymentCertificateController_cancel
@@ -1564,6 +1579,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api tickets confirm --json` — Accept or correct the AI suggestions and actually send the ticket
 - `tornix api tickets confirm-fixed --json` — The client confirming the fix worked — the one move that is theirs to make
 - `tornix api tickets convert --json` — Open a backlog item for this ticket in the vendor project and link it
+- `tornix api tickets counts --json` — Exact chip counts for the queue (all/mine/open/resolved/overdue/unassigned)
 - `tornix api tickets create --json` — Approve or refuse a held move
 - `tornix api tickets decide --json` — Approve or refuse your step in the flow
 - `tornix api tickets default --json` — Choose which approval flow governs tickets
@@ -1580,6 +1596,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api tickets master --json` — Master view: affected companies, merge evidence, queue reason, and what each client was told. Vendor-only — it names other companies.
 - `tornix api tickets merge --json` — Fold several tickets into one master. Each client keeps their own.
 - `tornix api tickets mine --json` — Everything this company has reported to us. Powers both the list and the board.
+- `tornix api tickets mine-counts --json` — Exact chip counts (all/mine/open/resolved/overdue/unassigned)
 - `tornix api tickets offer --json` — The offers made on this ticket, and what the next one would say
 - `tornix api tickets offer-approval --json` — Insist this client approves the cost before work starts
 - `tornix api tickets offer-cancel-create --json` — Withdraw an offer that is still with the client

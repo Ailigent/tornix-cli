@@ -83,6 +83,9 @@ AGENT_WITHHELD_API_COMMANDS = frozenset({
     ("email", "delete"),
     ("email", "connect"),
     ("email", "imap-connect"),
+    # Integration connections carry third-party API keys / passwords in the body.
+    ("company-admin-integrations", "replace"),
+    ("company-admin-integrations", "test"),
 })
 
 
