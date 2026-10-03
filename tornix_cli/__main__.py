@@ -10,6 +10,7 @@ from .catalog import catalog_command
 from .client import TornixClient
 from .commands.approvals import approvals_group
 from .commands.calendar import calendar_group
+from .commands.workload import workload_group
 from .commands.deep_research import deep_research_command
 from .commands.files import file_group
 from .commands.meetings import meetings_group
@@ -159,6 +160,7 @@ cli.add_command(file_group)
 cli.add_command(approvals_group)
 cli.add_command(meetings_group)
 cli.add_command(calendar_group)
+cli.add_command(workload_group)
 cli.add_command(build_api_group(load_spec()))
 
 # Uniform `--json` on every subcommand (works before or after the subcommand).
