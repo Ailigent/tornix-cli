@@ -61,5 +61,13 @@ Top-level `tornix` commands — auth, config, data proxy, projects, tasks, file,
 - `tornix tasks get --json` — Get a task by id.
 - `tornix tasks list --json` — List tasks in a project.
 - `tornix tasks update --json` — Update a task (PUT) with a JSON body.
+- `tornix workload calendar --json` — Resource calendar: person × day — capacity, hours booked, leave, holidays (≤ 6 weeks).
+- `tornix workload check --json` — Before assigning: each person's load in the task window before → after, leave, first free slot, alternatives. Writes nothing.
+- `tornix workload person --json` — One person's Workload and open tasks with their remaining hours.
+- `tornix workload preview --json` — What moving tasks WOULD do (before → after, warnings). Writes nothing.
+- `tornix workload requests --json` — Assignment requests: asked of me (inbox) or that I asked (outbox).
+- `tornix workload sprint-preview --json` — Who would take each unassigned sprint item (balanced / round robin) — a preview, writes nothing.
+- `tornix workload suggestions --json` — The engine's own rebalancing suggestions (Team insights) — who, which task, to whom, why.
+- `tornix workload team --json` — Every person's Workload the caller may see (admin: org; PM: their projects).
 
-(47 available commands; auth and credential lifecycle operations withheld)
+(55 available commands; auth and credential lifecycle operations withheld)

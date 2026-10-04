@@ -102,4 +102,4 @@ Commands are split per backend scope. Load ONLY the file matching your task (via
 | auth | `references/scopes/auth.md` | Restricted | Authentication, recovery, password, OTP, and device-session operations are user-controlled. |
 | api-keys | `references/scopes/api-keys.md` | Restricted | API key lifecycle is user-controlled; raw key material must never be exposed to the agent. |
 
-Available to agents: 1631 API commands + 47 core commands across 89 API scopes; authentication, API-key, password-bearing, and account/mailbox deletion operations are withheld.
+Available to agents: 1631 API commands + 55 core commands across 89 API scopes; authentication, API-key, password-bearing, and account/mailbox deletion operations are withheld.
