@@ -118,7 +118,7 @@
    "AddProjectMemberDto": {
     "properties": {
      "job_title_role_id": {
-      "description": "Org-level job title (organization_member) to give the member \u2014 applied only if they hold none yet and the caller is an org administrator; never overwrites. The member's existing org-level title applies on the project either way.",
+      "description": "Org-level job title (organization_member) to give the member — applied only if they hold none yet and the caller is an org administrator; never overwrites. The member's existing org-level title applies on the project either way.",
       "type": "string"
      },
      "user_id": {
@@ -565,7 +565,7 @@
    "ClaimQrLoginDto": {
     "properties": {
      "device_name": {
-      "description": "Shown in the approval prompt. Cosmetic \u2014 never trusted.",
+      "description": "Shown in the approval prompt. Cosmetic — never trusted.",
       "example": "iPhone 15 Pro",
       "type": "string"
      },
@@ -643,11 +643,11 @@
       "type": "string"
      },
      "imapHost": {
-      "description": "IMAP hostname \u2014 defaults to the company setting for the address\u2019 domain",
+      "description": "IMAP hostname — defaults to the company setting for the address’ domain",
       "type": "string"
      },
      "imapPort": {
-      "description": "IMAP port \u2014 defaults to the company setting (993)",
+      "description": "IMAP port — defaults to the company setting (993)",
       "type": "number"
      },
      "password": {
@@ -664,11 +664,11 @@
       "type": "string"
      },
      "smtpHost": {
-      "description": "SMTP hostname \u2014 defaults to the company setting for the address\u2019 domain",
+      "description": "SMTP hostname — defaults to the company setting for the address’ domain",
       "type": "string"
      },
      "smtpPort": {
-      "description": "SMTP port \u2014 defaults to the company setting (587)",
+      "description": "SMTP port — defaults to the company setting (587)",
       "type": "number"
      }
     },
@@ -712,7 +712,7 @@
       "type": "boolean"
      },
      "event_triggers": {
-      "description": "Entity/event triggers \u2014 free-form, stored as Json.",
+      "description": "Entity/event triggers — free-form, stored as Json.",
       "items": {
        "type": "object"
       },
@@ -742,7 +742,7 @@
       "type": "string"
      },
      "rules": {
-      "description": "Condition/action rule set \u2014 free-form, stored as Json.",
+      "description": "Condition/action rule set — free-form, stored as Json.",
       "items": {
        "type": "object"
       },
@@ -929,7 +929,7 @@
       "type": "boolean"
      },
      "name": {
-      "description": "Meeting title. Defaults to the collaboration\u2019s name.",
+      "description": "Meeting title. Defaults to the collaboration’s name.",
       "type": "string"
      }
     },
@@ -1076,6 +1076,18 @@
     "properties": {},
     "type": "object"
    },
+   "CreateHseIncidentDto": {
+    "properties": {},
+    "type": "object"
+   },
+   "CreateHseInspectionDto": {
+    "properties": {},
+    "type": "object"
+   },
+   "CreateHseViolationDto": {
+    "properties": {},
+    "type": "object"
+   },
    "CreateInitiativeDto": {
     "properties": {
      "title": {
@@ -1106,7 +1118,7 @@
       "type": "string"
      },
      "assign_to_member_id": {
-      "description": "A member (already in this organization, with a project membership) to assign the new title to immediately \u2014 the safer-than-editing-the-shared-title path: \"change it for just this one person\" by giving them their own title instead.",
+      "description": "A member (already in this organization, with a project membership) to assign the new title to immediately — the safer-than-editing-the-shared-title path: \"change it for just this one person\" by giving them their own title instead.",
       "type": "string"
      },
      "name": {
@@ -1189,7 +1201,7 @@
       "type": "string"
      },
      "job_title_id": {
-      "description": "One of this organization's job titles \u2014 an organization-level attribute, not tied to project_ids. Required unless role is C_LEVEL \u2014 C-Level already has full access everywhere and is refused a job title.",
+      "description": "One of this organization's job titles — an organization-level attribute, not tied to project_ids. Required unless role is C_LEVEL — C-Level already has full access everywhere and is refused a job title.",
       "type": "string"
      },
      "organization_id": {
@@ -1311,7 +1323,7 @@
       "type": "string"
      },
      "project_id": {
-      "description": "Omit for every project in this org \u2014 the common case, since a habit travels.",
+      "description": "Omit for every project in this org — the common case, since a habit travels.",
       "type": "string"
      }
     },
@@ -1544,7 +1556,7 @@
       "type": "string"
      },
      "pm_job_title_role_id": {
-      "description": "Org-level job title for the PM \u2014 applied only if they hold none yet and the caller is an org administrator; never overwrites.",
+      "description": "Org-level job title for the PM — applied only if they hold none yet and the caller is an org administrator; never overwrites.",
       "type": "string"
      },
      "pm_user_id": {
@@ -1927,7 +1939,7 @@
       "type": "string"
      },
      "pdf_convertible": {
-      "description": "Upload-time DOCX\u2192PDF probe verdict (false = won't be signable)",
+      "description": "Upload-time DOCX→PDF probe verdict (false = won't be signable)",
       "type": "boolean"
      },
      "primary_language": {
@@ -1963,7 +1975,7 @@
       "type": "string"
      },
      "source_file_kind": {
-      "description": "docx | pdf \u2014 inferred from content type if omitted",
+      "description": "docx | pdf — inferred from content type if omitted",
       "type": "string"
      },
      "source_filename": {
@@ -2172,7 +2184,7 @@
       "type": "string"
      },
      "required": {
-      "description": "Counts toward the DoR n/N readiness score. It NEVER gates a transition \u2014 DoR is advisory by construction.",
+      "description": "Counts toward the DoR n/N readiness score. It NEVER gates a transition — DoR is advisory by construction.",
       "type": "boolean"
      }
     },
@@ -2199,7 +2211,7 @@
    "EnrollBiometricDeviceDto": {
     "properties": {
      "device_name": {
-      "description": "Shown back to the user in a device list. Cosmetic \u2014 never trusted.",
+      "description": "Shown back to the user in a device list. Cosmetic — never trusted.",
       "example": "iPhone 15 Pro",
       "type": "string"
      }
@@ -2219,7 +2231,7 @@
       "type": "string"
      },
      "source_file_kind": {
-      "description": "docx | pdf \u2014 inferred from content type if omitted",
+      "description": "docx | pdf — inferred from content type if omitted",
       "type": "string"
      },
      "source_filename": {
@@ -2256,7 +2268,7 @@
       "type": "string"
      },
      "values": {
-      "description": "Field key \u2192 value (text/number/date/select value/checkbox/signature base64)",
+      "description": "Field key → value (text/number/date/select value/checkbox/signature base64)",
       "type": "object"
      }
     },
@@ -2318,7 +2330,7 @@
    "ImportTalonRowsDto": {
     "properties": {
      "organization_id": {
-      "description": "Required only when a row carries `tornix_employee_email` \u2014 the organization the link is scoped to, and the one the e-mail must resolve inside.",
+      "description": "Required only when a row carries `tornix_employee_email` — the organization the link is scoped to, and the one the e-mail must resolve inside.",
       "type": "string"
      },
      "rows": {
@@ -2349,7 +2361,7 @@
      },
      "send_credentials_email": {
       "default": false,
-      "description": "When true, every row whose password was set or changed by this import gets an e-mail with its e-mail, the plaintext password just written, and the login link \u2014 one e-mail per account, sent AFTER the transaction commits, best-effort (a send failure never rolls back or fails the import). Absent/false = no mail (today's behaviour) \u2014 the admin distributes credentials via the existing \"export as Excel\" flow instead.",
+      "description": "When true, every row whose password was set or changed by this import gets an e-mail with its e-mail, the plaintext password just written, and the login link — one e-mail per account, sent AFTER the transaction commits, best-effort (a send failure never rolls back or fails the import). Absent/false = no mail (today's behaviour) — the admin distributes credentials via the existing \"export as Excel\" flow instead.",
       "type": "boolean"
      }
     },
@@ -2385,7 +2397,7 @@
       "type": "boolean"
      },
      "organizationId": {
-      "description": "Ignored \u2014 the caller's own organization is always used.",
+      "description": "Ignored — the caller's own organization is always used.",
       "type": "string"
      },
      "recipientIds": {
@@ -2558,11 +2570,11 @@
    "MoveTaskDto": {
     "properties": {
      "after_task_id": {
-      "description": "Rank neighbour \u2014 the card to land after.",
+      "description": "Rank neighbour — the card to land after.",
       "type": "string"
      },
      "before_task_id": {
-      "description": "Rank neighbour \u2014 the card to land before.",
+      "description": "Rank neighbour — the card to land before.",
       "type": "string"
      },
      "task_id": {
@@ -2688,7 +2700,7 @@
       "type": "object"
      },
      "ui_permissions": {
-      "description": "UI-permission key -> boolean (visibility layer, e.g. `project.tab.gis`) \u2014 see src/modules/ui-permissions/ui-permissions.registry.ts. Unknown keys are silently ignored, same as `permissions`. These only hide a tab/button; they never replace the data-level enforcement the 73 keys above (and their guards) already do.",
+      "description": "UI-permission key -> boolean (visibility layer, e.g. `project.tab.gis`) — see src/modules/ui-permissions/ui-permissions.registry.ts. Unknown keys are silently ignored, same as `permissions`. These only hide a tab/button; they never replace the data-level enforcement the 73 keys above (and their guards) already do.",
       "type": "object"
      }
     },
@@ -2700,7 +2712,7 @@
    "PatchMemberDto": {
     "properties": {
      "email": {
-      "description": "New sign-in email. WARNING: this is also the Google account-resolution key (auth.service.ts resolves a Google sign-in by `where: { email }, provider: \"google\"`) \u2014 changing it can break Google sign-in for this account and, in the worst case, hand the account to whoever legitimately owns that address on Google. See CompanyAdminService.patchMember.",
+      "description": "New sign-in email. WARNING: this is also the Google account-resolution key (auth.service.ts resolves a Google sign-in by `where: { email }, provider: \"google\"`) — changing it can break Google sign-in for this account and, in the worst case, hand the account to whoever legitimately owns that address on Google. See CompanyAdminService.patchMember.",
       "type": "string"
      },
      "full_name": {
@@ -2708,11 +2720,11 @@
       "type": "string"
      },
      "job_title": {
-      "description": "An organization job-title role (organization_roles), by id or by exact name (case-insensitive) \u2014 an organization-level attribute (Sep 2026), independent of project membership (the only place it is stored). `null` clears it, but only for a C_LEVEL member (who never holds one) \u2014 a non-C_LEVEL member is REQUIRED to always have one, so `null` is refused for them. `@IsOptional()` already lets `null` through class-validator (it treats null/undefined identically), so the type below just makes that explicit \u2014 the service tells them apart by `!== undefined` (omitted) vs `=== null` (clear) vs a string (set).",
+      "description": "An organization job-title role (organization_roles), by id or by exact name (case-insensitive) — an organization-level attribute (Sep 2026), independent of project membership (the only place it is stored). `null` clears it, but only for a C_LEVEL member (who never holds one) — a non-C_LEVEL member is REQUIRED to always have one, so `null` is refused for them. `@IsOptional()` already lets `null` through class-validator (it treats null/undefined identically), so the type below just makes that explicit — the service tells them apart by `!== undefined` (omitted) vs `=== null` (clear) vs a string (set).",
       "type": "object"
      },
      "organization_id": {
-      "description": "Organization this edit is scoped to \u2014 the caller must be a member check target",
+      "description": "Organization this edit is scoped to — the caller must be a member check target",
       "type": "string"
      },
      "phone": {
@@ -2816,7 +2828,7 @@
    "PatchTalonUserDto": {
     "properties": {
      "access_status": {
-      "description": "Recorded access status only \u2014 does NOT by itself end an active session or block sign-in on Talon (see this file's header comment).",
+      "description": "Recorded access status only — does NOT by itself end an active session or block sign-in on Talon (see this file's header comment).",
       "enum": [
        "pending",
        "approved",
@@ -2842,7 +2854,7 @@
    "PinTaskSlotDto": {
     "properties": {
      "day": {
-      "description": "Calendar day, `YYYY-MM-DD` in the viewer\u2019s own timezone",
+      "description": "Calendar day, `YYYY-MM-DD` in the viewer’s own timezone",
       "type": "string"
      },
      "end_minutes": {
@@ -2910,11 +2922,11 @@
    "ProcurementStageDto": {
     "properties": {
      "approver_id": {
-      "description": "pinned user UUID \u2014 required when kind===user",
+      "description": "pinned user UUID — required when kind===user",
       "type": "string"
      },
      "job_title_role_id": {
-      "description": "organization_roles.id \u2014 required when kind===role",
+      "description": "organization_roles.id — required when kind===role",
       "type": "string"
      },
      "kind": {
@@ -3022,7 +3034,7 @@
       "type": "string"
      },
      "destination": {
-      "description": "Where the item goes. Omit for the \u0645\u0663 default (Proposed on a board that has the column). \"sprint\" uses sprint_id; \"backlog\" is the product backlog and ignores sprint_id. Naming one skips the Proposed queue \u2014 the item is stamped as accepted by its author.",
+      "description": "Where the item goes. Omit for the م٣ default (Proposed on a board that has the column). \"sprint\" uses sprint_id; \"backlog\" is the product backlog and ignores sprint_id. Naming one skips the Proposed queue — the item is stamped as accepted by its author.",
       "enum": [
        "proposed",
        "backlog",
@@ -3031,7 +3043,7 @@
       "type": "string"
      },
      "due_date": {
-      "description": "Deadline \u2014 the day this is promised for.",
+      "description": "Deadline — the day this is promised for.",
       "type": "string"
      },
      "end_minutes": {
@@ -3062,7 +3074,7 @@
       "type": "string"
      },
      "source_kind": {
-      "description": "Where the item came from (\u0645\u0663). Defaults to \"direct\" \u2014 someone typed it into the composer.",
+      "description": "Where the item came from (م٣). Defaults to \"direct\" — someone typed it into the composer.",
       "enum": [
        "design_sync",
        "weekly_meeting",
@@ -3133,7 +3145,7 @@
       "type": "array"
      },
      "note": {
-      "description": "What was done \u2014 free text",
+      "description": "What was done — free text",
       "type": "string"
      },
      "percent_to": {
@@ -3173,6 +3185,10 @@
      "email",
      "password"
     ],
+    "type": "object"
+   },
+   "RegisterHsePhotoDto": {
+    "properties": {},
     "type": "object"
    },
    "RegisterSnagAttachmentDto": {
@@ -3221,6 +3237,10 @@
     "type": "object"
    },
    "RenderPptxDto": {
+    "properties": {},
+    "type": "object"
+   },
+   "ReopenHseViolationDto": {
     "properties": {},
     "type": "object"
    },
@@ -3278,6 +3298,10 @@
     ],
     "type": "object"
    },
+   "RequestHseClosureDto": {
+    "properties": {},
+    "type": "object"
+   },
    "RequestObjectiveUpdatesDto": {
     "properties": {
      "objective_ids": {
@@ -3301,7 +3325,7 @@
    "ResetHawkamahAttemptsDto": {
     "properties": {
      "expectedAttemptsUsed": {
-      "description": "Attempts the admin was looking at \u2014 Hawkamah refuses (409 attempts_changed) if the count moved since",
+      "description": "Attempts the admin was looking at — Hawkamah refuses (409 attempts_changed) if the count moved since",
       "type": "number"
      },
      "force": {
@@ -3310,7 +3334,7 @@
       "type": "boolean"
      },
      "reason": {
-      "description": "Why the employee gets a fresh sitting \u2014 stored in Hawkamah's reset history",
+      "description": "Why the employee gets a fresh sitting — stored in Hawkamah's reset history",
       "maxLength": 500,
       "minLength": 3,
       "type": "string"
@@ -3372,7 +3396,7 @@
       "type": "string"
      },
      "title": {
-      "description": "Corrected title \u2014 the Edit action.",
+      "description": "Corrected title — the Edit action.",
       "type": "string"
      }
     },
@@ -3415,7 +3439,7 @@
       "type": "string"
      },
      "secrets": {
-      "description": "Secret fields only, keyed by the registry field key, RAW (plaintext) values \u2014 encrypted server-side before being stored, never persisted or logged as received.",
+      "description": "Secret fields only, keyed by the registry field key, RAW (plaintext) values — encrypted server-side before being stored, never persisted or logged as received.",
       "type": "object"
      },
      "settings": {
@@ -3477,7 +3501,7 @@
       "type": "string"
      },
      "title": {
-      "description": "Title. Defaults to the collaboration\u2019s name.",
+      "description": "Title. Defaults to the collaboration’s name.",
       "type": "string"
      }
     },
@@ -3675,7 +3699,7 @@
    "SetEstimateHoursDto": {
     "properties": {
      "estimated_hours": {
-      "description": "Time estimate in HOURS (0.25 \u2013 1000), or null to clear it. Logged hours are never set here \u2014 they come from time entries.",
+      "description": "Time estimate in HOURS (0.25 – 1000), or null to clear it. Logged hours are never set here — they come from time entries.",
       "nullable": true,
       "type": "object"
      }
@@ -3779,7 +3803,7 @@
       "type": "string"
      },
      "project_ids": {
-      "description": "The complete set of project ids this member should belong to within this organization once the call finishes. Every id must already be linked to organization_id via organization_projects \u2014 a foreign or unknown id is rejected outright, naming the offending id.",
+      "description": "The complete set of project ids this member should belong to within this organization once the call finishes. Every id must already be linked to organization_id via organization_projects — a foreign or unknown id is rejected outright, naming the offending id.",
       "items": {
        "type": "string"
       },
@@ -3795,7 +3819,7 @@
    "SetMemberRoleDto": {
     "properties": {
      "job_title_id": {
-      "description": "Required when the resulting role is not C_LEVEL and the member has no job title yet \u2014 one of this organization's job titles, applied on every project the member is on. Refused when the resulting role is C_LEVEL.",
+      "description": "Required when the resulting role is not C_LEVEL and the member has no job title yet — one of this organization's job titles, applied on every project the member is on. Refused when the resulting role is C_LEVEL.",
       "type": "string"
      },
      "organization_id": {
@@ -3847,7 +3871,7 @@
    "SetRecoveryEmailDto": {
     "properties": {
      "email": {
-      "description": "Candidate recovery address. Parked in `recovery_email_pending` until its OTP is entered \u2014 the live `recovery_email` is untouched until then.",
+      "description": "Candidate recovery address. Parked in `recovery_email_pending` until its OTP is entered — the live `recovery_email` is untouched until then.",
       "example": "dina.zidan@outlook.com",
       "type": "string"
      }
@@ -3988,7 +4012,7 @@
    "SetTaskAssigneesDto": {
     "properties": {
      "reason": {
-      "description": "Why they are being given it \u2014 notified to the people ADDED by this call, and to nobody else. Omit for a silent assignment: an unexplained handover is a legitimate choice, and a default sentence pretending to be a reason is not.",
+      "description": "Why they are being given it — notified to the people ADDED by this call, and to nobody else. Omit for a silent assignment: an unexplained handover is a legitimate choice, and a default sentence pretending to be a reason is not.",
       "maxLength": 1000,
       "type": "string"
      },
@@ -4059,7 +4083,7 @@
       "type": "array"
      },
      "estimated_hours": {
-      "description": "Estimate in HOURS (0\u20131000), null clears.",
+      "description": "Estimate in HOURS (0–1000), null clears.",
       "nullable": true,
       "type": "object"
      }
@@ -4084,7 +4108,7 @@
       "type": "string"
      },
      "note": {
-      "description": "What was agreed, in the decider\u2019s words.",
+      "description": "What was agreed, in the decider’s words.",
       "nullable": true,
       "type": "object"
      }
@@ -4118,7 +4142,7 @@
       "type": "string"
      },
      "note": {
-      "description": "The person\u2019s own qualifier, free text.",
+      "description": "The person’s own qualifier, free text.",
       "nullable": true,
       "type": "object"
      },
@@ -4133,7 +4157,7 @@
       "type": "string"
      },
      "remaining_hours": {
-      "description": "How much longer from NOW, in hours (0\u20131000). null clears the stated forecast and the tile goes back to the derived one.",
+      "description": "How much longer from NOW, in hours (0–1000). null clears the stated forecast and the tile goes back to the derived one.",
       "nullable": true,
       "type": "object"
      },
@@ -4158,7 +4182,7 @@
    "SetTaskImpactDto": {
     "properties": {
      "impact": {
-      "description": "1\u20135, or null to clear",
+      "description": "1–5, or null to clear",
       "nullable": true,
       "type": "object"
      }
@@ -4298,7 +4322,7 @@
    "SuggestEpicBreakdownDto": {
     "properties": {
      "goal": {
-      "description": "The epic outcome \u2014 what should be true when it is done.",
+      "description": "The epic outcome — what should be true when it is done.",
       "type": "string"
      },
      "name": {
@@ -4343,7 +4367,7 @@
       "type": "string"
      },
      "title": {
-      "description": "What the person typed \u2014 the only required input.",
+      "description": "What the person typed — the only required input.",
       "type": "string"
      }
     },
@@ -4364,7 +4388,7 @@
       "type": "number"
      },
      "reason": {
-      "description": "Written into Talon's ledger line. Left out, Talon records that the move came from the linked Tornix Company Admin \u2014 never a person, because a service call has no actor.",
+      "description": "Written into Talon's ledger line. Left out, Talon records that the move came from the linked Tornix Company Admin — never a person, because a service call has no actor.",
       "example": "Extra budget for the quarter close",
       "type": "string"
      }
@@ -4377,7 +4401,7 @@
    "TalonImportRowDto": {
     "properties": {
      "access_status": {
-      "description": "Recorded access status only \u2014 Talon does not check it at sign-in (see PatchTalonUserDto).",
+      "description": "Recorded access status only — Talon does not check it at sign-in (see PatchTalonUserDto).",
       "enum": [
        "pending",
        "approved",
@@ -4390,7 +4414,7 @@
       "type": "number"
      },
      "email": {
-      "description": "The row key \u2014 matched against Talon's own users by e-mail",
+      "description": "The row key — matched against Talon's own users by e-mail",
       "type": "string"
      },
      "full_name": {
@@ -4402,7 +4426,7 @@
       "type": "string"
      },
      "tornix_employee_email": {
-      "description": "A Tornix member's e-mail to link this Talon user to. The link itself is still made by id \u2014 this resolves the e-mail to a member of `organization_id` first, and refuses the row if it resolves to nobody.",
+      "description": "A Tornix member's e-mail to link this Talon user to. The link itself is still made by id — this resolves the e-mail to a member of `organization_id` first, and refuses the row if it resolves to nobody.",
       "type": "string"
      }
     },
@@ -4421,7 +4445,7 @@
       "type": "object"
      },
      "settings": {
-      "description": "Unsaved form values to test WITH, merged over the resolved (saved) state \u2014 lets the admin test before saving.",
+      "description": "Unsaved form values to test WITH, merged over the resolved (saved) state — lets the admin test before saving.",
       "type": "object"
      }
     },
@@ -4482,11 +4506,11 @@
       "type": "number"
      },
      "email": {
-      "description": "The row key \u2014 present -> update, absent -> create (rule 1)",
+      "description": "The row key — present -> update, absent -> create (rule 1)",
       "type": "string"
      },
      "job_title_role_id": {
-      "description": "OPTIONAL organization-level job title (an organization_roles id, resolved from the title name by the frontend). Absent = untouched \u2014 a new member is created WITHOUT a title and an administrator assigns it later. Never `null`: the sheet does not clear a title.",
+      "description": "OPTIONAL organization-level job title (an organization_roles id, resolved from the title name by the frontend). Absent = untouched — a new member is created WITHOUT a title and an administrator assigns it later. Never `null`: the sheet does not clear a title.",
       "type": "string"
      },
      "name": {
@@ -4494,11 +4518,11 @@
       "type": "object"
      },
      "password": {
-      "description": "Absent = untouched. Never `null` \u2014 a password cannot be \"cleared\", only set; the frontend rejects a dash in this column before submit.",
+      "description": "Absent = untouched. Never `null` — a password cannot be \"cleared\", only set; the frontend rejects a dash in this column before submit.",
       "type": "string"
      },
      "projects": {
-      "description": "Project ids to ADD (union) to this member's project set in this organization. Absent = untouched. Never removes an existing membership (rule 8) \u2014 the sheet cannot unlink a project.",
+      "description": "Project ids to ADD (union) to this member's project set in this organization. Absent = untouched. Never removes an existing membership (rule 8) — the sheet cannot unlink a project.",
       "items": {
        "type": "string"
       },
@@ -4535,7 +4559,7 @@
       "type": "string"
      },
      "user_id": {
-      "description": "Ignored \u2014 the account is taken from the JWT",
+      "description": "Ignored — the account is taken from the JWT",
       "type": "string"
      }
     },
@@ -4815,14 +4839,18 @@
    "UpdateHrApprovalSettingsDto": {
     "properties": {
      "hr_approver_id": {
-      "description": "Step 2 override \u2014 pin a specific HR Manager. When omitted/empty, the system resolves dynamically by `access_level=HR`.",
+      "description": "Step 2 override — pin a specific HR Manager. When omitted/empty, the system resolves dynamically by `access_level=HR`.",
       "type": "string"
      },
      "static_pm_approver_id": {
-      "description": "Step 1 fallback \u2014 used when the HR request has no project, or the project has no PM with access_level=MANAGER. Optional.",
+      "description": "Step 1 fallback — used when the HR request has no project, or the project has no PM with access_level=MANAGER. Optional.",
       "type": "string"
      }
     },
+    "type": "object"
+   },
+   "UpdateHseViolationDto": {
+    "properties": {},
     "type": "object"
    },
    "UpdateInitiativeDocumentsDto": {
@@ -5458,7 +5486,7 @@
       "type": "object"
      },
      "odoo_project_id": {
-      "description": "Oravex project id a \u00ab\u0645\u0633\u062a\u062e\u0644\u0635\u00bb is invoiced on; null clears the link",
+      "description": "Oravex project id a «مستخلص» is invoiced on; null clears the link",
       "example": 6,
       "nullable": true,
       "type": "object"
@@ -5940,7 +5968,7 @@
       "type": "number"
      },
      "title": {
-      "description": "Overrides the kind\u2019s translated label",
+      "description": "Overrides the kind’s translated label",
       "type": "object"
      },
      "weekday": {
@@ -5963,6 +5991,10 @@
     "type": "object"
    },
    "UpsertGovernanceSettingsDto": {
+    "properties": {},
+    "type": "object"
+   },
+   "UpsertHsePlanDto": {
     "properties": {},
     "type": "object"
    },
@@ -6560,7 +6592,7 @@
       "bearer": []
      }
     ],
-    "summary": "Which project a finished meeting drops its action items into, as PROPOSED (\u0645\u0664). null = automatic intake is off for this org.",
+    "summary": "Which project a finished meeting drops its action items into, as PROPOSED (م٤). null = automatic intake is off for this org.",
     "tags": [
      "agile"
     ]
@@ -6692,7 +6724,7 @@
       "bearer": []
      }
     ],
-    "summary": "Answer a \"Similar to \u2026\" with no: downgrades the suspicion to a recorded 'related' so the card stops asking. Requires manage_backlog.",
+    "summary": "Answer a \"Similar to …\" with no: downgrades the suspicion to a recorded 'related' so the card stops asking. Requires manage_backlog.",
     "tags": [
      "agile"
     ]
@@ -6787,7 +6819,7 @@
       "bearer": []
      }
     ],
-    "summary": "Reveal a round \u2014 a wide spread is never averaged",
+    "summary": "Reveal a round — a wide spread is never averaged",
     "tags": [
      "agile"
     ]
@@ -6884,7 +6916,7 @@
       "bearer": []
      }
     ],
-    "summary": "Measured accuracy of the forecast, per basis \u2014 telemetry, not a live input",
+    "summary": "Measured accuracy of the forecast, per basis — telemetry, not a live input",
     "tags": [
      "agile"
     ]
@@ -6971,7 +7003,7 @@
       "bearer": []
      }
     ],
-    "summary": "Rearrange your steps \u2014 the body lists every id in its new order",
+    "summary": "Rearrange your steps — the body lists every id in its new order",
     "tags": [
      "agile"
     ]
@@ -7001,7 +7033,7 @@
       "bearer": []
      }
     ],
-    "summary": "Candidate steps read off the work you actually do. Writes NOTHING \u2014 costs 1 credit.",
+    "summary": "Candidate steps read off the work you actually do. Writes NOTHING — costs 1 credit.",
     "tags": [
      "agile"
     ]
@@ -7155,7 +7187,7 @@
       "bearer": []
      }
     ],
-    "summary": "Releases \u2192 sprints \u2192 tasks composition + ranked backlog",
+    "summary": "Releases → sprints → tasks composition + ranked backlog",
     "tags": [
      "agile"
     ]
@@ -7633,7 +7665,7 @@
       "bearer": []
      }
     ],
-    "summary": "Set the Definition of Ready checklist (no mode \u2014 never gates)",
+    "summary": "Set the Definition of Ready checklist (no mode — never gates)",
     "tags": [
      "agile"
     ]
@@ -7738,7 +7770,7 @@
       "bearer": []
      }
     ],
-    "summary": "AI epic breakdown \u2014 proposes 3-6 tasks with points, sized against the project\u2019s own history. Read-only: creates nothing.",
+    "summary": "AI epic breakdown — proposes 3-6 tasks with points, sized against the project’s own history. Read-only: creates nothing.",
     "tags": [
      "agile"
     ]
@@ -7775,7 +7807,7 @@
       "bearer": []
      }
     ],
-    "summary": "How often this team\u2019s estimates covered the work",
+    "summary": "How often this team’s estimates covered the work",
     "tags": [
      "agile"
     ]
@@ -7888,7 +7920,7 @@
       "bearer": []
      }
     ],
-    "summary": "Findings from the board and recorded meetings. Read-only \u2014 nothing is applied until someone acts on it.",
+    "summary": "Findings from the board and recorded meetings. Read-only — nothing is applied until someone acts on it.",
     "tags": [
      "agile"
     ]
@@ -8150,7 +8182,7 @@
       "bearer": []
      }
     ],
-    "summary": "Compare to sprint zero \u2014 the first CLOSED sprint against the latest",
+    "summary": "Compare to sprint zero — the first CLOSED sprint against the latest",
     "tags": [
      "agile"
     ]
@@ -8342,7 +8374,7 @@
       "bearer": []
      }
     ],
-    "summary": "The Estimates tab of the cycle report: how often work ran over, by how much when it did, the reason each re-forecast gave, how long each queue keeps work waiting, and how the estimate holds up as tasks get bigger. Same window and same Mine/Team rules as /reports/performance \u2014 never a per-person breakdown.",
+    "summary": "The Estimates tab of the cycle report: how often work ran over, by how much when it did, the reason each re-forecast gave, how long each queue keeps work waiting, and how the estimate holds up as tasks get bigger. Same window and same Mine/Team rules as /reports/performance — never a per-person breakdown.",
     "tags": [
      "agile"
     ]
@@ -8530,7 +8562,7 @@
       "bearer": []
      }
     ],
-    "summary": "One person's cycle: commitments kept, median cycle time, estimate accuracy, time blocked, reviews given, a six-cycle trend and a draft review. `scope=team` returns the project aggregate instead \u2014 never another individual.",
+    "summary": "One person's cycle: commitments kept, median cycle time, estimate accuracy, time blocked, reviews given, a six-cycle trend and a draft review. `scope=team` returns the project aggregate instead — never another individual.",
     "tags": [
      "agile"
     ]
@@ -8771,7 +8803,7 @@
       "bearer": []
      }
     ],
-    "summary": "Throughput, bugs over time, created vs closed and lead time \u2014 one call so all four share the same week boundaries.",
+    "summary": "Throughput, bugs over time, created vs closed and lead time — one call so all four share the same week boundaries.",
     "tags": [
      "agile"
     ]
@@ -9165,7 +9197,7 @@
       "bearer": []
      }
     ],
-    "summary": "Work that already describes this title \u2014 open AND closed tasks, with the project thresholds",
+    "summary": "Work that already describes this title — open AND closed tasks, with the project thresholds",
     "tags": [
      "agile"
     ]
@@ -9204,7 +9236,7 @@
       "bearer": []
      }
     ],
-    "summary": "AI task draft \u2014 from a title, proposes description + epic (from the project\u2019s real epics) + points. Read-only: creates nothing.",
+    "summary": "AI task draft — from a title, proposes description + epic (from the project’s real epics) + points. Read-only: creates nothing.",
     "tags": [
      "agile"
     ]
@@ -9330,7 +9362,7 @@
       "bearer": []
      }
     ],
-    "summary": "Undo one merge \u2014 split a mention back out into its own proposal, restored from the wording that person actually used. Requires manage_backlog. 409 FIRST_MENTION on the mention the task was created from.",
+    "summary": "Undo one merge — split a mention back out into its own proposal, restored from the wording that person actually used. Requires manage_backlog. 409 FIRST_MENTION on the mention the task was created from.",
     "tags": [
      "agile"
     ]
@@ -9408,7 +9440,7 @@
       "bearer": []
      }
     ],
-    "summary": "Answer a gap the card names \u2014 owner, date, estimate. Writes through to the target task when the item has one, so the two can never disagree.",
+    "summary": "Answer a gap the card names — owner, date, estimate. Writes through to the target task when the item has one, so the two can never disagree.",
     "tags": [
      "agile"
     ]
@@ -9505,7 +9537,7 @@
       "bearer": []
      }
     ],
-    "summary": "Raise a blocker, a proposal or a decision by hand \u2014 the only writer the \"Blockers raised\" group has.",
+    "summary": "Raise a blocker, a proposal or a decision by hand — the only writer the \"Blockers raised\" group has.",
     "tags": [
      "agile"
     ]
@@ -9668,7 +9700,7 @@
       "bearer": []
      }
     ],
-    "summary": "Delete a sprint (PLANNED only; member tasks \u2192 backlog)",
+    "summary": "Delete a sprint (PLANNED only; member tasks → backlog)",
     "tags": [
      "agile"
     ]
@@ -10098,7 +10130,7 @@
       "bearer": []
      }
     ],
-    "summary": "Generate + cache an AI summary of the retro (Phase-3 \u00a74.15)",
+    "summary": "Generate + cache an AI summary of the retro (Phase-3 §4.15)",
     "tags": [
      "agile"
     ]
@@ -10225,7 +10257,7 @@
       "bearer": []
      }
     ],
-    "summary": "Accept a proposed item for the team. The proposer may accept their own \u2014 both proposed_by and accepted_by are recorded either way. 409 ALREADY_ACCEPTED on a second accept.",
+    "summary": "Accept a proposed item for the team. The proposer may accept their own — both proposed_by and accepted_by are recorded either way. 409 ALREADY_ACCEPTED on a second accept.",
     "tags": [
      "agile"
     ]
@@ -10361,7 +10393,7 @@
       "bearer": []
      }
     ],
-    "summary": "AI checks derived from one task's own text \u2014 advisory, never a gate",
+    "summary": "AI checks derived from one task's own text — advisory, never a gate",
     "tags": [
      "agile"
     ]
@@ -10505,7 +10537,7 @@
       "bearer": []
      }
     ],
-    "summary": "Turn a proposal down (\u0645\u0663). Records who/why/the note and takes the row off every agile surface \u2014 it is NOT a delete. The note is required and is sent to the proposer. 409 ALREADY_ACCEPTED / ALREADY_DECLINED.",
+    "summary": "Turn a proposal down (م٣). Records who/why/the note and takes the row off every agile surface — it is NOT a delete. The note is required and is sent to the proposer. 409 ALREADY_ACCEPTED / ALREADY_DECLINED.",
     "tags": [
      "agile"
     ]
@@ -10926,7 +10958,7 @@
       "bearer": []
      }
     ],
-    "summary": "AI reading of the re-forecast being typed, grounded in this task\u2019s own record",
+    "summary": "AI reading of the re-forecast being typed, grounded in this task’s own record",
     "tags": [
      "agile"
     ]
@@ -10965,7 +10997,7 @@
       "bearer": []
      }
     ],
-    "summary": "Set/clear business impact 1\u20135 (the other axis of the Impact/Effort matrix)",
+    "summary": "Set/clear business impact 1–5 (the other axis of the Impact/Effort matrix)",
     "tags": [
      "agile"
     ]
@@ -11099,7 +11131,7 @@
       "bearer": []
      }
     ],
-    "summary": "Unpin \u2014 the task returns to the automatic order",
+    "summary": "Unpin — the task returns to the automatic order",
     "tags": [
      "agile"
     ]
@@ -11194,7 +11226,7 @@
       "bearer": []
      }
     ],
-    "summary": "Queue a proposal in the project's refinement session and return where it landed. Idempotent per (session, task). Does NOT accept the task \u2014 accepting the queued item does. 409 ALREADY_ACCEPTED if it is no longer a proposal.",
+    "summary": "Queue a proposal in the project's refinement session and return where it landed. Idempotent per (session, task). Does NOT accept the task — accepting the queued item does. 409 ALREADY_ACCEPTED if it is no longer a proposal.",
     "tags": [
      "agile"
     ]
@@ -11726,7 +11758,7 @@
        }
       }
      },
-     "description": "The file\u2019s raw bytes.",
+     "description": "The file’s raw bytes.",
      "required": true
     },
     "responses": {
@@ -12916,7 +12948,7 @@
   },
   "/api/v1/ai/context": {
    "get": {
-    "description": "Slice 1 serves one block: `decisions` \u2014 what this organization already accepted, dismissed or implemented, so a generator does not re-raise a finding somebody already answered. `available` lists the blocks this version serves and `degraded` names any block that failed, so a caller can tell \"nothing found\" from \"could not look\". Org-scoped from the JWT.",
+    "description": "Slice 1 serves one block: `decisions` — what this organization already accepted, dismissed or implemented, so a generator does not re-raise a finding somebody already answered. `available` lists the blocks this version serves and `degraded` names any block that failed, so a caller can tell \"nothing found\" from \"could not look\". Org-scoped from the JWT.",
     "operationId": "AiContextController_context",
     "parameters": [
      {
@@ -14341,7 +14373,7 @@
       "bearer": []
      }
     ],
-    "summary": "Condense a slide\u2019s prose to a word target",
+    "summary": "Condense a slide’s prose to a word target",
     "tags": [
      "ai-proxy"
     ]
@@ -14361,7 +14393,7 @@
       "bearer": []
      }
     ],
-    "summary": "Render one slide in a reference deck\u2019s visual style",
+    "summary": "Render one slide in a reference deck’s visual style",
     "tags": [
      "ai-proxy"
     ]
@@ -14833,7 +14865,7 @@
       }
      },
      {
-      "description": "ISO date \u2014 count and return only calls after it. The revoke dialog uses it for \"requests in the last 30 days\"; without it `total` is all-time, which is a different and much less useful number to decide on.",
+      "description": "ISO date — count and return only calls after it. The revoke dialog uses it for \"requests in the last 30 days\"; without it `total` is all-time, which is a different and much less useful number to decide on.",
       "in": "query",
       "name": "since",
       "required": false,
@@ -15247,7 +15279,7 @@
       "bearer": []
      }
     ],
-    "summary": "Get org Approval AI settings (defaults if unset), plus whether automatic approval can actually run \u2014 reading this also disarms an org left switched on with no authority matrix behind it",
+    "summary": "Get org Approval AI settings (defaults if unset), plus whether automatic approval can actually run — reading this also disarms an org left switched on with no authority matrix behind it",
     "tags": [
      "approvals"
     ]
@@ -15684,7 +15716,7 @@
       "bearer": []
      }
     ],
-    "summary": "Give every project in the org its 2-letter LATIN request code, translating the name (\u0645\u0648\u0644 \u0627\u0644\u0630\u0647\u0628 \u2192 GO) rather than transliterating it. Skips projects that already hold a Latin code unless force=true; an Arabic code left by the old scheme is always replaced.",
+    "summary": "Give every project in the org its 2-letter LATIN request code, translating the name (مول الذهب → GO) rather than transliterating it. Skips projects that already hold a Latin code unless force=true; an Arabic code left by the old scheme is always replaced.",
     "tags": [
      "approvals"
     ]
@@ -15801,7 +15833,7 @@
       "bearer": []
      }
     ],
-    "summary": "Download the files of SEVERAL requests as one zip \u2014 each request in its own REF-v{version}/ folder. Requests outside the caller's org, or with no readable file, are skipped rather than failing the archive.",
+    "summary": "Download the files of SEVERAL requests as one zip — each request in its own REF-v{version}/ folder. Requests outside the caller's org, or with no readable file, are skipped rather than failing the archive.",
     "tags": [
      "approvals"
     ]
@@ -16054,7 +16086,7 @@
       "bearer": []
      }
     ],
-    "summary": "Download every file on a request as one zip \u2014 the CURRENT version's attachments, each one's latest signed copy when it has been stamped. Named after the request reference (REQ-\u2026-v{version}.zip).",
+    "summary": "Download every file on a request as one zip — the CURRENT version's attachments, each one's latest signed copy when it has been stamped. Named after the request reference (REQ-…-v{version}.zip).",
     "tags": [
      "approvals"
     ]
@@ -16286,7 +16318,7 @@
       "bearer": []
      }
     ],
-    "summary": "List complexity\u2192SLA-days policies for current org",
+    "summary": "List complexity→SLA-days policies for current org",
     "tags": [
      "approvals"
     ]
@@ -17747,7 +17779,7 @@
       "bearer": []
      }
     ],
-    "summary": "Turn 2FA off \u2014 needs a live code or a recovery code",
+    "summary": "Turn 2FA off — needs a live code or a recovery code",
     "tags": [
      "auth"
     ]
@@ -18020,7 +18052,7 @@
       }
      },
      {
-      "description": "building | floor | zone | wbs | activity \u2014 with key, only that group",
+      "description": "building | floor | zone | wbs | activity — with key, only that group",
       "in": "query",
       "name": "group",
       "required": false,
@@ -18232,7 +18264,7 @@
       }
      },
      {
-      "description": "building | floor | zone | wbs | activity | cost_code \u2014 with key, only that group",
+      "description": "building | floor | zone | wbs | activity | cost_code — with key, only that group",
       "in": "query",
       "name": "group",
       "required": false,
@@ -18313,7 +18345,7 @@
       "bearer": []
      }
     ],
-    "summary": "One element: quantity \u2192 BOQ \u2192 cost code \u2192 budget \u2192 committed \u2192 actual \u2192 forecast",
+    "summary": "One element: quantity → BOQ → cost code → budget → committed → actual → forecast",
     "tags": [
      "bim"
     ]
@@ -21117,7 +21149,7 @@
   },
   "/api/v1/company-admin/activity": {
    "get": {
-    "description": "A merged, newest-first timeline over TWO sources: `audit_logs` (member actions, recorded from Sep 2026 onwards) and `credit_transactions` of type `admin_adjustment` (every top-up/deduction ever made, including those from the Excel import). Credit rows are PLATFORM-ONLY, matching the guard on the adjust endpoint \u2014 an organization admin sees the member actions alone. `actions` is a comma-separated filter over `company_admin.member_{created,imported,deleted,role_changed,access_status_changed}` and `credit.{granted,deducted}`. `system` is `tornix` | `talon` | `all` (default): Talon rows come from the sibling deployment, carry NO organization, and are therefore the same whichever organization is selected \u2014 they are platform-only, like the Talon tab itself.",
+    "description": "A merged, newest-first timeline over TWO sources: `audit_logs` (member actions, recorded from Sep 2026 onwards) and `credit_transactions` of type `admin_adjustment` (every top-up/deduction ever made, including those from the Excel import). Credit rows are PLATFORM-ONLY, matching the guard on the adjust endpoint — an organization admin sees the member actions alone. `actions` is a comma-separated filter over `company_admin.member_{created,imported,deleted,role_changed,access_status_changed}` and `credit.{granted,deducted}`. `system` is `tornix` | `talon` | `all` (default): Talon rows come from the sibling deployment, carry NO organization, and are therefore the same whichever organization is selected — they are platform-only, like the Talon tab itself.",
     "operationId": "CompanyAdminController_getActivity",
     "parameters": [
      {
@@ -21211,7 +21243,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Who did what to whom on this screen \u2014 members added / imported / deleted, role and access-status changes, plus every administrative credit adjustment with its reason",
+    "summary": "[Org admin] Who did what to whom on this screen — members added / imported / deleted, role and access-status changes, plus every administrative credit adjustment with its reason",
     "tags": [
      "company-admin"
     ]
@@ -21241,7 +21273,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Apply the Tornix sheet of an Excel import \u2014 ONE request for the whole file, ONE transaction, per-row outcomes returned. Re-validates every row server-side; never trusts the client-side preview. An organization admin cannot pull in an account outside their organization, change an identity-locked account's password/role/access-status, or set credit.",
+    "summary": "[Org admin] Apply the Tornix sheet of an Excel import — ONE request for the whole file, ONE transaction, per-row outcomes returned. Re-validates every row server-side; never trusts the client-side preview. An organization admin cannot pull in an account outside their organization, change an identity-locked account's password/role/access-status, or set credit.",
     "tags": [
      "company-admin-excel"
     ]
@@ -21271,7 +21303,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Read-only pre-flight for the import preview \u2014 which of the file's emails already exist in Tornix (anywhere, not just this organization), whether they are already members here, and what this caller is allowed to change about them. Writes nothing.",
+    "summary": "[Org admin] Read-only pre-flight for the import preview — which of the file's emails already exist in Tornix (anywhere, not just this organization), whether they are already members here, and what this caller is allowed to change about them. Writes nothing.",
     "tags": [
      "company-admin-excel"
     ]
@@ -21301,7 +21333,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] \"Send to their e-mails\" \u2014 mails each given account the password THIS BROWSER just set for it, on demand, after an apply already ran. Re-verifies every password against that account's current hash and always mails the address on file, never a client-supplied one.",
+    "summary": "[Org admin] \"Send to their e-mails\" — mails each given account the password THIS BROWSER just set for it, on demand, after an apply already ran. Re-verifies every password against that account's current hash and always mails the address on file, never a client-supplied one.",
     "tags": [
      "company-admin-excel"
     ]
@@ -21338,7 +21370,7 @@
       "bearer": []
      }
     ],
-    "summary": "One member's per-attempt scores + previous (reset) sittings \u2014 headlines only, never the questions or answers from Hawkamah's report",
+    "summary": "One member's per-attempt scores + previous (reset) sittings — headlines only, never the questions or answers from Hawkamah's report",
     "tags": [
      "company-admin-hawkamah"
     ]
@@ -21644,7 +21676,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] One organization's job titles (organization_roles) with member counts, ordered by member count desc \u2014 the real per-project permission layer, distinct from the two-value global role",
+    "summary": "[Org admin] One organization's job titles (organization_roles) with member counts, ordered by member count desc — the real per-project permission layer, distinct from the two-value global role",
     "tags": [
      "company-admin"
     ]
@@ -21672,7 +21704,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Create a new job title by cloning an existing one's permissions \u2014 the safer path for \"change it for just this one member\", optionally assigning the new title to one member in the same call",
+    "summary": "[Org admin] Create a new job title by cloning an existing one's permissions — the safer path for \"change it for just this one member\", optionally assigning the new title to one member in the same call",
     "tags": [
      "company-admin"
     ]
@@ -21746,7 +21778,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Update a job title's permissions \u2014 writes the SHARED role, affecting every member who currently holds it, not only the member the caller has open",
+    "summary": "[Org admin] Update a job title's permissions — writes the SHARED role, affecting every member who currently holds it, not only the member the caller has open",
     "tags": [
      "company-admin"
     ]
@@ -21987,7 +22019,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Members of ONE organization \u2014 search/filter/sort/paginate on the server",
+    "summary": "[Org admin] Members of ONE organization — search/filter/sort/paginate on the server",
     "tags": [
      "company-admin"
     ]
@@ -22082,7 +22114,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Delete a member's ACCOUNT (not just its membership). Refuses the caller's own account, an identity-locked account, an account holding super-admin access, and an account referenced by partner reviews / supplier evaluations (reason `referenced_by_business_records` \u2014 reject its access instead).",
+    "summary": "[Org admin] Delete a member's ACCOUNT (not just its membership). Refuses the caller's own account, an identity-locked account, an account holding super-admin access, and an account referenced by partner reviews / supplier evaluations (reason `referenced_by_business_records` — reject its access instead).",
     "tags": [
      "company-admin"
     ]
@@ -22154,7 +22186,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Update full_name/phone/job_title/email \u2014 role, access_status, password and super-admin status go through /users/admin/*, not here",
+    "summary": "[Org admin] Update full_name/phone/job_title/email — role, access_status, password and super-admin status go through /users/admin/*, not here",
     "tags": [
      "company-admin"
     ]
@@ -22193,7 +22225,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Set a member's access lifecycle status (pending/approved/rejected) \u2014 org-scoped equivalent of /users/admin/set-access-status. Refuses the caller's own account and an identity-locked account.",
+    "summary": "[Org admin] Set a member's access lifecycle status (pending/approved/rejected) — org-scoped equivalent of /users/admin/set-access-status. Refuses the caller's own account and an identity-locked account.",
     "tags": [
      "company-admin"
     ]
@@ -22232,7 +22264,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Super admin] Adjust a member's credit balance within one organization \u2014 delegates to CreditsService.adminAdjustCredits so the ledger stays in one place.",
+    "summary": "[Super admin] Adjust a member's credit balance within one organization — delegates to CreditsService.adminAdjustCredits so the ledger stays in one place.",
     "tags": [
      "company-admin"
     ]
@@ -22271,7 +22303,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Reset a member's password \u2014 org-scoped equivalent of /users/admin/change-password, refused when the account is identity-locked (shared with another organization, the org owner, or a platform administrator)",
+    "summary": "[Org admin] Reset a member's password — org-scoped equivalent of /users/admin/change-password, refused when the account is identity-locked (shared with another organization, the org owner, or a platform administrator)",
     "tags": [
      "company-admin"
     ]
@@ -22310,7 +22342,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Set the FINAL SET of projects a member belongs to within one organization \u2014 the server diffs against current memberships and adds/removes only the delta. Never touches this member's memberships in other organizations.",
+    "summary": "[Org admin] Set the FINAL SET of projects a member belongs to within one organization — the server diffs against current memberships and adds/removes only the delta. Never touches this member's memberships in other organizations.",
     "tags": [
      "company-admin"
     ]
@@ -22349,7 +22381,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Org admin] Set a member's global role (C_LEVEL / REGULAR_MANAGER / null) \u2014 org-scoped equivalent of /users/admin/set-role. Refuses the caller's own account and an identity-locked account.",
+    "summary": "[Org admin] Set a member's global role (C_LEVEL / REGULAR_MANAGER / null) — org-scoped equivalent of /users/admin/set-role. Refuses the caller's own account and an identity-locked account.",
     "tags": [
      "company-admin"
     ]
@@ -22523,7 +22555,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Super admin] Apply the Talon sheet of an Excel import \u2014 creates/updates Talon users, moves credit to the target balance and records the Tornix identity link. NOT a transaction (Talon is a separate deployment, one HTTP call per user): every row reports its own outcome and what applied stays applied.",
+    "summary": "[Super admin] Apply the Talon sheet of an Excel import — creates/updates Talon users, moves credit to the target balance and records the Tornix identity link. NOT a transaction (Talon is a separate deployment, one HTTP call per user): every row reports its own outcome and what applied stays applied.",
     "tags": [
      "company-admin-talon"
     ]
@@ -22563,7 +22595,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Super admin] Every Talon user on this deployment's sibling box, with its resolved Tornix link (id-resolved locally) \u2014 NOT credit balance, see talon.service.ts",
+    "summary": "[Super admin] Every Talon user on this deployment's sibling box, with its resolved Tornix link (id-resolved locally) — NOT credit balance, see talon.service.ts",
     "tags": [
      "company-admin-talon"
     ]
@@ -22620,7 +22652,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Super admin] Delete a Talon user \u2014 cascades to its Tornix-link and Oravex-link rows on Talon's side ONLY; never touches this deployment's own users table or Oravex/Odoo",
+    "summary": "[Super admin] Delete a Talon user — cascades to its Tornix-link and Oravex-link rows on Talon's side ONLY; never touches this deployment's own users table or Oravex/Odoo",
     "tags": [
      "company-admin-talon"
     ]
@@ -22696,7 +22728,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Super admin] Correct one Talon user's balance in either direction \u2014 a NEGATIVE amount is the only way to take credit back",
+    "summary": "[Super admin] Correct one Talon user's balance in either direction — a NEGATIVE amount is the only way to take credit back",
     "tags": [
      "company-admin-talon"
     ]
@@ -22735,7 +22767,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Super admin] Add credit to one Talon user's wallet \u2014 forwarded to Talon's `/credits/admin/accounts/:id/topup`, which writes its own ledger line",
+    "summary": "[Super admin] Add credit to one Talon user's wallet — forwarded to Talon's `/credits/admin/accounts/:id/topup`, which writes its own ledger line",
     "tags": [
      "company-admin-talon"
     ]
@@ -22774,7 +22806,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Super admin] Remove the identity link \u2014 never touches the Tornix account itself",
+    "summary": "[Super admin] Remove the identity link — never touches the Tornix account itself",
     "tags": [
      "company-admin-talon"
     ]
@@ -22811,7 +22843,7 @@
       "bearer": []
      }
     ],
-    "summary": "[Super admin] Identity link ONLY \u2014 records that this Talon user IS the given Tornix member. Never provisions a hermes-sandbox gateway.",
+    "summary": "[Super admin] Identity link ONLY — records that this Talon user IS the given Tornix member. Never provisions a hermes-sandbox gateway.",
     "tags": [
      "company-admin-talon"
     ]
@@ -23263,7 +23295,7 @@
       "bearer": []
      }
     ],
-    "summary": "Soft-delete a cost category (sets is_active=false; never hard-deletes \u2014 Odoo depends on slug stability)",
+    "summary": "Soft-delete a cost category (sets is_active=false; never hard-deletes — Odoo depends on slug stability)",
     "tags": [
      "cost-categories"
     ]
@@ -24985,7 +25017,7 @@
       "bearer": []
      }
     ],
-    "summary": "Documents board \u2014 the recent-files section",
+    "summary": "Documents board — the recent-files section",
     "tags": [
      "documents"
     ]
@@ -25022,7 +25054,7 @@
       "bearer": []
      }
     ],
-    "summary": "Documents board \u2014 figures, smart groups and storage",
+    "summary": "Documents board — figures, smart groups and storage",
     "tags": [
      "documents"
     ]
@@ -25988,7 +26020,7 @@
       "bearer": []
      }
     ],
-    "summary": "System folders (Inbox, Starred, Sent, Drafts, Archive, Spam, Trash) with total + unread counts, and the mailbox path each resolved to on this account. NOT the same as /labels, which returns the user\u2019s own tags.",
+    "summary": "System folders (Inbox, Starred, Sent, Drafts, Archive, Spam, Trash) with total + unread counts, and the mailbox path each resolved to on this account. NOT the same as /labels, which returns the user’s own tags.",
     "tags": [
      "email"
     ]
@@ -26073,7 +26105,7 @@
       "bearer": []
      }
     ],
-    "summary": "Really sync one of the caller\u2019s mailboxes (fetch, store, batch-triage), through the guarded sort path. Does nothing \u2014 `skipped: true`, same shape \u2014 while the caller has a sort in flight or this mailbox synced in the last 10 minutes. `synced: false` with an `error` when it cannot or did not sync; `last_sync_at` moves only when mail was actually covered.",
+    "summary": "Really sync one of the caller’s mailboxes (fetch, store, batch-triage), through the guarded sort path. Does nothing — `skipped: true`, same shape — while the caller has a sort in flight or this mailbox synced in the last 10 minutes. `synced: false` with an `error` when it cannot or did not sync; `last_sync_at` moves only when mail was actually covered.",
     "tags": [
      "email"
     ]
@@ -26202,7 +26234,7 @@
       "bearer": []
      }
     ],
-    "summary": "The caller's briefing for their local today, or `briefing: null`. Never writes \u2014 use POST to get-or-generate.",
+    "summary": "The caller's briefing for their local today, or `briefing: null`. Never writes — use POST to get-or-generate.",
     "tags": [
      "email"
     ]
@@ -26249,7 +26281,7 @@
       "bearer": []
      }
     ],
-    "summary": "Record that the greeting popup for this briefing was closed. The caller\u2019s own briefing only; 404 otherwise.",
+    "summary": "Record that the greeting popup for this briefing was closed. The caller’s own briefing only; 404 otherwise.",
     "tags": [
      "email"
     ]
@@ -26269,7 +26301,7 @@
       "bearer": []
      }
     ],
-    "summary": "The caller's inbox categories in tab order, with unread/total counts over the whole synced mailbox (archived excluded). A user who never customised anything gets the three built-ins with id null \u2014 nothing is written on read.",
+    "summary": "The caller's inbox categories in tab order, with unread/total counts over the whole synced mailbox (archived excluded). A user who never customised anything gets the three built-ins with id null — nothing is written on read.",
     "tags": [
      "email"
     ]
@@ -26428,7 +26460,7 @@
       "bearer": []
      }
     ],
-    "summary": "One page of the caller's stored mail filed under this category, newest first \u2014 read straight off the same category_key the resolver already wrote, no re-derivation. `limit` defaults to 25 (max 50), `offset` defaults to 0. An unknown key returns an empty page rather than a 404.",
+    "summary": "One page of the caller's stored mail filed under this category, newest first — read straight off the same category_key the resolver already wrote, no re-derivation. `limit` defaults to 25 (max 50), `offset` defaults to 0. An unknown key returns an empty page rather than a 404.",
     "tags": [
      "email"
     ]
@@ -26486,7 +26518,7 @@
       "bearer": []
      }
     ],
-    "summary": "How many of the caller\u2019s emails a condition would match, and the newest 5, before saving it. Uses the same Arabic-safe matcher as the saved rule.",
+    "summary": "How many of the caller’s emails a condition would match, and the newest 5, before saving it. Uses the same Arabic-safe matcher as the saved rule.",
     "tags": [
      "email"
     ]
@@ -26753,7 +26785,7 @@
       "bearer": []
      }
     ],
-    "summary": "Signed preview URLs for a message\u2019s IMAGE attachments, served from the archive in object storage. Only images, only files the archiver has already stored \u2014 anything else is simply absent and the client keeps its file glyph.",
+    "summary": "Signed preview URLs for a message’s IMAGE attachments, served from the archive in object storage. Only images, only files the archiver has already stored — anything else is simply absent and the client keeps its file glyph.",
     "tags": [
      "email"
     ]
@@ -26783,7 +26815,7 @@
       "bearer": []
      }
     ],
-    "summary": "Test IMAP+SMTP connection and save credentials. Host/port/security are optional: anything left out is filled from the organization\u2019s own mail settings (Company admin \u2192 \u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a).",
+    "summary": "Test IMAP+SMTP connection and save credentials. Host/port/security are optional: anything left out is filled from the organization’s own mail settings (Company admin → البريد الإلكتروني).",
     "tags": [
      "email"
     ]
@@ -26832,7 +26864,7 @@
       "bearer": []
      }
     ],
-    "summary": "The company mail settings that apply to the caller \u2014 and, when an address is supplied, to that address\u2019 domain. `configured` says the organization has settings at all, `matched` says one answers the address (its own domain, else the organization default). The connect form uses it to decide whether it draws the technical fields; the values carry no credential, so serving them to any member is safe.",
+    "summary": "The company mail settings that apply to the caller — and, when an address is supplied, to that address’ domain. `configured` says the organization has settings at all, `matched` says one answers the address (its own domain, else the organization default). The connect form uses it to decide whether it draws the technical fields; the values carry no credential, so serving them to any member is safe.",
     "tags": [
      "email"
     ]
@@ -26872,7 +26904,7 @@
       "bearer": []
      }
     ],
-    "summary": "Record what the mailbox now says about these messages \u2014 `isRead` and/or `isStarred` \u2014 so the stored counts stay true. An omitted flag is left alone, an id we never synced matches nothing, and the answer is how many rows actually moved. At most 200 ids.",
+    "summary": "Record what the mailbox now says about these messages — `isRead` and/or `isStarred` — so the stored counts stay true. An omitted flag is left alone, an id we never synced matches nothing, and the answer is how many rows actually moved. At most 200 ids.",
     "tags": [
      "email"
     ]
@@ -26988,7 +27020,7 @@
       "bearer": []
      }
     ],
-    "summary": "List the caller\u2019s pending scheduled emails.",
+    "summary": "List the caller’s pending scheduled emails.",
     "tags": [
      "email"
     ]
@@ -27037,7 +27069,7 @@
       "bearer": []
      }
     ],
-    "summary": "Mark the mailbox as looked at. Moves the window the briefing counts from. Called when the inbox is OPENED \u2014 never on sync, which would zero the briefing for a reader who saw nothing.",
+    "summary": "Mark the mailbox as looked at. Moves the window the briefing counts from. Called when the inbox is OPENED — never on sync, which would zero the briefing for a reader who saw nothing.",
     "tags": [
      "email"
     ]
@@ -27086,7 +27118,7 @@
       "bearer": []
      }
     ],
-    "summary": "Resolve a sender email address to the person/entity it belongs to (teammate, partner contact, vendor, \u2026) and the project(s) they relate to. Project links are filtered to the caller's accessible projects.",
+    "summary": "Resolve a sender email address to the person/entity it belongs to (teammate, partner contact, vendor, …) and the project(s) they relate to. Project links are filtered to the caller's accessible projects.",
     "tags": [
      "email"
     ]
@@ -27126,7 +27158,7 @@
       "bearer": []
      }
     ],
-    "summary": "Sort the caller's mail on the server, silently \u2014 called once when the site opens. Syncs mailboxes not synced in the last 10 minutes and re-triages recent mail that has no verdict, in batches (never one call per email). Waits up to 25s: `running` means it continues in the background. Throttled per user (in flight or started < 10 min ago \u2192 `skipped`).",
+    "summary": "Sort the caller's mail on the server, silently — called once when the site opens. Syncs mailboxes not synced in the last 10 minutes and re-triages recent mail that has no verdict, in batches (never one call per email). Waits up to 25s: `running` means it continues in the background. Throttled per user (in flight or started < 10 min ago → `skipped`).",
     "tags": [
      "email"
     ]
@@ -27146,7 +27178,7 @@
       "bearer": []
      }
     ],
-    "summary": "LEGACY (old web, mobile): same as POST /email/sort-now \u2014 one guarded server-side sort (per-user throttle, in-flight join, 25s wait). Returns the old fields filled from the sort (`enqueued` = verdicts written) plus `status`.",
+    "summary": "LEGACY (old web, mobile): same as POST /email/sort-now — one guarded server-side sort (per-user throttle, in-flight join, 25s wait). Returns the old fields filled from the sort (`enqueued` = verdicts written) plus `status`.",
     "tags": [
      "email"
     ]
@@ -27166,7 +27198,7 @@
       "bearer": []
      }
     ],
-    "summary": "Triage the inbox page the client is showing, in ONE model call from headers only, and persist the buckets. This is what fills the briefing. Distinct from /classify-batch, which reads each body and costs one call (and one credit charge) PER EMAIL \u2014 right when a message is opened, wrong for a list.",
+    "summary": "Triage the inbox page the client is showing, in ONE model call from headers only, and persist the buckets. This is what fills the briefing. Distinct from /classify-batch, which reads each body and costs one call (and one credit charge) PER EMAIL — right when a message is opened, wrong for a list.",
     "tags": [
      "email"
     ]
@@ -27211,7 +27243,7 @@
       "bearer": []
      }
     ],
-    "summary": "Inbox briefing: how many emails are in each triage bucket since the reader last looked, plus the ones needing a decision. Counts come from the classifier, over the WHOLE synced mailbox \u2014 not the page the client has loaded.",
+    "summary": "Inbox briefing: how many emails are in each triage bucket since the reader last looked, plus the ones needing a decision. Counts come from the classifier, over the WHOLE synced mailbox — not the page the client has loaded.",
     "tags": [
      "email"
     ]
@@ -27401,7 +27433,7 @@
       "bearer": []
      }
     ],
-    "summary": "Lock a period \u2014 closed, and no longer reopenable",
+    "summary": "Lock a period — closed, and no longer reopenable",
     "tags": [
      "cost"
     ]
@@ -31405,7 +31437,7 @@
       "bearer": []
      }
     ],
-    "summary": "Approve a pending project deletion (human sessions only \u2014 an agent token is refused)",
+    "summary": "Approve a pending project deletion (human sessions only — an agent token is refused)",
     "tags": [
      "graphql"
     ]
@@ -31425,7 +31457,7 @@
       "bearer": []
      }
     ],
-    "summary": "Compact section index \u2014 what to put in an agent tool description instead of the SDL",
+    "summary": "Compact section index — what to put in an agent tool description instead of the SDL",
     "tags": [
      "graphql"
     ]
@@ -31502,7 +31534,7 @@
       "bearer": []
      }
     ],
-    "summary": "Section index \u2014 one or two operations per API area, and what each replaces",
+    "summary": "Section index — one or two operations per API area, and what each replaces",
     "tags": [
      "graphql"
     ]
@@ -32147,7 +32179,7 @@
   },
   "/api/v1/insights/resolved": {
    "get": {
-    "description": "Approval-aging rows whose underlying approval request left \"awaiting decision\" within the lookback window (since_hours, default 24, max 168). Per-caller: visible only to someone who was an approver on any step of that request, and a dismissed row is excluded. Not paginated \u2014 at most 20 rows, newest acted_on_at first. A caller with no user id always gets an empty list.",
+    "description": "Approval-aging rows whose underlying approval request left \"awaiting decision\" within the lookback window (since_hours, default 24, max 168). Per-caller: visible only to someone who was an approver on any step of that request, and a dismissed row is excluded. Not paginated — at most 20 rows, newest acted_on_at first. A caller with no user id always gets an empty list.",
     "operationId": "InsightsController_resolved",
     "parameters": [
      {
@@ -32256,7 +32288,7 @@
   },
   "/api/v1/insights/{id}/dismiss": {
    "post": {
-    "description": "Per-viewer state only \u2014 never touches the insight's own organization-wide status.",
+    "description": "Per-viewer state only — never touches the insight's own organization-wide status.",
     "operationId": "InsightsController_dismiss",
     "parameters": [
      {
@@ -32296,7 +32328,7 @@
   },
   "/api/v1/insights/{id}/snooze": {
    "post": {
-    "description": "Per-viewer state only \u2014 never touches the insight's own organization-wide status.",
+    "description": "Per-viewer state only — never touches the insight's own organization-wide status.",
     "operationId": "InsightsController_snooze",
     "parameters": [
      {
@@ -32410,7 +32442,7 @@
       "bearer": []
      }
     ],
-    "summary": "Accept a pending invitation for the calling user \u2014 sets the caller's own profile role from the server-side invitation record (P5 C2: the only non-proxy path allowed to write profiles.role for a self-accept)",
+    "summary": "Accept a pending invitation for the calling user — sets the caller's own profile role from the server-side invitation record (P5 C2: the only non-proxy path allowed to write profiles.role for a self-accept)",
     "tags": [
      "invitations"
     ]
@@ -33724,7 +33756,7 @@
       "bearer": []
      }
     ],
-    "summary": "Paginated meeting history \u2014 filtered and counted in SQL",
+    "summary": "Paginated meeting history — filtered and counted in SQL",
     "tags": [
      "meetings"
     ]
@@ -34167,7 +34199,7 @@
       "bearer": []
      }
     ],
-    "summary": "Appoint a meeting participant as an admin \u2014 they mute and remove like the owner (room owner only).",
+    "summary": "Appoint a meeting participant as an admin — they mute and remove like the owner (room owner only).",
     "tags": [
      "meetings"
     ]
@@ -34252,7 +34284,7 @@
       "bearer": []
      }
     ],
-    "summary": "Create or fetch a shareable invite link for a video room (host only). Idempotent by default \u2014 returns the existing token if one is still valid. Pass `force: true` to rotate (invalidates previously shared links). Pass `ttl_days: null` or `0` for a permanent link.",
+    "summary": "Create or fetch a shareable invite link for a video room (host only). Idempotent by default — returns the existing token if one is still valid. Pass `force: true` to rotate (invalidates previously shared links). Pass `ttl_days: null` or `0` for a permanent link.",
     "tags": [
      "meetings"
     ]
@@ -34320,7 +34352,7 @@
       "bearer": []
      }
     ],
-    "summary": "Update a live meeting's options \u2014 auto-record, auto-admit guests, feed the backlog (room owner or an appointed admin).",
+    "summary": "Update a live meeting's options — auto-record, auto-admit guests, feed the backlog (room owner or an appointed admin).",
     "tags": [
      "meetings"
     ]
@@ -35114,7 +35146,7 @@
       "bearer": []
      }
     ],
-    "summary": "memory(action, target, content) \u2014 add/replace/remove a fact or the profile",
+    "summary": "memory(action, target, content) — add/replace/remove a fact or the profile",
     "tags": [
      "memory"
     ]
@@ -35154,7 +35186,7 @@
       "bearer": []
      }
     ],
-    "summary": "List all memory entries for a scope (namespace user|org) \u2014 the Memory tab",
+    "summary": "List all memory entries for a scope (namespace user|org) — the Memory tab",
     "tags": [
      "memory"
     ]
@@ -35194,7 +35226,7 @@
       "bearer": []
      }
     ],
-    "summary": "memory_search(query, category) \u2014 full-text search over memory",
+    "summary": "memory_search(query, category) — full-text search over memory",
     "tags": [
      "memory"
     ]
@@ -35214,7 +35246,7 @@
       "bearer": []
      }
     ],
-    "summary": "session_search(query) \u2014 full-text search over past conversations",
+    "summary": "session_search(query) — full-text search over past conversations",
     "tags": [
      "memory"
     ]
@@ -35234,7 +35266,7 @@
       "bearer": []
      }
     ],
-    "summary": "skill_manage(action, scope, \u2026) \u2014 CRUD reusable procedure skills",
+    "summary": "skill_manage(action, scope, …) — CRUD reusable procedure skills",
     "tags": [
      "memory"
     ]
@@ -36818,7 +36850,7 @@
       "bearer": []
      }
     ],
-    "summary": "Per-member load: real estimated hours of the member's open assigned tasks \u00f7 their weekly capacity. With project_id it counts only that project (member on THIS project \u2014 the same numerator and capacity a project card sums); without it, all the org's projects (member across the org, on a standard week); project_ids narrows the org-wide view to a set of projects. Never guesses hours: null hours/percentage = active work but none estimated.",
+    "summary": "Per-member load: real estimated hours of the member's open assigned tasks ÷ their weekly capacity. With project_id it counts only that project (member on THIS project — the same numerator and capacity a project card sums); without it, all the org's projects (member across the org, on a standard week); project_ids narrows the org-wide view to a set of projects. Never guesses hours: null hours/percentage = active work but none estimated.",
     "tags": [
      "organizations"
     ]
@@ -42501,6 +42533,758 @@
     }
    }
   },
+  "/api/v1/projects/{projectId}/hse/access": {
+   "get": {
+    "operationId": "HseController_myAccess",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/incidents": {
+   "get": {
+    "operationId": "HseController_listIncidents",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   },
+   "post": {
+    "operationId": "HseController_createIncident",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CreateHseIncidentDto"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/inspections": {
+   "get": {
+    "operationId": "HseController_listInspections",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   },
+   "post": {
+    "operationId": "HseController_createInspection",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CreateHseInspectionDto"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/inspections/default-checklist": {
+   "get": {
+    "operationId": "HseController_defaultChecklist",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/kpis": {
+   "get": {
+    "operationId": "HseController_kpis",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/plan": {
+   "get": {
+    "operationId": "HseController_getPlan",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   },
+   "put": {
+    "operationId": "HseController_putPlan",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/UpsertHsePlanDto"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/plan/documents": {
+   "get": {
+    "operationId": "HseController_planDocuments",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "search",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/violations": {
+   "get": {
+    "operationId": "HseController_listViolations",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   },
+   "post": {
+    "operationId": "HseController_createViolation",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CreateHseViolationDto"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/violations/{id}": {
+   "delete": {
+    "operationId": "HseController_deleteViolation",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "id",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   },
+   "get": {
+    "operationId": "HseController_getViolation",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "id",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   },
+   "patch": {
+    "operationId": "HseController_updateViolation",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "id",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/UpdateHseViolationDto"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/violations/{id}/close": {
+   "post": {
+    "operationId": "HseController_close",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "id",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "201": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/violations/{id}/photos": {
+   "post": {
+    "operationId": "HseController_addPhoto",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "id",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RegisterHsePhotoDto"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/violations/{id}/photos/{photoId}": {
+   "delete": {
+    "operationId": "HseController_deletePhoto",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "id",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "photoId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/violations/{id}/photos/{photoId}/url": {
+   "get": {
+    "operationId": "HseController_photoUrl",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "id",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "photoId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/violations/{id}/reopen": {
+   "post": {
+    "operationId": "HseController_reopen",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "id",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ReopenHseViolationDto"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
+  "/api/v1/projects/{projectId}/hse/violations/{id}/request-closure": {
+   "post": {
+    "operationId": "HseController_requestClosure",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "projectId",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "id",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RequestHseClosureDto"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "description": ""
+     }
+    },
+    "security": [
+     {
+      "bearer": []
+     }
+    ],
+    "tags": [
+     "hse"
+    ]
+   }
+  },
   "/api/v1/projects/{projectId}/inventory/snapshot": {
    "post": {
     "operationId": "OdooWarehouseController_ingestSnapshot",
@@ -45450,7 +46234,7 @@
        }
       }
      },
-     "description": "The file\u2019s raw bytes.",
+     "description": "The file’s raw bytes.",
      "required": true
     },
     "responses": {
@@ -47520,7 +48304,7 @@
       "bearer": []
      }
     ],
-    "summary": "Open a draft that revises a live strategy (activation stamps v1.1, v1.2 \u2026)",
+    "summary": "Open a draft that revises a live strategy (activation stamps v1.1, v1.2 …)",
     "tags": [
      "strategy-draft"
     ]
@@ -47828,7 +48612,7 @@
       "bearer": []
      }
     ],
-    "summary": "Edit a draft item. The payload is MERGED, not replaced. Marks the item as edited by the user unless `as_proposal: true` \u2014 which is how an agent suggests a value (e.g. a project link) without claiming the card as a human decision.",
+    "summary": "Edit a draft item. The payload is MERGED, not replaced. Marks the item as edited by the user unless `as_proposal: true` — which is how an agent suggests a value (e.g. a project link) without claiming the card as a human decision.",
     "tags": [
      "strategy-draft"
     ]
@@ -48154,7 +48938,7 @@
       "bearer": []
      }
     ],
-    "summary": "Generate strategy with AI (SSE stream) \u2014 proxied to strategic-navigator:8013",
+    "summary": "Generate strategy with AI (SSE stream) — proxied to strategic-navigator:8013",
     "tags": [
      "strategy"
     ]
@@ -48174,7 +48958,7 @@
       "bearer": []
      }
     ],
-    "summary": "Generate strategy synchronously \u2014 proxied to strategic-navigator:8013",
+    "summary": "Generate strategy synchronously — proxied to strategic-navigator:8013",
     "tags": [
      "strategy"
     ]
@@ -48967,7 +49751,7 @@
       "bearer": []
      }
     ],
-    "summary": "Match projects to objectives \u2014 proxied to strategic-navigator:8013",
+    "summary": "Match projects to objectives — proxied to strategic-navigator:8013",
     "tags": [
      "strategy"
     ]
@@ -48987,7 +49771,7 @@
       "bearer": []
      }
     ],
-    "summary": "Match projects during wizard \u2014 proxied to strategic-navigator:8013",
+    "summary": "Match projects during wizard — proxied to strategic-navigator:8013",
     "tags": [
      "strategy"
     ]
@@ -50273,7 +51057,7 @@
       "bearer": []
      }
     ],
-    "summary": "Delete this strategy's strategic risks \u2014 all of them, or only `?ids=` (Re-analyze retires the previous set once the new run has succeeded)",
+    "summary": "Delete this strategy's strategic risks — all of them, or only `?ids=` (Re-analyze retires the previous set once the new run has succeeded)",
     "tags": [
      "strategy"
     ]
@@ -53163,7 +53947,7 @@
       "bearer": []
      }
     ],
-    "summary": "Client tickets waiting to be accepted, ordered by aggregate impact (people blocked \u00d7 companies), not by priority alone",
+    "summary": "Client tickets waiting to be accepted, ordered by aggregate impact (people blocked × companies), not by priority alone",
     "tags": [
      "tickets"
     ]
@@ -53377,7 +54161,7 @@
       "bearer": []
      }
     ],
-    "summary": "Remove a gate \u2014 that move goes straight through again",
+    "summary": "Remove a gate — that move goes straight through again",
     "tags": [
      "tickets"
     ]
@@ -53491,7 +54275,7 @@
       "bearer": []
      }
     ],
-    "summary": "Already resolved \u2014 the fix is live; moves the ticket to released for the client to confirm",
+    "summary": "Already resolved — the fix is live; moves the ticket to released for the client to confirm",
     "tags": [
      "tickets"
     ]
@@ -53520,7 +54304,7 @@
       "bearer": []
      }
     ],
-    "summary": "The flow this ticket is on \u2014 the graph, and every step on it",
+    "summary": "The flow this ticket is on — the graph, and every step on it",
     "tags": [
      "tickets"
     ]
@@ -53692,7 +54476,7 @@
       "bearer": []
      }
     ],
-    "summary": "Master view: affected companies, merge evidence, queue reason, and what each client was told. Vendor-only \u2014 it names other companies.",
+    "summary": "Master view: affected companies, merge evidence, queue reason, and what each client was told. Vendor-only — it names other companies.",
     "tags": [
      "tickets"
     ]
@@ -54082,7 +54866,7 @@
       "bearer": []
      }
     ],
-    "summary": "Write a ticket. Returns it with the AI analysis for the review screen \u2014 it is NOT sent until /confirm.",
+    "summary": "Write a ticket. Returns it with the AI analysis for the review screen — it is NOT sent until /confirm.",
     "tags": [
      "tickets"
     ]
@@ -54171,7 +54955,7 @@
       "bearer": []
      }
     ],
-    "summary": "Send an answered offer\u2019s decision again after Tornix could not be reached",
+    "summary": "Send an answered offer’s decision again after Tornix could not be reached",
     "tags": [
      "tickets"
     ]
@@ -54231,7 +55015,7 @@
       "bearer": []
      }
     ],
-    "summary": "Does a ticket from this company need its administrator\u2019s approval first, and whose?",
+    "summary": "Does a ticket from this company need its administrator’s approval first, and whose?",
     "tags": [
      "tickets"
     ]
@@ -54442,7 +55226,7 @@
       "bearer": []
      }
     ],
-    "summary": "Add a file, photo or voice note \u2014 allowed until we accept the ticket",
+    "summary": "Add a file, photo or voice note — allowed until we accept the ticket",
     "tags": [
      "tickets"
     ]
@@ -54556,7 +55340,7 @@
       "bearer": []
      }
     ],
-    "summary": "The client confirming the fix worked \u2014 the one move that is theirs to make",
+    "summary": "The client confirming the fix worked — the one move that is theirs to make",
     "tags": [
      "tickets"
     ]
@@ -55389,7 +56173,7 @@
       "bearer": []
      }
     ],
-    "summary": "Monthly performance report for the org\u2019s twin cards: how many closed with no human in the loop, how many a person confirmed, how many escalated, plus per-kind and per-hook-event breakdowns.",
+    "summary": "Monthly performance report for the org’s twin cards: how many closed with no human in the loop, how many a person confirmed, how many escalated, plus per-kind and per-hook-event breakdowns.",
     "tags": [
      "twin"
     ]
@@ -55426,7 +56210,7 @@
       "bearer": []
      }
     ],
-    "summary": "Caller's effective UI-permission map for one organization, optionally scoped to one project \u2014 the tab/button visibility layer this feeds (see ui-permissions.registry.ts)",
+    "summary": "Caller's effective UI-permission map for one organization, optionally scoped to one project — the tab/button visibility layer this feeds (see ui-permissions.registry.ts)",
     "tags": [
      "ui-permissions"
     ]
@@ -55446,7 +56230,7 @@
       "bearer": []
      }
     ],
-    "summary": "The UI-permission registry \u2014 sections, keys and defaults. The frontend mirror (frontend/src/shared/permissions) asserts its own key set against this same list.",
+    "summary": "The UI-permission registry — sections, keys and defaults. The frontend mirror (frontend/src/shared/permissions) asserts its own key set against this same list.",
     "tags": [
      "ui-permissions"
     ]
@@ -55802,7 +56586,7 @@
       "bearer": []
      }
     ],
-    "summary": "What the current user can do \u2014 super-admin status (no super-admin check; answers about the caller only)",
+    "summary": "What the current user can do — super-admin status (no super-admin check; answers about the caller only)",
     "tags": [
      "users"
     ]
@@ -56123,7 +56907,7 @@
       "description": ""
      }
     },
-    "summary": "Fetch up to N sample rows for a data source. Service-key auth only \u2014 used by the project-health widget builder to give the AI ground-truth shape before Phase B.",
+    "summary": "Fetch up to N sample rows for a data source. Service-key auth only — used by the project-health widget builder to give the AI ground-truth shape before Phase B.",
     "tags": [
      "widget-data"
     ]
@@ -56188,7 +56972,7 @@
       "bearer": []
      }
     ],
-    "summary": "Enumerate data sources + their schemas. Public: no per-user data \u2014 catalog metadata only; consumed by the project-health widget builder at boot.",
+    "summary": "Enumerate data sources + their schemas. Public: no per-user data — catalog metadata only; consumed by the project-health widget builder at boot.",
     "tags": [
      "widget-data"
     ]
@@ -56384,7 +57168,7 @@
     ]
    },
    "patch": {
-    "description": "PostgREST-compatible UPDATE. Filters work the same as GET (`col=eq.value`, `col=in.(\u2026)`). Use `Prefer: return=representation` to echo updated rows, or `return=minimal` for empty 204.",
+    "description": "PostgREST-compatible UPDATE. Filters work the same as GET (`col=eq.value`, `col=in.(…)`). Use `Prefer: return=representation` to echo updated rows, or `return=minimal` for empty 204.",
     "operationId": "PostgrestCompatController_update",
     "parameters": [
      {
