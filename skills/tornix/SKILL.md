@@ -884,6 +884,27 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix api hr-requests leave-policy-replace --json` — HrRequestsController_setLeavePolicy
 - `tornix api hr-requests leave-precheck --json` — HrRequestsController_precheckLeave
 - `tornix api hr-requests list --json` — HrRequestsController_list
+- `tornix api hse access --json` — HseController_myAccess
+- `tornix api hse close --json` — HseController_close
+- `tornix api hse default-checklist --json` — HseController_defaultChecklist
+- `tornix api hse delete --json` — HseController_deleteViolation
+- `tornix api hse documents --json` — HseController_planDocuments
+- `tornix api hse get --json` — HseController_getViolation
+- `tornix api hse incidents --json` — HseController_listIncidents
+- `tornix api hse inspections --json` — HseController_listInspections
+- `tornix api hse kpis --json` — HseController_kpis
+- `tornix api hse photos --json` — HseController_addPhoto
+- `tornix api hse plan --json` — HseController_getPlan
+- `tornix api hse projects-incidents-create --json` — HseController_createIncident
+- `tornix api hse projects-inspections-create --json` — HseController_createInspection
+- `tornix api hse projects-plan-replace --json` — HseController_putPlan
+- `tornix api hse projects-violations-create --json` — HseController_createViolation
+- `tornix api hse reopen --json` — HseController_reopen
+- `tornix api hse request-closure --json` — HseController_requestClosure
+- `tornix api hse update --json` — HseController_updateViolation
+- `tornix api hse url --json` — HseController_photoUrl
+- `tornix api hse violations --json` — HseController_listViolations
+- `tornix api hse violations-photos-delete --json` — HseController_deletePhoto
 - `tornix api insights dismiss --json` — Dismiss an insight for the caller
 - `tornix api insights get --json` — Get one AI insight by id
 - `tornix api insights latest --json` — Latest portfolio-insights run status for the caller organization
@@ -1715,6 +1736,23 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix doctor --json` — Diff the pinned OpenAPI snapshot against a live backend. Exits non-zero on drift, so CI can gate on it.
 - `tornix file upload --json` — Upload a local file to a project's File Center.
 - `tornix gen --json` — Refresh the pinned OpenAPI snapshot from a backend.
+- `tornix hse access --json` — What the caller may do in this project's HSE (view / manage / assignee).
+- `tornix hse checklist --json` — The default inspection checklist (keys + Arabic labels).
+- `tornix hse close --json` — Close a violation directly (manage_hse). The normal path is request-closure + approval.
+- `tornix hse incident-add --json` — Report a near miss / incident / lost-time incident.
+- `tornix hse incidents --json` — Near misses / incidents / lost-time incidents.
+- `tornix hse inspection-add --json` — Record an inspection round. --item KEY=ok|nc|na[:note] overrides the default checklist; nc items open violations.
+- `tornix hse inspections --json` — Inspection rounds of the project.
+- `tornix hse kpis --json` — HSE KPI cards: days without lost time, near misses, open / awaiting-closure violations.
+- `tornix hse photo-add --json` — Upload a local image and register it as the violation's «before» or «after» photo.
+- `tornix hse plan --json` — The four-part HSE plan (safety, security, environment, personnel).
+- `tornix hse reopen --json` — Reopen a closed violation (manage_hse); a reason is required.
+- `tornix hse request-closure --json` — Ask to close a violation (assignee or manager). Needs ≥1 «after» photo id; the request lands in «الطلبات».
+- `tornix hse summary --json` — KPIs plus violation counts per status for one project.
+- `tornix hse violation --json` — One violation with its photos.
+- `tornix hse violation-add --json` — Record a violation (needs manage_hse).
+- `tornix hse violation-update --json` — Change a violation (needs manage_hse; not on a closed one).
+- `tornix hse violations --json` — List violations (newest first) with counts for the whole filter.
 - `tornix meetings action-items --json` — Get a meeting's action items.
 - `tornix meetings get --json` — Get a meeting by id.
 - `tornix meetings list --json` — List meetings (optionally by project).
