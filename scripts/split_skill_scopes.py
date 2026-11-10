@@ -41,6 +41,9 @@ def render_core(core):
         '> Password-bearing account creation, password reset, account and connected-mailbox deletion, and import commands are human-only and withheld;',
         '> never pass passwords via command options or `--data`.',
         '> `config show` is safe (it reveals `has_key`, not the key); never inspect raw config files or `.env`.',
+        '> **Several orgs:** `tornix orgs list --json` shows them. No org named -> read with `--org all`',
+        '> (rows carry `org`; output `{data, errors}`). User names an org -> `--org "<name>"`. Name the org per item when',
+        '> mixing. `--org all` is list reads only; writes and single-id reads need ONE org (ask if unclear).',
         '',
     ]
     allowed_core = [(cmd, desc) for cmd, desc in core if agent_command_allowed(cmd)]

@@ -25,7 +25,7 @@ def _run(args, tmp_path=None):
             return httpx.Response(200, json={"ok": True})
         return httpx.Response(200, json={"data": {"id": "x", "ok": True}})
 
-    cfg = Config(api_url="https://x.test", api_key="tk", org_id="o")
+    cfg = Config(api_url="https://x.test", api_key="tk", org_id="11111111-1111-1111-1111-111111111111")
     obj = {"config": cfg, "client": TornixClient(cfg, transport=httpx.MockTransport(handler)), "json": True}
     res = CliRunner().invoke(hse_group, args, obj=obj, catch_exceptions=False)
     return res, calls

@@ -12,6 +12,8 @@ class TornixClient:
     def __init__(self, config: Config, *, transport: httpx.BaseTransport | None = None,
                  timeout: float = 30.0, retries: int = 2) -> None:
         self.config = config
+        self._transport = transport
+        self._org_resolved: dict[str, str] = {}
         # Default transport retries transient connection failures; tests inject a mock.
         if transport is None:
             transport = httpx.HTTPTransport(retries=retries)
@@ -28,11 +30,26 @@ class TornixClient:
         bearer = self.config.api_key or self.config.token
         if bearer:
             h["Authorization"] = f"Bearer {bearer}"
-        if self.config.org_id:
-            h["X-Organization-ID"] = self.config.org_id
+        org = None if "X-Organization-ID" in (extra or {}) else self._effective_org()
+        if org:
+            h["X-Organization-ID"] = org
         if extra:
             h.update(extra)
-        return h
+        # A None value drops that header (e.g. listing orgs without scoping to one).
+        return {k: v for k, v in h.items() if v is not None}
+
+    def _effective_org(self) -> str | None:
+        """The org id to send. `--org` may be an id or a NAME; a name is resolved once
+        against the caller's own org list. `all` is handled by the CLI fan-out, never sent."""
+        from .orgs import ALL, fetch_orgs, is_uuid, resolve_org
+        org = self.config.org_id
+        if not org or org.lower() == ALL:
+            return None
+        if is_uuid(org):
+            return org
+        if org not in self._org_resolved:
+            self._org_resolved[org] = resolve_org(fetch_orgs(self), org)
+        return self._org_resolved[org]
 
     # ── core request ──
     def request(self, method: str, path: str, *, params: dict | None = None,

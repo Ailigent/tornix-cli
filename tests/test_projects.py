@@ -190,10 +190,10 @@ def test_projects_create_sends_org_header_when_configured():
         return httpx.Response(200, json={"data": {"id": "p9"}})
 
     r = CliRunner().invoke(
-        projects_group, ["create", "--name", "Alpha"], obj=_obj(handler, org_id="org-42")
+        projects_group, ["create", "--name", "Alpha"], obj=_obj(handler, org_id="22222222-2222-2222-2222-222222222222")
     )
     assert r.exit_code == 0, r.output
-    assert seen["org"] == "org-42"
+    assert seen["org"] == "22222222-2222-2222-2222-222222222222"
 
 
 def test_projects_create_trims_padded_name():

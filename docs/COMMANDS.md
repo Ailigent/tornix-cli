@@ -39,6 +39,15 @@ with `--org <id>` or `TORNIX_ORG` as needed.
 Discover additional command names with `tornix catalog --json`; its output may include human-only
 auth, API-key, password-bearing, and account/mailbox deletion operations above, which remain forbidden to the agent.
 
+## Several organizations (after the caller check above)
+The same login reaches every org the user belongs to; `tornix orgs list --json` shows them (`current` = the open one).
+- Question names no org («عندي طلبات معلقة؟», "my tasks") -> read with `--org all`, e.g. `tornix --org all approvals list --json`.
+  Output is `{"data": [...], "errors": [...]}`; every row has `org: {id, name}`. Say a failed org in `errors` was unreachable.
+- User names an org («في منظمة X …») -> `--org "<name>"`, even if it is not the open one. That org only.
+- An answer that mixes orgs names the org on every item.
+- `--org all` is for list reads only. Writes (create/update/comment/approve …) and reads of one id need ONE org: use the org
+  of the item, or ask the user which one if unclear. Never guess.
+
 ## Conventions
 - Output: add `--json` to any command. Errors go to stderr as `{"error": {...}}` with
   non-zero exit codes (3=auth, 4=not-found, 5=validation, 6=rate-limit/credits).
@@ -1761,6 +1770,7 @@ auth, API-key, password-bearing, and account/mailbox deletion operations above, 
 - `tornix meetings room-delete --json` — Deactivate/delete a meeting (video) room.
 - `tornix meetings room-list --json` — List active meeting (video) rooms in the org.
 - `tornix meetings transcript --json` — Get a meeting's transcript.
+- `tornix orgs list --json` — List your organizations (id, name, role); `current` marks the open one.
 - `tornix projects create --json` — Create a project.
 - `tornix projects get --json` — Get a project by id.
 - `tornix projects health --json` — Get a project's health summary.

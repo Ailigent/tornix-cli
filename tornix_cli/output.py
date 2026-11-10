@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 import sys
+import threading
+from contextlib import contextmanager
 from typing import Any
 
 import click
@@ -11,6 +13,7 @@ from rich.table import Table
 from .errors import TornixError
 
 _console = Console()
+_tls = threading.local()
 _err_console = Console(stderr=True)
 
 
@@ -52,8 +55,23 @@ def add_json_option(group: "click.Group") -> None:
             add_json_option(cmd)
 
 
+@contextmanager
+def capture_emit(sink: list):
+    """Collect what `emit` would print on THIS thread as (data, columns) pairs
+    instead (used by `--org all` to merge per-org results)."""
+    _tls.sink = sink
+    try:
+        yield sink
+    finally:
+        _tls.sink = None
+
+
 def emit(data: Any, *, json_mode: bool = False, jsonl: bool = False,
          columns: list[str] | None = None) -> None:
+    sink = getattr(_tls, "sink", None)
+    if sink is not None:
+        sink.append((data, columns))
+        return
     if json_mode:
         if jsonl and isinstance(data, list):
             for row in data:

@@ -15,21 +15,35 @@ from .commands.workload import workload_group
 from .commands.deep_research import deep_research_command
 from .commands.files import file_group
 from .commands.meetings import meetings_group
+from .commands.orgs import orgs_group
 from .commands.projects import projects_group
 from .commands.tasks import tasks_group
 from .config import PROFILES, Config
 from .data import data_group, rpc_command
 from .doctor import doctor_command
 from .errors import EXIT, TornixError
+from .orgs import run_all_orgs
 from .output import add_json_option, emit, emit_error
 from .repl import run_repl
 from .spec import fetch_spec, load_spec
 
 
-@click.group(invoke_without_command=True)
+class _RootGroup(click.Group):
+    def invoke(self, ctx: click.Context):
+        # Click clears the remaining tokens before running the group callback, but
+        # `--org all` must re-run the whole command per org, so keep a copy.
+        d = ctx.__dict__
+        ctx.meta["tornix.tokens"] = [*(d.get("_protected_args") or d.get("protected_args") or []),
+                                     *ctx.args]
+        return super().invoke(ctx)
+
+
+@click.group(cls=_RootGroup, invoke_without_command=True)
 @click.option("--json", "json_mode", is_flag=True, help="Machine-readable JSON output.")
 @click.option("--profile", default=None, help="Config profile (prod|stage).")
-@click.option("--org", default=None, help="Organization id (X-Organization-ID).")
+@click.option("--org", default=None,
+              help='Organization id or name (X-Organization-ID), or "all" for list-style reads '
+                   "across every org.")
 @click.version_option()
 @click.pass_context
 def cli(ctx: click.Context, json_mode: bool, profile: str | None, org: str | None) -> None:
@@ -55,6 +69,8 @@ def cli(ctx: click.Context, json_mode: bool, profile: str | None, org: str | Non
         obj["client"] = TornixClient(cfg)
     if ctx.invoked_subcommand is None:
         run_repl(cli, obj)
+    elif (getattr(cfg, "org_id", None) or "").lower() == "all":
+        run_all_orgs(ctx, cli, ctx.meta.get("tornix.tokens", []))
 
 
 @cli.group(name="config", help="Manage configuration.")
@@ -162,6 +178,7 @@ cli.add_command(approvals_group)
 cli.add_command(meetings_group)
 cli.add_command(calendar_group)
 cli.add_command(workload_group)
+cli.add_command(orgs_group)
 cli.add_command(hse_group)
 cli.add_command(build_api_group(load_spec()))
 

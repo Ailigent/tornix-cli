@@ -13,6 +13,9 @@ Top-level `tornix` commands — auth, config, data proxy, projects, tasks, file,
 > Password-bearing account creation, password reset, account and connected-mailbox deletion, and import commands are human-only and withheld;
 > never pass passwords via command options or `--data`.
 > `config show` is safe (it reveals `has_key`, not the key); never inspect raw config files or `.env`.
+> **Several orgs:** `tornix orgs list --json` shows them. No org named -> read with `--org all`
+> (rows carry `org`; output `{data, errors}`). User names an org -> `--org "<name>"`. Name the org per item when
+> mixing. `--org all` is list reads only; writes and single-id reads need ONE org (ask if unclear).
 
 - `tornix approvals approve --json` — Approve a workflow step.
 - `tornix approvals get --json` — Get an approval request by id.
@@ -69,5 +72,6 @@ Top-level `tornix` commands — auth, config, data proxy, projects, tasks, file,
 - `tornix workload sprint-preview --json` — Who would take each unassigned sprint item (balanced / round robin) — a preview, writes nothing.
 - `tornix workload suggestions --json` — The engine's own rebalancing suggestions (Team insights) — who, which task, to whom, why.
 - `tornix workload team --json` — Every person's Workload the caller may see (admin: org; PM: their projects).
+- `tornix orgs list --json` — List your organizations (id, name, role); `current` marks the open one.
 
-(55 available commands; auth and credential lifecycle operations withheld)
+(56 available commands; auth and credential lifecycle operations withheld)

@@ -6,7 +6,7 @@ from tornix_cli.errors import TornixError
 
 
 def make_client(handler):
-    cfg = Config(api_url="https://x.test", api_key="tk_1", org_id="org-9")
+    cfg = Config(api_url="https://x.test", api_key="tk_1", org_id="11111111-1111-1111-1111-111111111111")
     return TornixClient(cfg, transport=httpx.MockTransport(handler))
 
 
@@ -20,7 +20,7 @@ def test_injects_auth_and_org_headers():
 
     out = make_client(handler).get("/api/v1/projects")
     assert seen["auth"] == "Bearer tk_1"
-    assert seen["org"] == "org-9"
+    assert seen["org"] == "11111111-1111-1111-1111-111111111111"
     assert out == {"ok": True}            # envelope unwrapped
 
 
